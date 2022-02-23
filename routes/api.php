@@ -19,4 +19,4 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::resource('manga', MangaController::class);
+Route::resource('manga', MangaController::class)->except('create', 'edit');

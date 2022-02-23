@@ -16,6 +16,7 @@ namespace App\Models{
  *
  * @property int $id
  * @property string $title
+ * @property string $slug
  * @property string $description
  * @property string $published_at
  * @property \Illuminate\Support\Carbon|null $created_at
@@ -27,6 +28,7 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|Manga whereDescription($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Manga whereId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Manga wherePublishedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Manga whereSlug($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Manga whereTitle($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Manga whereUpdatedAt($value)
  */

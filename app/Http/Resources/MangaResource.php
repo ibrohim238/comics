@@ -22,7 +22,12 @@ class MangaResource extends JsonResource
     public function toArray($request): array|JsonSerializable|Arrayable
     {
         return [
-          'title' => $this->title
+            'id' => $this->id,
+            'title' => $this->title,
+            'slug' => $this->slug,
+            'description' => $this->description,
+            'created_at' => $this->created_at,
+            'update_at' => $this->updated_at,
         ];
     }
 }
