@@ -3,6 +3,7 @@
 namespace Database\Factories;
 
 use App\Models\Manga;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 class MangaFactory extends Factory
@@ -12,7 +13,9 @@ class MangaFactory extends Factory
     public function definition(): array
     {
         return [
-
+            'title' => $this->faker->title,
+            'description' => $this->faker->text,
+            'published_at' => Carbon::now(),
         ];
     }
 }

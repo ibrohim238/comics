@@ -5,6 +5,7 @@ namespace App\Dto;
 use App\Http\Requests\MangaRequest;
 use Carbon\Carbon;
 use Spatie\DataTransferObject\DataTransferObject;
+use Spatie\DataTransferObject\Exceptions\UnknownProperties;
 
 class MangaDto extends DataTransferObject
 {
@@ -12,12 +13,11 @@ class MangaDto extends DataTransferObject
     public string $description;
     public Carbon $publishedAt;
 
+    /**
+     * @throws UnknownProperties
+     */
     public static function fromRequest(MangaRequest $request): MangaDto
     {
-        return new self([
-            'name' => $request->title,
-            'description' => $request->description,
-            'published_at' => $request->publishedAt
-        ]);
+        return new self($request->validated());
     }
 }
