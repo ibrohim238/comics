@@ -29,6 +29,10 @@ class AuthenticationController extends Controller
      */
     public function user()
     {
-        return auth()->user();
+        $user = auth()->user();
+        $avatar = $user->getFallbackMediaUrl();
+        $user->image = $avatar;
+
+        return $user;
     }
 }

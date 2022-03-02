@@ -16,4 +16,4 @@ use Illuminate\Support\Facades\Route;
 */
 require  ('auth.php');
 
-Route::resource('manga', MangaController::class)->except('create', 'edit');
+Route::apiResource('manga', MangaController::class);

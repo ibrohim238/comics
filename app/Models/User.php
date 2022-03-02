@@ -3,15 +3,19 @@
 namespace App\Models;
 
 use App\Notifications\VerifyEmail;
-use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Passport\HasApiTokens;
+use Spatie\MediaLibrary\HasMedia;
+use Spatie\MediaLibrary\InteractsWithMedia;
 
-class User extends Authenticatable
+class User extends Authenticatable implements HasMedia
 {
-    use HasApiTokens, HasFactory, Notifiable;
+    use HasApiTokens;
+    use HasFactory;
+    use Notifiable;
+    use InteractsWithMedia;
 
     /**
      * The attributes that are mass assignable.
@@ -46,5 +50,13 @@ class User extends Authenticatable
     public function sendEmailVerificationNotification()
     {
         $this->notify(new VerifyEmail());
+    }
+
+    public function registerMediaCollections(): void
+    {
+        $this
+            ->addMediaCollection('default')
+            ->singleFile()
+            ->useFallbackUrl(url('/media/avatar.png'));
     }
 }
