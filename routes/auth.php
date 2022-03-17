@@ -1,22 +1,23 @@
 <?php
 
-use App\Http\Controllers\Api\Auth\AuthenticationController;
-use App\Http\Controllers\Api\Auth\LoginController;
-use App\Http\Controllers\Api\Auth\RegisterController;
-use App\Http\Controllers\Api\Auth\VerificationController;
+use App\Versions\V1\Http\Controllers\Api\Auth\ForgotPasswordController;
+use App\Versions\V1\Http\Controllers\Api\Auth\LogoutController;
+use App\Versions\V1\Http\Controllers\Api\Auth\RegisterController;
+use App\Versions\V1\Http\Controllers\Api\Auth\ResetPasswordController;
+use App\Versions\V1\Http\Controllers\Api\Auth\VerificationController;
 
-Route::post('/login', [LoginController::class, 'login'])->name('login');
+Route::post('logout', [LogoutController::class, 'logout']);
 
-Route::post('/register', [RegisterController::class, 'register'])->name('register');
+Route::post('register', [RegisterController::class, 'register']);
 
-Route::group(['middleware' => ['auth:api']], function () {
+Route::get('verify-email/{id}/{hash}', [VerificationController::class, 'verify'])
+    ->name('verification.verify');
 
-    Route::get('/email/verify/{hash}', [VerificationController::class, 'verify'])->name('verification.verify');
+Route::post('verify-email/resend', [VerificationController::class, 'resend'])
+    ->name('verification.resend');
 
-    Route::get('/email/resend', [VerificationController::class, 'resend'])->name('verification.resend');
+Route::post('forgot-password', [ForgotPasswordController::class, 'sendResetLinkEmail'])
+    ->name('password.email');
 
-    Route::get('/user', [AuthenticationController::class, 'user'])->name('user');
-
-    Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
-
-});
+Route::post('reset-password', [ResetPasswordController::class, 'reset'])
+    ->name('password.reset');

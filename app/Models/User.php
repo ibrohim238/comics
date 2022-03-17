@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Notifications\VerifyEmail;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -47,6 +48,15 @@ class User extends Authenticatable implements HasMedia
         'email_verified_at' => 'datetime',
     ];
 
+    protected $appends = ['avatar'];
+
+    protected function avatar(): Attribute
+    {
+        return new Attribute(
+            get: fn () => $this->getFirstMediaUrl('avatar'),
+        );
+    }
+
     public function sendEmailVerificationNotification()
     {
         $this->notify(new VerifyEmail());
@@ -55,7 +65,7 @@ class User extends Authenticatable implements HasMedia
     public function registerMediaCollections(): void
     {
         $this
-            ->addMediaCollection('default')
+            ->addMediaCollection('avatar')
             ->singleFile()
             ->useFallbackUrl(url('/media/avatar.png'));
     }
