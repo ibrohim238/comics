@@ -2,8 +2,8 @@
 
 namespace App\Models;
 
-use App\Notifications\VerifyEmail;
-use Illuminate\Database\Eloquent\Casts\Attribute;
+use App\Versions\V1\Dto\FallbackMedia;
+use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -11,7 +11,7 @@ use Laravel\Passport\HasApiTokens;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
 
-class User extends Authenticatable implements HasMedia
+class User extends Authenticatable implements HasMedia, MustVerifyEmail
 {
     use HasApiTokens;
     use HasFactory;
@@ -48,25 +48,18 @@ class User extends Authenticatable implements HasMedia
         'email_verified_at' => 'datetime',
     ];
 
-    protected $appends = ['avatar'];
-
-    protected function avatar(): Attribute
-    {
-        return new Attribute(
-            get: fn () => $this->getFirstMediaUrl('avatar'),
-        );
-    }
-
-    public function sendEmailVerificationNotification()
-    {
-        $this->notify(new VerifyEmail());
-    }
-
     public function registerMediaCollections(): void
     {
         $this
             ->addMediaCollection('avatar')
             ->singleFile()
             ->useFallbackUrl(url('/media/avatar.png'));
+    }
+
+    public function getFirstMedia(string $collectionName = 'default', $filters = [])
+    {
+        $media = $this->getMedia($collectionName, $filters);
+
+        return $media->first() ?? new FallbackMedia($collectionName, $this->getFallbackMediaUrl($collectionName));
     }
 }

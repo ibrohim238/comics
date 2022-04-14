@@ -35,10 +35,6 @@ class AuthServiceProvider extends ServiceProvider
 
         Passport::routes();
 
-        Passport::tokensExpireIn(now()->addDays(15));
-        Passport::refreshTokensExpireIn(now()->addDays(30));
-        Passport::personalAccessTokensExpireIn(now()->addMonths(6));
-
         VerifyEmail::createUrlUsing(function ($notifiable) {
             return remove_api_segment(URL::temporarySignedRoute(
                 'verification.verify',
