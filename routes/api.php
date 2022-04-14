@@ -1,7 +1,8 @@
 <?php
 
-use App\Http\Controllers\Api\MangaController;
-use Illuminate\Http\Request;
+use App\Versions\V1\Http\Controllers\Api\ChapterController;
+use App\Versions\V1\Http\Controllers\Api\MangaController;
+use App\Versions\V1\Http\Controllers\Api\UserController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -15,8 +16,26 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
-});
+Route::prefix('v1')->group(function () {
+    /*
+     * Auth
+     */
+    require ('auth.php');
 
-Route::resource('manga', MangaController::class)->except('create', 'edit');
+    /*
+     * User
+     */
+    Route::get('user', [UserController::class, 'show']);
+
+    Route::patch('user', [UserController::class, 'update']);
+
+    Route::delete('user', [UserController::class, 'destroy']);
+
+    /*
+     * Manga
+     */
+
+    Route::apiResource('manga', MangaController::class);
+
+    Route::get('manga/{manga}/{chapter}', ChapterController::class);
+});
