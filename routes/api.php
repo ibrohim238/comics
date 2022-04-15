@@ -37,5 +37,5 @@ Route::prefix('v1')->group(function () {
 
     Route::apiResource('manga', MangaController::class);
 
-    Route::get('manga/{manga}/{chapter}', ChapterController::class);
+    Route::get('manga/{manga}/{chapter}', [ChapterController::class, 'show']);
 });
