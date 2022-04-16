@@ -1,11 +1,12 @@
 <?php
 
-namespace App\Observers;
+namespace App\Versions\V1\Observers;
 
 use App\Enums\EnumTypeEnum;
 use App\Models\Manga;
 use App\Versions\V1\Services\EventService;
 use Illuminate\Support\Facades\Auth;
+use function app;
 
 class MangaObserver
 {
