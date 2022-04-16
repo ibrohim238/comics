@@ -21,9 +21,9 @@ class ChapterResource extends JsonResource
             'number' => $this->number,
             'title' => $this->title,
             'order_column' => $this->order_column,
-            'media' => new MediaCollection($this->media),
+            'media' => new MediaCollection($this->getMedia()),
             'likes' => $this->likes()->count(),
-            'comments' => new CommentCollection($this->comments()),
+            'comments' => new CommentCollection($this->comments),
         ];
     }
 }

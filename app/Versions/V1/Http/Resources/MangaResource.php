@@ -22,7 +22,7 @@ class MangaResource extends JsonResource
             'description' => $this->description,
             'media' => new MediaResource($this->getFirstMedia()),
             'rating' => $this->loadAvg('ratings', 'rating'),
-            'comments' => new CommentCollection($this->comments())
+            'comments' => new CommentCollection($this->comments),
         ];
     }
 }
