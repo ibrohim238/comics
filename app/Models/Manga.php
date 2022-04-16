@@ -26,6 +26,15 @@ class Manga extends Model implements HasMedia, Eventable, Rateable
         'published_at',
     ];
 
+    public function users(): BelongsToMany
+    {
+        return $this->belongsToMany(
+            User::class,
+            'bookmarks',
+            'manga_id',
+            'user_id');
+    }
+
     public function chapters(): HasMany
     {
         return $this->hasMany(Chapter::class);
