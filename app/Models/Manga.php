@@ -11,12 +11,13 @@ use Spatie\MediaLibrary\InteractsWithMedia;
 use Spatie\Sluggable\HasSlug;
 use Spatie\Sluggable\SlugOptions;
 
-class Manga extends Model implements HasMedia, Eventable, Rateable
+class Manga extends Model implements HasMedia, Eventable, Rateable, Commentable
 {
     use HasFactory;
     use HasSlug;
     use HasEvents;
     use HasRatings;
+    use HasComments;
     use InteractsWithMedia;
 
     protected $fillable = [
