@@ -4,17 +4,19 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
 use Spatie\Sluggable\HasSlug;
 use Spatie\Sluggable\SlugOptions;
 
-class Manga extends Model implements HasMedia, Eventable
+class Manga extends Model implements HasMedia, Eventable, Rateable
 {
     use HasFactory;
     use HasSlug;
     use HasEvents;
+    use HasRatings;
     use InteractsWithMedia;
 
     protected $fillable = [
