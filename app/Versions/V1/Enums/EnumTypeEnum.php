@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Versions\V1;
+namespace App\Versions\V1\Enums;
 
 enum EnumTypeEnum: string
 {

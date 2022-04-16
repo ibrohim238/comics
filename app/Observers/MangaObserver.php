@@ -3,7 +3,7 @@
 namespace App\Observers;
 
 use App\Models\Manga;
-use App\Versions\V1\EnumTypeEnum;
+use App\Versions\V1\Enums\EnumTypeEnum;
 use App\Versions\V1\Services\EventService;
 use Illuminate\Support\Facades\Auth;
 
@@ -17,7 +17,7 @@ class MangaObserver
      */
     public function created(Manga $manga)
     {
-        app(EventService::class)->create($manga, Auth::user(), EnumTypeEnum::CREATE_TYPE->value);
+        app(EventService::class)->create($manga, Auth::user(), EnumTypeEnum::CREATE_TYPE);
     }
 
     /**
@@ -28,7 +28,7 @@ class MangaObserver
      */
     public function updated(Manga $manga)
     {
-        app(EventService::class)->create($manga, Auth::user(), EnumTypeEnum::UPDATE_TYPE->value);
+        app(EventService::class)->create($manga, Auth::user(), EnumTypeEnum::UPDATE_TYPE);
     }
 
     /**
@@ -39,7 +39,7 @@ class MangaObserver
      */
     public function deleted(Manga $manga)
     {
-        app(EventService::class)->create($manga, Auth::user(), EnumTypeEnum::DELETE_TYPE->value);
+        app(EventService::class)->create($manga, Auth::user(), EnumTypeEnum::DELETE_TYPE);
     }
 
     /**

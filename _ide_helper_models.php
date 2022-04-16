@@ -22,6 +22,8 @@ namespace App\Models{
  * @property int $order_column
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Event[] $events
+ * @property-read int|null $events_count
  * @property-read \Spatie\MediaLibrary\MediaCollections\Models\Collections\MediaCollection|\Spatie\MediaLibrary\MediaCollections\Models\Media[] $media
  * @property-read int|null $media_count
  * @method static \Database\Factories\ChapterFactory factory(...$parameters)
@@ -37,7 +39,34 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|Chapter whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Chapter whereVolume($value)
  */
-	class Chapter extends \Eloquent implements \Spatie\MediaLibrary\HasMedia {}
+	class Chapter extends \Eloquent implements \Spatie\MediaLibrary\HasMedia, \App\Models\Eventable {}
+}
+
+namespace App\Models{
+/**
+ * App\Models\Event
+ *
+ * @property int $id
+ * @property string $type
+ * @property int $user_id
+ * @property string $eventable_type
+ * @property int $eventable_id
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \Illuminate\Database\Eloquent\Model|\Eloquent $eventable
+ * @property-read \App\Models\User|null $user
+ * @method static \Illuminate\Database\Eloquent\Builder|Event newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Event newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Event query()
+ * @method static \Illuminate\Database\Eloquent\Builder|Event whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Event whereEventableId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Event whereEventableType($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Event whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Event whereType($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Event whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Event whereUserId($value)
+ */
+	class Event extends \Eloquent {}
 }
 
 namespace App\Models{
@@ -53,6 +82,8 @@ namespace App\Models{
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Chapter[] $chapters
  * @property-read int|null $chapters_count
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Event[] $events
+ * @property-read int|null $events_count
  * @property-read \Spatie\MediaLibrary\MediaCollections\Models\Collections\MediaCollection|\Spatie\MediaLibrary\MediaCollections\Models\Media[] $media
  * @property-read int|null $media_count
  * @method static \Database\Factories\MangaFactory factory(...$parameters)
@@ -67,7 +98,7 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|Manga whereTitle($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Manga whereUpdatedAt($value)
  */
-	class Manga extends \Eloquent implements \Spatie\MediaLibrary\HasMedia {}
+	class Manga extends \Eloquent implements \Spatie\MediaLibrary\HasMedia, \App\Models\Eventable {}
 }
 
 namespace App\Models{
@@ -103,6 +134,6 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|User whereRememberToken($value)
  * @method static \Illuminate\Database\Eloquent\Builder|User whereUpdatedAt($value)
  */
-	class User extends \Eloquent implements \Spatie\MediaLibrary\HasMedia {}
+	class User extends \Eloquent implements \Spatie\MediaLibrary\HasMedia, \Illuminate\Contracts\Auth\MustVerifyEmail {}
 }
 

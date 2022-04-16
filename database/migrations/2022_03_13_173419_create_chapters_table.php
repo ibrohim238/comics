@@ -18,7 +18,7 @@ return new class extends Migration
             $table->integer('volume');
             $table->float('number');
             $table->string('title');
-            $table->foreignId('manga_id')->constrained();
+            $table->foreignId('manga_id')->references('id')->on('mangas');
             $table->unsignedInteger('order_column');
             $table->timestamps();
         });
