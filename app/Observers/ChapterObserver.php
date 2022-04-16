@@ -2,8 +2,8 @@
 
 namespace App\Observers;
 
+use App\Enums\EnumTypeEnum;
 use App\Models\Chapter;
-use App\Versions\V1\Enums\EnumTypeEnum;
 use App\Versions\V1\Services\EventService;
 use Illuminate\Support\Facades\Auth;
 

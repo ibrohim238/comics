@@ -2,7 +2,7 @@
 
 namespace App\Versions\V1\Dto;
 
-use App\Http\Requests\ChapterRequest;
+use App\Versions\V1\Http\Requests\Api\ChapterRequest;
 use Spatie\DataTransferObject\DataTransferObject;
 use Spatie\DataTransferObject\Exceptions\UnknownProperties;
 

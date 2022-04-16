@@ -2,12 +2,12 @@
 
 namespace App\Versions\V1\Http\Controllers\Api;
 
-use App\Http\Requests\ChapterRequest;
-use App\Versions\V1\Dto\ChapterDto;
-use App\Versions\V1\Http\Controllers\Controller;
-use App\Versions\V1\Http\Resources\ChapterResource;
 use App\Models\Chapter;
 use App\Models\Manga;
+use App\Versions\V1\Dto\ChapterDto;
+use App\Versions\V1\Http\Controllers\Controller;
+use App\Versions\V1\Http\Requests\Api\ChapterRequest;
+use App\Versions\V1\Http\Resources\ChapterResource;
 use App\Versions\V1\Services\ChapterService;
 use Spatie\DataTransferObject\Exceptions\UnknownProperties;
 
