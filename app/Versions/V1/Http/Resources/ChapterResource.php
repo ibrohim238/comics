@@ -14,20 +14,16 @@ use JsonSerializable;
 */
 class ChapterResource extends JsonResource
 {
-    /**
-     * Transform the resource into an array.
-     *
-     * @param  Request  $request
-     * @return array|Arrayable|JsonSerializable
-     */
-    public function toArray($request): array|JsonSerializable|Arrayable
+    public function toArray($request): array
     {
         return [
             'volume' => $this->volume,
             'number' => $this->number,
             'title' => $this->title,
             'order_column' => $this->order_column,
-            'media' => new MediaCollection($this->media)
+            'media' => new MediaCollection($this->media),
+            'likes' => $this->likes()->count(),
+            'comments' => new CommentCollection($this->comments()),
         ];
     }
 }

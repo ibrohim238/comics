@@ -13,20 +13,16 @@ use JsonSerializable;
 */
 class MangaResource extends JsonResource
 {
-    /**
-     * Transform the resource into an array.
-     *
-     * @param  Request  $request
-     * @return array|Arrayable|JsonSerializable
-     */
-    public function toArray($request): array|JsonSerializable|Arrayable
+    public function toArray($request): array
     {
         return [
             'id' => $this->id,
             'title' => $this->title,
             'slug' => $this->slug,
             'description' => $this->description,
-            'media' => new MediaResource($this->getFirstMedia())
+            'media' => new MediaResource($this->getFirstMedia()),
+            'rating' => $this->loadAvg('ratings', 'rating'),
+            'comments' => new CommentCollection($this->comments())
         ];
     }
 }
