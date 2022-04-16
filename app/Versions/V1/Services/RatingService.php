@@ -3,6 +3,7 @@
 namespace App\Versions\V1\Services;
 
 use App\Models\Rateable;
+use App\Models\Rating;
 use App\Models\User;
 use App\Versions\V1\Dto\RatingDto;
 
@@ -16,7 +17,7 @@ class RatingService
 
     public function add(RatingDto $dto)
     {
-        /* @var Rateable $rateable */
+        /* @var Rating $rating*/
         $this->rateable->ratings()
             ->updateOrCreate([
                 'user_id' => $this->user->id,

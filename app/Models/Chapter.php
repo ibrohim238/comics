@@ -7,11 +7,12 @@ use Illuminate\Database\Eloquent\Model;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
 
-class Chapter extends Model implements HasMedia, Eventable
+class Chapter extends Model implements HasMedia, Eventable, Likeable
 {
     use HasFactory;
     use InteractsWithMedia;
     use HasEvents;
+    use HasLikes;
 
     protected $fillable = [
         'volume',
