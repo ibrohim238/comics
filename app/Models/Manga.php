@@ -10,10 +10,11 @@ use Spatie\MediaLibrary\InteractsWithMedia;
 use Spatie\Sluggable\HasSlug;
 use Spatie\Sluggable\SlugOptions;
 
-class Manga extends Model implements HasMedia
+class Manga extends Model implements HasMedia, Eventable
 {
     use HasFactory;
     use HasSlug;
+    use HasEvents;
     use InteractsWithMedia;
 
     protected $fillable = [

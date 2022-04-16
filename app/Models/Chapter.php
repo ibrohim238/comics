@@ -7,10 +7,11 @@ use Illuminate\Database\Eloquent\Model;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
 
-class Chapter extends Model implements HasMedia
+class Chapter extends Model implements HasMedia, Eventable
 {
     use HasFactory;
     use InteractsWithMedia;
+    use HasEvents;
 
     protected $fillable = [
         'volume',
@@ -18,6 +19,7 @@ class Chapter extends Model implements HasMedia
         'title',
         'order_column',
     ];
+
 
     public function getRouteKeyName(): string
     {
