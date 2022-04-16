@@ -24,14 +24,14 @@ class MangaController extends Controller
     /**
      * @throws UnknownProperties
      */
-    public function store(MangaRequest $request, MangaService $service)
+    public function store(MangaRequest $request)
     {
-        $manga = $service->save(new Manga(), MangaDto::fromRequest($request));
+        $manga = (new MangaService(new Manga()))->save(MangaDto::fromRequest($request));
 
         return new MangaResource($manga);
     }
 
-    public function show(Manga $manga)
+    public function show(Manga $manga): MangaChaptersResource
     {
         return new MangaChaptersResource($manga);
     }
@@ -39,16 +39,16 @@ class MangaController extends Controller
     /**
      * @throws UnknownProperties
      */
-    public function update(MangaRequest $request, Manga $manga, MangaService $service)
+    public function update(MangaRequest $request, Manga $manga)
     {
-        $service->save($manga, MangaDto::fromRequest($request));
+        (new MangaService($manga))->save(MangaDto::fromRequest($request));
 
         return new MangaResource($manga);
     }
 
-    public function destroy(Manga $manga, MangaService $service)
+    public function destroy(Manga $manga)
     {
-        $service->delete($manga);
+        (new MangaService($manga))->delete();
 
         return response()->noContent();
     }
