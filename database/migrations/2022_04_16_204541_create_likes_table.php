@@ -13,9 +13,8 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('ratings', function (Blueprint $table) {
-            $table->smallInteger('rating');
-            $table->morphs('rateable');
+        Schema::create('likes', function (Blueprint $table) {
+            $table->morphs('likeable');
             $table->foreignId('user_id')->references('id')->on('users');
         });
     }
@@ -27,6 +26,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('ratings');
+        Schema::dropIfExists('likes');
     }
 };
