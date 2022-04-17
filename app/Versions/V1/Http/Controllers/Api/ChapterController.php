@@ -13,11 +13,6 @@ use Spatie\DataTransferObject\Exceptions\UnknownProperties;
 
 class ChapterController extends Controller
 {
-    /**
-     * @param Manga $manga
-     * @param Chapter $chapter
-     * @return ChapterResource
-     */
     public function show(Manga $manga, Chapter $chapter): ChapterResource
     {
         return new ChapterResource($chapter);

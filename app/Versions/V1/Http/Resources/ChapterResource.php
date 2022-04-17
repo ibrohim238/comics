@@ -3,11 +3,7 @@
 namespace App\Versions\V1\Http\Resources;
 
 use App\Models\Chapter;
-use App\Models\Manga;
-use Illuminate\Contracts\Support\Arrayable;
-use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
-use JsonSerializable;
 
 /**
  * @mixin Chapter
@@ -22,8 +18,8 @@ class ChapterResource extends JsonResource
             'title' => $this->title,
             'order_column' => $this->order_column,
             'media' => new MediaCollection($this->getMedia()),
-            'likes' => $this->likes()->count(),
-            'comments' => new CommentCollection($this->comments),
+            'likes' => new LikeResource($this->likes()),
+            'comments' => new CommentCollection($this->whenLoaded('comments'))
         ];
     }
 }

@@ -4,7 +4,6 @@ namespace App\Versions\V1\Http\Controllers\Api;
 
 use App\Versions\V1\Http\Controllers\Controller;
 use App\Versions\V1\Http\Requests\Api\MangaRequest;
-use App\Versions\V1\Http\Resources\MangaChaptersResource;
 use App\Versions\V1\Http\Resources\MangaCollection;
 use App\Versions\V1\Http\Resources\MangaResource;
 use App\Models\Manga;
@@ -31,9 +30,9 @@ class MangaController extends Controller
         return new MangaResource($manga);
     }
 
-    public function show(Manga $manga): MangaChaptersResource
+    public function show(Manga $manga): MangaResource
     {
-        return new MangaChaptersResource($manga);
+        return (new MangaResource($manga->load('comments', 'chapters')));
     }
 
     /**
