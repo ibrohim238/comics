@@ -8,6 +8,8 @@ use Illuminate\Database\Eloquent\Relations\MorphTo;
 
 class Rating extends Model
 {
+    public $timestamps = false;
+
     protected $fillable = [
         'rating',
         'user_id'

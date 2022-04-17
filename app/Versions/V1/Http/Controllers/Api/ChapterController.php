@@ -15,7 +15,7 @@ class ChapterController extends Controller
 {
     public function show(Manga $manga, Chapter $chapter): ChapterResource
     {
-        return new ChapterResource($chapter);
+        return new ChapterResource($chapter->load('media', 'comments'));
     }
 
     /**

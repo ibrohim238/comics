@@ -16,7 +16,7 @@ return new class extends Migration
         Schema::create('events', function (Blueprint $table) {
             $table->id();
             $table->enum('type', ['created', 'updated', 'deleted']);
-            $table->foreignId('user_id');
+            $table->foreignId('user_id')->nullable();
             $table->morphs('eventable');
             $table->timestamps();
         });
