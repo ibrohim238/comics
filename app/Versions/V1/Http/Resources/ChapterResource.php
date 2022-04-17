@@ -19,7 +19,6 @@ class ChapterResource extends JsonResource
             'order_column' => $this->order_column,
             'likes' => $this->likes()->count(),
             'media' => new MediaCollection($this->whenLoaded('media')),
-            'comments' => new CommentCollection($this->whenLoaded('comments'))
         ];
     }
 }
