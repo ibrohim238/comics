@@ -19,8 +19,6 @@ class MangaResource extends JsonResource
             'description' => $this->description,
             'media' => new MediaResource($this->getFirstMedia()),
             'rating' => round($this->ratings_avg_rating ?? 0, 3),
-            'comments' => new CommentCollection($this->whenLoaded('comments')),
-            'chapters' => new ChapterCollection($this->whenLoaded('chapters')),
         ];
     }
 }

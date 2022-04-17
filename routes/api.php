@@ -1,6 +1,9 @@
 <?php
 
+use App\Versions\V1\Http\Controllers\Api\ChapterCommentController;
 use App\Versions\V1\Http\Controllers\Api\ChapterController;
+use App\Versions\V1\Http\Controllers\Api\CommentController;
+use App\Versions\V1\Http\Controllers\Api\MangaCommentController;
 use App\Versions\V1\Http\Controllers\Api\MangaController;
 use App\Versions\V1\Http\Controllers\Api\UserController;
 use Illuminate\Support\Facades\Route;
@@ -31,21 +34,32 @@ Route::prefix('v1')->group(function () {
 
     Route::delete('user', [UserController::class, 'destroy']);
 
+
     /*
      * Manga
      */
-
     Route::apiResource('manga', MangaController::class);
+
+    /* Comments */
+    Route::patch('/comments/{comments}', [CommentController::class, 'update']);
+    Route::delete('/comments/{comments}', [CommentController::class, 'destroy']);
+
+    Route::group(['prefix' => '/manga/{manga}'], function () {
+        /* MangaComments */
+        Route::get('/comments', [MangaCommentController::class, 'index']);
+        Route::post('/comments', [MangaCommentController::class, 'store']);
+        Route::group(['prefix' => '/chapter/{chapter}'], function () {
+            /* ChapterComments */
+            Route::get('/comments', [ChapterCommentController::class, 'index']);
+            Route::post('/comments', [ChapterCommentController::class, 'store']);
+        });
+    });
 
     /*
      * Chapter
      */
-    Route::group(['prefix' => '/manga/{manga}', 'controller' => ChapterController::class], function() {
-        Route::post('/', 'store');
-        Route::get('/{chapter}', 'show');
-        Route::patch('/{chapter}', 'update');
-        Route::delete('/{chapter}', 'destroy');
-    });
+    Route::apiResource('manga.chapter', ChapterController::class);
+
 
 
 

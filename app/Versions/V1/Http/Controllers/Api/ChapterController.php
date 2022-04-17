@@ -7,12 +7,20 @@ use App\Models\Manga;
 use App\Versions\V1\Dto\ChapterDto;
 use App\Versions\V1\Http\Controllers\Controller;
 use App\Versions\V1\Http\Requests\Api\ChapterRequest;
+use App\Versions\V1\Http\Resources\ChapterCollection;
 use App\Versions\V1\Http\Resources\ChapterResource;
 use App\Versions\V1\Services\ChapterService;
 use Spatie\DataTransferObject\Exceptions\UnknownProperties;
 
 class ChapterController extends Controller
 {
+    public function index(Manga $manga)
+    {
+        $chapters = $manga->chapters()->get();
+
+        return new ChapterCollection($chapters);
+    }
+
     public function show(Manga $manga, Chapter $chapter): ChapterResource
     {
         return new ChapterResource($chapter->load('media', 'comments'));
