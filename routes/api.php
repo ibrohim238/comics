@@ -37,5 +37,16 @@ Route::prefix('v1')->group(function () {
 
     Route::apiResource('manga', MangaController::class);
 
-    Route::apiResource('manga.chapter', ChapterController::class)->except('index');
+    /*
+     * Chapter
+     */
+    Route::group(['prefix' => '/manga/{manga}', 'controller' => ChapterController::class], function() {
+        Route::post('/', 'store');
+        Route::get('/{chapter}', 'show');
+        Route::patch('/{chapter}', 'update');
+        Route::delete('/{chapter}', 'destroy');
+    });
+
+
+
 });
