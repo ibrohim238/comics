@@ -2,12 +2,15 @@
 
 namespace App\Versions\V1\Http\Controllers\Api\Auth;
 
+use App\Versions\V1\Dto\UserDto;
 use App\Versions\V1\Http\Controllers\Controller;
 use App\Models\User;
 use App\Providers\RouteServiceProvider;
+use App\Versions\V1\Services\UserService;
 use Illuminate\Foundation\Auth\RegistersUsers;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
+use Spatie\DataTransferObject\Exceptions\UnknownProperties;
 
 class RegisterController extends Controller
 {
@@ -59,15 +62,12 @@ class RegisterController extends Controller
     /**
      * Create a new user instance after a valid registration.
      *
-     * @param  array  $data
-     * @return \App\Models\User
+     * @param array $data
+     * @return User
+     * @throws UnknownProperties
      */
-    protected function create(array $data)
+    protected function create(array $data, UserService $service)
     {
-        return User::create([
-            'name' => $data['name'],
-            'email' => $data['email'],
-            'password' => Hash::make($data['password']),
-        ]);
+        return $service->create(UserDto::fromArray($data));
     }
 }
