@@ -17,7 +17,8 @@ class UserDto extends DataTransferObject
     public static function fromArray(array $data): UserDto
     {
         return new self([
-            'name' => $data['name'],
+            'name' => $data['username'],
+            'username' => $data['username'],
             'email' => $data['email'],
             'password' => $data['password'],
         ]);
