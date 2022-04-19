@@ -1,12 +1,8 @@
 <?php
 
 use App\Enums\CommentableTypeEnum;
-use App\Models\Chapter;
-use App\Models\Manga;
-use App\Versions\V1\Http\Controllers\Api\ChapterCommentController;
 use App\Versions\V1\Http\Controllers\Api\ChapterController;
 use App\Versions\V1\Http\Controllers\Api\CommentController;
-use App\Versions\V1\Http\Controllers\Api\MangaCommentController;
 use App\Versions\V1\Http\Controllers\Api\MangaController;
 use App\Versions\V1\Http\Controllers\Api\UserController;
 use Illuminate\Support\Facades\Route;
