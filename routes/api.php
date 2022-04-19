@@ -1,5 +1,8 @@
 <?php
 
+use App\Enums\CommentableTypeEnum;
+use App\Models\Chapter;
+use App\Models\Manga;
 use App\Versions\V1\Http\Controllers\Api\ChapterCommentController;
 use App\Versions\V1\Http\Controllers\Api\ChapterController;
 use App\Versions\V1\Http\Controllers\Api\CommentController;
@@ -40,27 +43,23 @@ Route::prefix('v1')->group(function () {
      */
     Route::apiResource('manga', MangaController::class);
 
-    /* Comments */
-    Route::patch('/comments/{comments}', [CommentController::class, 'update']);
-    Route::delete('/comments/{comments}', [CommentController::class, 'destroy']);
-
-    Route::group(['prefix' => '/manga/{manga}'], function () {
-        /* MangaComments */
-        Route::get('/comments', [MangaCommentController::class, 'index']);
-        Route::post('/comments', [MangaCommentController::class, 'store']);
-        Route::group(['prefix' => '/chapter/{chapter}'], function () {
-            /* ChapterComments */
-            Route::get('/comments', [ChapterCommentController::class, 'index']);
-            Route::post('/comments', [ChapterCommentController::class, 'store']);
-        });
-    });
-
     /*
      * Chapter
      */
     Route::apiResource('manga.chapter', ChapterController::class);
 
+    /*
+     * Comments
+     */
+    Route::get('/comment/{model}/{id}', [CommentController::class, 'index'])
+        ->whereIn('model', CommentableTypeEnum::values())
+        ->whereNumber('id');
+    Route::post('/comment/{model}/{id}', [CommentController::class, 'store'])
+        ->whereIn('model', CommentableTypeEnum::values())
+        ->whereNumber('id');
 
+    Route::patch('/comment/{comment}', [CommentController::class, 'update']);
+    Route::delete('/comment/{comment}', [CommentController::class, 'destroy']);
 
 
 });
