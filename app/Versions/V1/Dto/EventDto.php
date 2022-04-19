@@ -6,7 +6,7 @@ use Spatie\DataTransferObject\DataTransferObject;
 
 class EventDto extends DataTransferObject
 {
-    public int $user_id;
+    public ?int $user_id;
     public string $type;
 
     public static function fromArray(array $data): EventDto
