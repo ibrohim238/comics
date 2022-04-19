@@ -3,27 +3,22 @@
 namespace App\Policies;
 
 use App\Enums\PermissionEnum;
-use App\Models\Manga;
+use App\Models\Chapter;
 use App\Models\User;
 use Illuminate\Auth\Access\HandlesAuthorization;
 
-class MangaPolicy
+class ChapterPolicy
 {
     use HandlesAuthorization;
-
-    public function __construct()
-    {
-        //
-    }
 
     public function viewAny(?User $user): bool
     {
         return true;
     }
 
-    public function view(?User $user): bool
+    public function view(User $user, Chapter $chapter): bool
     {
-        return true;
+       //
     }
 
     public function create(User $user): bool
@@ -31,22 +26,22 @@ class MangaPolicy
         return $user->hasPermissionTo(PermissionEnum::MANAGE_MANGA->value);
     }
 
-    public function update(User $user, Manga $manga): bool
+    public function update(User $user, Chapter $chapter): bool
     {
         return $user->hasPermissionTo(PermissionEnum::MANAGE_MANGA->value);
     }
 
-    public function delete(User $user, Manga $manga): bool
+    public function delete(User $user, Chapter $chapter): bool
     {
         return $user->hasPermissionTo(PermissionEnum::MANAGE_MANGA->value);
     }
 
-    public function restore(User $user, Manga $manga): bool
+    public function restore(User $user, Chapter $chapter): bool
     {
         //
     }
 
-    public function forceDelete(User $user, Manga $manga): bool
+    public function forceDelete(User $user, Chapter $chapter): bool
     {
         //
     }

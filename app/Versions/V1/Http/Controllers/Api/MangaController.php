@@ -14,6 +14,11 @@ use Spatie\DataTransferObject\Exceptions\UnknownProperties;
 
 class MangaController extends Controller
 {
+    public function __construct()
+    {
+        $this->authorizeResource(Manga::class);
+    }
+
     public function index()
     {
         return new MangaCollection(

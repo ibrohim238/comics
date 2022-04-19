@@ -20,6 +20,11 @@ class CommentController extends Controller
 {
     use IdentifiesModels;
 
+    public function __construct()
+    {
+        $this->authorizeResource(Comment::class);
+    }
+
     /**
      * @throws Exception
      */
