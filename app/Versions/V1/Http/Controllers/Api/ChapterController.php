@@ -14,6 +14,11 @@ use Spatie\DataTransferObject\Exceptions\UnknownProperties;
 
 class ChapterController extends Controller
 {
+    public function __construct()
+    {
+        $this->authorizeResource(Chapter::class);
+    }
+
     public function index(Manga $manga)
     {
         $chapters = $manga->chapters()->get();
