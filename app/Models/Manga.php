@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use App\Models\Team\HasTeams;
+use App\Models\Team\Teamable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
@@ -11,7 +13,7 @@ use Spatie\MediaLibrary\InteractsWithMedia;
 use Spatie\Sluggable\HasSlug;
 use Spatie\Sluggable\SlugOptions;
 
-class Manga extends Model implements HasMedia, Eventable, Rateable, Commentable
+class Manga extends Model implements HasMedia, Eventable, Rateable, Commentable, Teamable
 {
     use HasFactory;
     use HasSlug;
@@ -19,6 +21,7 @@ class Manga extends Model implements HasMedia, Eventable, Rateable, Commentable
     use HasRatings;
     use HasComments;
     use InteractsWithMedia;
+    use HasTeams;
 
     protected $fillable = [
         'title',
