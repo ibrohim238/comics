@@ -4,6 +4,7 @@ namespace App\Versions\V1\Http\Controllers\Api;
 
 use App\Models\Chapter;
 use App\Models\Manga;
+use App\Models\Team\Team;
 use App\Versions\V1\Dto\ChapterDto;
 use App\Versions\V1\Http\Controllers\Controller;
 use App\Versions\V1\Http\Requests\Api\ChapterRequest;
@@ -34,9 +35,13 @@ class ChapterController extends Controller
     /**
      * @throws UnknownProperties
      */
-    public function store(ChapterRequest $request)
+    public function store(ChapterRequest $request, Team $team)
     {
         $chapter = (new ChapterService(new Chapter()))->save(ChapterDto::fromRequest($request));;
+
+        $manga = $chapter->manga;
+        /* @var Manga $manga*/
+        $manga->teams()->save($team);
 
         return new ChapterResource($chapter);
     }

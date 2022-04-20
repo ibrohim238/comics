@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 
 trait TeamTrait
 {
-    public function team(): BelongsToMany
+    public function teams(): BelongsToMany
     {
         return $this->belongsToMany(
             Team::class,

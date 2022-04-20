@@ -148,6 +148,8 @@ namespace App\Models{
  * @property-read int|null $media_count
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Rating[] $ratings
  * @property-read int|null $ratings_count
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Team\Team[] $teams
+ * @property-read int|null $teams_count
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\User[] $users
  * @property-read int|null $users_count
  * @method static \Database\Factories\MangaFactory factory(...$parameters)
@@ -162,7 +164,7 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|Manga whereTitle($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Manga whereUpdatedAt($value)
  */
-	class Manga extends \Eloquent implements \Spatie\MediaLibrary\HasMedia, \App\Models\Eventable, \App\Models\Rateable, \App\Models\Commentable {}
+	class Manga extends \Eloquent implements \Spatie\MediaLibrary\HasMedia, \App\Models\Eventable, \App\Models\Rateable, \App\Models\Commentable, \App\Models\Team\Teamable {}
 }
 
 namespace App\Models{
@@ -212,12 +214,104 @@ namespace App\Models{
 	class Role extends \Eloquent {}
 }
 
+namespace App\Models\Team{
+/**
+ * App\Models\Team\Team
+ *
+ * @property int $id
+ * @property string $title
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \Illuminate\Database\Eloquent\Model|\Eloquent $teamable
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\User[] $users
+ * @property-read int|null $users_count
+ * @method static \Illuminate\Database\Eloquent\Builder|Team newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Team newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Team query()
+ * @method static \Illuminate\Database\Eloquent\Builder|Team whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Team whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Team whereTitle($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Team whereUpdatedAt($value)
+ */
+	class Team extends \Eloquent {}
+}
+
+namespace App\Models\Team{
+/**
+ * App\Models\Team\TeamPermission
+ *
+ * @property int $id
+ * @property string $title
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Team\TeamRole[] $role
+ * @property-read int|null $role_count
+ * @method static \Illuminate\Database\Eloquent\Builder|TeamPermission newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|TeamPermission newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|TeamPermission query()
+ * @method static \Illuminate\Database\Eloquent\Builder|TeamPermission whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|TeamPermission whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|TeamPermission whereTitle($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|TeamPermission whereUpdatedAt($value)
+ */
+	class TeamPermission extends \Eloquent {}
+}
+
+namespace App\Models\Team{
+/**
+ * App\Models\Team\TeamRole
+ *
+ * @property int $id
+ * @property string $title
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Team\TeamPermission[] $permissions
+ * @property-read int|null $permissions_count
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Team\TeamUser[] $teamUser
+ * @property-read int|null $team_user_count
+ * @method static \Illuminate\Database\Eloquent\Builder|TeamRole newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|TeamRole newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|TeamRole query()
+ * @method static \Illuminate\Database\Eloquent\Builder|TeamRole whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|TeamRole whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|TeamRole whereTitle($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|TeamRole whereUpdatedAt($value)
+ */
+	class TeamRole extends \Eloquent {}
+}
+
+namespace App\Models\Team{
+/**
+ * App\Models\Team\TeamUser
+ *
+ * @property int $id
+ * @property int $user_id
+ * @property int $team_id
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Team\TeamRole[] $role
+ * @property-read int|null $role_count
+ * @property-read \App\Models\Team\Team $team
+ * @property-read \App\Models\User $user
+ * @method static \Illuminate\Database\Eloquent\Builder|TeamUser newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|TeamUser newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|TeamUser query()
+ * @method static \Illuminate\Database\Eloquent\Builder|TeamUser whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|TeamUser whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|TeamUser whereTeamId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|TeamUser whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|TeamUser whereUserId($value)
+ */
+	class TeamUser extends \Eloquent {}
+}
+
 namespace App\Models{
 /**
  * App\Models\User
  *
  * @property int $id
  * @property string $name
+ * @property string $username
  * @property string $email
  * @property \Illuminate\Support\Carbon|null $email_verified_at
  * @property string $password
@@ -236,6 +330,10 @@ namespace App\Models{
  * @property-read int|null $permissions_count
  * @property-read \Illuminate\Database\Eloquent\Collection|\Spatie\Permission\Models\Role[] $roles
  * @property-read int|null $roles_count
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Team\Team[] $team
+ * @property-read int|null $team_count
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Team\TeamUser[] $teamUsers
+ * @property-read int|null $team_users_count
  * @property-read \Illuminate\Database\Eloquent\Collection|\Laravel\Passport\Token[] $tokens
  * @property-read int|null $tokens_count
  * @method static \Database\Factories\UserFactory factory(...$parameters)
@@ -252,6 +350,7 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|User wherePassword($value)
  * @method static \Illuminate\Database\Eloquent\Builder|User whereRememberToken($value)
  * @method static \Illuminate\Database\Eloquent\Builder|User whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|User whereUsername($value)
  */
 	class User extends \Eloquent implements \Spatie\MediaLibrary\HasMedia, \Illuminate\Contracts\Auth\MustVerifyEmail {}
 }
