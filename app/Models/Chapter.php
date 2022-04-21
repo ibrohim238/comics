@@ -2,7 +2,7 @@
 
 namespace App\Models;
 
-use App\Models\Team\HasTeams;
+use App\Models\Team\HasTeamable;
 use App\Models\Team\Teamable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -17,7 +17,7 @@ class Chapter extends Model implements HasMedia, Eventable, Likeable, Commentabl
     use HasEvents;
     use HasLikes;
     use HasComments;
-    use HasTeams;
+    use HasTeamable;
 
     protected $fillable = [
         'volume',

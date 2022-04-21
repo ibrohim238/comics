@@ -2,7 +2,7 @@
 
 namespace App\Models;
 
-use App\Models\Team\HasTeams;
+use App\Models\Team\HasTeamable;
 use App\Models\Team\Teamable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -21,7 +21,7 @@ class Manga extends Model implements HasMedia, Eventable, Rateable, Commentable,
     use HasRatings;
     use HasComments;
     use InteractsWithMedia;
-    use HasTeams;
+    use HasTeamable;
 
     protected $fillable = [
         'title',

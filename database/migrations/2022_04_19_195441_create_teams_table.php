@@ -29,6 +29,16 @@ return new class extends Migration
             $table->unique(['team_id', 'user_id']);
         });
 
+        Schema::create('team_invitations', function (Blueprint $table) {
+            $table->id();
+            $table->foreignId('team_id')->constrained()->cascadeOnDelete();
+            $table->foreignId('user_id')->constrained();
+            $table->string('role')->nullable();
+            $table->timestamps();
+
+            $table->unique(['team_id', 'user_id']);
+        });
+
         Schema::create('teamables', function (Blueprint $table) {
             $table->foreignId('team_id')->constrained();
             $table->morphs('teamable');
@@ -44,10 +54,7 @@ return new class extends Migration
     {
         Schema::dropIfExists('teams');
         Schema::dropIfExists('team_users');
-        Schema::dropIfExists('team_roles');
-        Schema::dropIfExists('team_permissions');
-        Schema::dropIfExists('team_role_has_permissions');
-        Schema::dropIfExists('team_user_has_role');
+        Schema::dropIfExists('team_invitations');
         Schema::dropIfExists('teamables');
     }
 };

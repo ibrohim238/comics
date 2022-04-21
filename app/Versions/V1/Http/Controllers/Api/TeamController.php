@@ -2,6 +2,7 @@
 
 namespace App\Versions\V1\Http\Controllers\Api;
 
+use App\Enums\TeamRolePermissionEnum;
 use App\Http\Requests\TeamRequest;
 use App\Models\Team\Team;
 use App\Versions\V1\Dto\TeamDto;
@@ -10,6 +11,7 @@ use App\Versions\V1\Http\Resources\MangaCollection;
 use App\Versions\V1\Http\Resources\TeamCollection;
 use App\Versions\V1\Http\Resources\TeamResource;
 use App\Versions\V1\Http\Resources\UserCollection;
+use App\Versions\V1\Services\TeamMemberService;
 use App\Versions\V1\Services\TeamService;
 use Illuminate\Support\Facades\Auth;
 use Spatie\DataTransferObject\Exceptions\UnknownProperties;
@@ -25,16 +27,6 @@ class TeamController extends Controller
         );
     }
 
-    public function participants(Team $team)
-    {
-        return new UserCollection($team->users()->get());
-    }
-
-    public function teamable(Team $team)
-    {
-        return new MangaCollection($team->teamable()->get());
-    }
-
     public function show(Team $team)
     {
         return new TeamResource($team);
@@ -48,7 +40,8 @@ class TeamController extends Controller
     public function store(TeamRequest $request, TeamService $service)
     {
         $team = $service->save(new Team(), TeamDto::fromRequest($request));
-        $team->users()->save(Auth::user());
+        app(TeamMemberService::class)
+            ->add($team, Auth::user(), TeamRolePermissionEnum::owner->value);
 
         return new TeamResource($team);
     }
