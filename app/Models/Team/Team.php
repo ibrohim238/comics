@@ -16,7 +16,7 @@ class Team extends Model implements HasMedia
     use InteractsWithMedia;
 
     protected $fillable = [
-        'title',
+        'name',
     ];
 
     public function users(): BelongsToMany
