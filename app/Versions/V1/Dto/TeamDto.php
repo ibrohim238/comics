@@ -2,7 +2,7 @@
 
 namespace App\Versions\V1\Dto;
 
-use App\Http\Requests\TeamRequest;
+use App\Versions\V1\Http\Requests\Api\TeamRequest;
 use Spatie\DataTransferObject\DataTransferObject;
 use Spatie\DataTransferObject\Exceptions\UnknownProperties;
 

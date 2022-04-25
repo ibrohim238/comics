@@ -2,64 +2,36 @@
 
 namespace App\Versions\V1\Http\Controllers\Api;
 
-use App\Models\Chapter;
 use App\Models\Manga;
-use App\Models\Team\Team;
-use App\Versions\V1\Dto\ChapterDto;
 use App\Versions\V1\Http\Controllers\Controller;
-use App\Versions\V1\Http\Requests\Api\ChapterRequest;
+use App\Versions\V1\Http\Requests\Api\ChapterIndexRequest;
 use App\Versions\V1\Http\Resources\ChapterCollection;
 use App\Versions\V1\Http\Resources\ChapterResource;
-use App\Versions\V1\Services\ChapterService;
-use Spatie\DataTransferObject\Exceptions\UnknownProperties;
+use Illuminate\Auth\Access\AuthorizationException;
 
 class ChapterController extends Controller
 {
-    public function __construct()
+    /**
+     * @throws AuthorizationException
+     */
+    public function index(Manga $manga, ChapterIndexRequest $request)
     {
-        $this->authorizeResource(Chapter::class);
-    }
+        $this->authorize('viewAny');
 
-    public function index(Manga $manga)
-    {
-        $chapters = $manga->chapters()->get();
+        $chapters = $manga->chapters()->where('team_id', $request->validated('team_id'))->get();
 
         return new ChapterCollection($chapters);
     }
 
-    public function show(Manga $manga, Chapter $chapter): ChapterResource
-    {
-        return new ChapterResource($chapter->load('media', 'comments'));
-    }
-
     /**
-     * @throws UnknownProperties
+     * @throws AuthorizationException
      */
-    public function store(ChapterRequest $request, Team $team)
+    public function show(Manga $manga, int $chapterOrder): ChapterResource
     {
-        $chapter = (new ChapterService(new Chapter()))->save(ChapterDto::fromRequest($request));;
+        $chapter = $manga->chapters()->where('order_column', $chapterOrder)->firstOrFail();
 
-        $manga = $chapter->manga;
-        /* @var Manga $manga*/
-        $manga->teams()->save($team);
+        $this->authorize('view', $chapter);
 
-        return new ChapterResource($chapter);
-    }
-
-    /**
-     * @throws UnknownProperties
-     */
-    public function update(Chapter $chapter, ChapterRequest $request)
-    {
-        (new ChapterService($chapter))->save(ChapterDto::fromRequest($request));
-
-        return new ChapterResource($chapter);
-    }
-
-    public function destroy(Chapter $chapter)
-    {
-        (new ChapterService($chapter))->delete();
-
-        return response()->noContent();
+        return new ChapterResource($chapter->load('media'));
     }
 }

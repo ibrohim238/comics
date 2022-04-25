@@ -14,8 +14,8 @@ return new class extends Migration
     public function up()
     {
         Schema::create('bookmarks', function (Blueprint $table) {
-            $table->foreignId('user_id')->references('id')->on('users');
-            $table->foreignId('manga_id')->references('id')->on('users');
+            $table->foreignId('user_id')->constrained();
+            $table->foreignId('manga_id')->constrained();
             $table->unique(['manga_id', 'user_id']);
         });
     }

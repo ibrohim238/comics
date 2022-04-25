@@ -4,6 +4,7 @@ namespace App\Providers;
 
 use App\Models\Chapter;
 use App\Models\Manga;
+use App\Models\Team;
 use App\Models\User;
 use Illuminate\Auth\Notifications\ResetPassword;
 use Illuminate\Database\Eloquent\Relations\Relation;
@@ -32,10 +33,11 @@ class AppServiceProvider extends ServiceProvider
             return config('app.url').'/reset-password?token='.$token.'&email='.urlencode($notifiable->email);
         });
 
-//        Relation::enforceMorphMap([
-//            'user' => User::class,
-//            'manga' => Manga::class,
-//            'chapter' => Chapter::class,
-//        ]);
+        Relation::enforceMorphMap([
+            'user' => User::class,
+            'manga' => Manga::class,
+            'chapter' => Chapter::class,
+            'team' => Team::class
+        ]);
     }
 }

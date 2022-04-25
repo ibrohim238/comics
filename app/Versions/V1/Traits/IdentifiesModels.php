@@ -9,17 +9,14 @@ use Illuminate\Database\Eloquent\Relations\Relation;
 
 trait IdentifiesModels
 {
-    /**
-     * @throws \Exception
-     */
     protected function identifyModel(string $type, int $id): ?Commentable
     {
-        $model = match ($type) {
-            'manga' => Manga::class,
-            'chapter' => Chapter::class,
-            default => throw new \Exception('Not supported type'),
-        };
-//        $model = Relation::getMorphedModel($type);
+//        $model = match ($type) {
+//            'manga' => Manga::class,
+//            'chapter' => Chapter::class,
+//            default => throw new \Exception('Not supported type'),
+//        };
+        $model = Relation::getMorphedModel($type);
 
         return $model::findOrFail($id);
     }

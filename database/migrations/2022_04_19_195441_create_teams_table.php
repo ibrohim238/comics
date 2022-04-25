@@ -15,42 +15,35 @@ return new class extends Migration
     {
         Schema::create('teams', function (Blueprint $table) {
             $table->id();
-            $table->string('title')->unique();
+            $table->string('name')->unique();
             $table->timestamps();
         });
 
         Schema::create('team_user', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->references('id')->on('users');
-            $table->foreignId('team_id')->references('id')->on('teams');
+            $table->foreignId('user_id')->constrained();
+            $table->foreignId('team_id')->constrained();
+            $table->string('role');
             $table->timestamps();
+
+            $table->unique(['team_id', 'user_id']);
         });
 
-        Schema::create('team_roles', function (Blueprint $table) {
+        Schema::create('team_invitations', function (Blueprint $table) {
             $table->id();
-            $table->string('title');
+            $table->foreignId('team_id')->constrained()->cascadeOnDelete();
+            $table->foreignId('user_id')->constrained();
+            $table->string('role')->nullable();
             $table->timestamps();
-        });
 
-        Schema::create('team_permissions', function (Blueprint $table) {
-            $table->id();
-            $table->string('title');
-            $table->timestamps();
-        });
-
-        Schema::create('team_role_has_permissions', function (Blueprint $table) {
-            $table->foreignId('team_permission_id')->references('id')->on('team_permissions');
-            $table->foreignId('team_role_id')->references('id')->on('team_roles');
-        });
-
-        Schema::create('team_user_has_role', function (Blueprint $table) {
-            $table->foreignId('team_user_id')->references('id')->on('team_user');
-            $table->foreignId('team_role_id')->references('id')->on('team_roles');
+            $table->unique(['team_id', 'user_id']);
         });
 
         Schema::create('teamables', function (Blueprint $table) {
-            $table->foreignId('team_id')->references('id')->on('teams');
+            $table->id();
+            $table->foreignId('team_id')->constrained();
             $table->morphs('teamable');
+            $table->timestamps();
         });
     }
 
@@ -63,10 +56,7 @@ return new class extends Migration
     {
         Schema::dropIfExists('teams');
         Schema::dropIfExists('team_users');
-        Schema::dropIfExists('team_roles');
-        Schema::dropIfExists('team_permissions');
-        Schema::dropIfExists('team_role_has_permissions');
-        Schema::dropIfExists('team_user_has_role');
+        Schema::dropIfExists('team_invitations');
         Schema::dropIfExists('teamables');
     }
 };

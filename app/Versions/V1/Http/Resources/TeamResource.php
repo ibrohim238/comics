@@ -2,7 +2,7 @@
 
 namespace App\Versions\V1\Http\Resources;
 
-use App\Models\Team\Team;
+use App\Models\Team;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 /**
@@ -16,7 +16,7 @@ class TeamResource extends JsonResource
         return [
             'id' => $this->id,
             'title' => $this->title,
-            'media' => new MediaResource($this->getFirstMediaUrl())
+            'media' => new MediaResource($this->getFirstMedia())
         ];
     }
 }
