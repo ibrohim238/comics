@@ -2,6 +2,7 @@
 
 namespace App\Versions\V1\Http\Controllers\Api;
 
+use App\Models\Chapter;
 use App\Models\Manga;
 use App\Versions\V1\Http\Controllers\Controller;
 use App\Versions\V1\Http\Requests\Api\ChapterIndexRequest;
@@ -11,27 +12,20 @@ use Illuminate\Auth\Access\AuthorizationException;
 
 class ChapterController extends Controller
 {
-    /**
-     * @throws AuthorizationException
-     */
+    public function __construct()
+    {
+        $this->authorizeResource(Chapter::class);
+    }
+
     public function index(Manga $manga, ChapterIndexRequest $request)
     {
-        $this->authorize('viewAny');
-
         $chapters = $manga->chapters()->where('team_id', $request->validated('team_id'))->get();
 
         return new ChapterCollection($chapters);
     }
 
-    /**
-     * @throws AuthorizationException
-     */
-    public function show(Manga $manga, int $chapterOrder): ChapterResource
+    public function show(Manga $manga, Chapter $chapter): ChapterResource
     {
-        $chapter = $manga->chapters()->where('order_column', $chapterOrder)->firstOrFail();
-
-        $this->authorize('view', $chapter);
-
         return new ChapterResource($chapter->load('media'));
     }
 }

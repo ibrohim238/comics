@@ -17,7 +17,7 @@ return new class extends Migration
             $table->id();
             $table->integer('volume');
             $table->float('number');
-            $table->string('title');
+            $table->string('name');
             $table->boolean('is_paid')->default(false);
             $table->foreignId('manga_id')->constrained();
             $table->unsignedInteger('order_column');

@@ -18,9 +18,10 @@ class ChapterService
     {
         $this
             ->fill($dto)
-            ->associate($team, $manga)
+            ->associateTeam($team)
+            ->associateManga($manga)
             ->save()
-            ->addMedias($dto->images);
+            ->addImages($dto->images);
 
         return $this->chapter;
     }
@@ -30,7 +31,7 @@ class ChapterService
         $this
             ->fill($dto)
             ->save()
-            ->addMedias($dto->images);
+            ->addImages($dto->images);
 
         return $this->chapter;
     }
@@ -49,15 +50,21 @@ class ChapterService
         return $this;
     }
 
-    public function associate(Team $team, Manga $manga): static
+    public function associateTeam(Team $team): static
     {
         $this->chapter->team()->associate($team);
+
+        return $this;
+    }
+
+    public function associateManga(Manga $manga): static
+    {
         $this->chapter->manga()->associate($manga);
 
         return $this;
     }
 
-    public function addMedias(?array $images): static
+    public function addImages(?array $images): static
     {
         if ($images) {
             $this->chapter->addMultipleMediaFromRequest(['images'])
@@ -65,6 +72,7 @@ class ChapterService
                     $fileAdder->toMediaCollection();
                 });
         }
+
         return $this;
     }
 

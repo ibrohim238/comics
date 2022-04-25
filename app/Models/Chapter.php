@@ -19,9 +19,8 @@ class Chapter extends Model implements HasMedia, Eventable, Likeable, Commentabl
     protected $fillable = [
         'volume',
         'number',
-        'title',
+        'name',
         'is_paid',
-        'order_column',
     ];
 
     public function manga(): BelongsTo

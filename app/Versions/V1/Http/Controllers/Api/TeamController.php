@@ -35,8 +35,6 @@ class TeamController extends Controller
 
     /**
      * @throws UnknownProperties
-     * @throws FileDoesNotExist
-     * @throws FileIsTooBig
      */
     public function store(TeamRequest $request)
     {
@@ -47,8 +45,6 @@ class TeamController extends Controller
 
     /**
      * @throws UnknownProperties
-     * @throws FileIsTooBig
-     * @throws FileDoesNotExist
      */
     public function update(Team $team, TeamRequest $request)
     {

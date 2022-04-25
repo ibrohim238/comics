@@ -23,29 +23,4 @@ class ChapterPolicy
         }
         return true;
     }
-
-    public function create(User $user, Chapter $chapter, Team $team): bool
-    {
-        return $user->hasTeamable($team, $chapter->manga);
-    }
-
-    public function update(User $user, Chapter $chapter, Team $team): bool
-    {
-        return $user->hasTeamable($team, $chapter->manga);
-    }
-
-    public function delete(User $user, Chapter $chapter, Team $team): bool
-    {
-        return $user->hasTeamable($team, $chapter->manga);
-    }
-
-    public function restore(User $user, Chapter $chapter): bool
-    {
-        //
-    }
-
-    public function forceDelete(User $user, Chapter $chapter): bool
-    {
-        //
-    }
 }

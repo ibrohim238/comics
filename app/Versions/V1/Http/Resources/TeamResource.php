@@ -15,7 +15,7 @@ class TeamResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'title' => $this->title,
+            'title' => $this->name,
             'media' => new MediaResource($this->getFirstMedia())
         ];
     }

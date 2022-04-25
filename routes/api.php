@@ -5,7 +5,7 @@ use App\Versions\V1\Http\Controllers\Api\BookmarksController;
 use App\Versions\V1\Http\Controllers\Api\ChapterController;
 use App\Versions\V1\Http\Controllers\Api\CommentController;
 use App\Versions\V1\Http\Controllers\Api\MangaController;
-use App\Versions\V1\Http\Controllers\Api\TeamableChapterController;
+use App\Versions\V1\Http\Controllers\Api\TeamMangaChapterController;
 use App\Versions\V1\Http\Controllers\Api\TeamableController;
 use App\Versions\V1\Http\Controllers\Api\TeamController;
 use App\Versions\V1\Http\Controllers\Api\TeamInvitationController;
@@ -60,25 +60,30 @@ Route::prefix('v1')->group(function () {
     /*
      * Manga
      */
-    Route::apiResource('manga', MangaController::class);
+    Route::apiResource('manga', MangaController::class)->parameter('manga', 'manga:slug');
 
+    /*
+     * Bookmarks
+     */
     Route::get('/bookmarks', [BookmarksController::class, 'index']);
+    Route::post('/bookmarks/attach/{manga}', [BookmarksController::class, 'add']);
+    Route::post('/bookmarks/detach/{manga}', [BookmarksController::class, 'delete']);
 
     /*
      * Chapter
      */
-    Route::get('/manga/{manga}/chapter', [ChapterController::class, 'index']);
-    Route::get('/manga/{manga}/chapter/{chapterOrder}', [ChapterController::class, 'show']);
+    Route::get('/manga/{manga:slug}/chapter', [ChapterController::class, 'index']);
+    Route::get('/manga/{manga:slug}/chapter/{chapter}', [ChapterController::class, 'show']);
 
     Route::get('/teams/{team}/teamable', [TeamableController::class, 'index']);
     Route::get('/teams/{team}/teamable/{model}/{id}', [TeamableController::class, 'show']);
     Route::post('/teams/{team}/teamable/{model}/{id}', [TeamableController::class, 'store']);
     Route::delete('/teams/{team}/teamable/{model}/{id}', [TeamableController::class, 'destroy']);
 
-    Route::get('/teams/{team}/teamable/manga/{manga:id}/chapter', [TeamableChapterController::class, 'index']);
-    Route::post('/teams/{team}/teamable/manga/{manga:id}/chapter', [TeamableChapterController::class, 'store']);
-    Route::patch('/teams/{team}/teamable/manga/{manga:id}/chapter/{chapter}', [TeamableChapterController::class, 'update']);
-    Route::delete('/teams/{team}/teamable/manga/{manga:id}/chapter/{chapter}', [TeamableChapterController::class, 'destroy']);
+    Route::get('/teams/{team}/teamable/manga/{manga}/chapter', [TeamMangaChapterController::class, 'index']);
+    Route::post('/teams/{team}/teamable/manga/{manga}/chapter', [TeamMangaChapterController::class, 'store']);
+    Route::patch('/teams/{team}/teamable/manga/{manga}/chapter/{chapter}', [TeamMangaChapterController::class, 'update']);
+    Route::delete('/teams/{team}/teamable/manga/{manga}/chapter/{chapter}', [TeamMangaChapterController::class, 'destroy']);
 
     /*
      * Comments

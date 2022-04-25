@@ -50,7 +50,7 @@ class TeamService
      * @throws FileDoesNotExist
      * @throws FileIsTooBig
      */
-    public function addMedia()
+    public function addImage()
     {
         $this->team->addMediaFromRequest('image')->toMediaCollection();
     }
