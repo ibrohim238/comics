@@ -2,9 +2,8 @@
 
 namespace App\Versions\V1\Services;
 
-use App\Models\Team\Team;
+use App\Models\Team;
 use App\Models\User;
-use Illuminate\Support\Facades\Request;
 
 class TeamMemberService
 {
@@ -20,8 +19,6 @@ class TeamMemberService
 
     public function  remove(Team $team, User $user): void
     {
-        /*Исправить*/
-
         $team->users()->detach($user);
     }
 }

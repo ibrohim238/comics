@@ -32,17 +32,17 @@ class CommentPolicy
 
     public function update(User $user, Comment $comment): bool
     {
-        return $comment->user_id === $user->id;
+        return $comment->user()->is($user);
     }
 
     public function delete(User $user, Comment $comment): bool
     {
-        return $comment->user_id === $user->id || $user->hasPermissionTo(PermissionEnum::MANAGE_COMMENT->value);
+        return $comment->user()->is($user) || $user->hasPermissionTo(PermissionEnum::MANAGE_COMMENT->value);
     }
 
     public function restore(User $user, Comment $comment): bool
     {
-        return $comment->user_id === $user->id || $user->hasPermissionTo(PermissionEnum::MANAGE_COMMENT->value);
+        return $comment->user()->is($user) || $user->hasPermissionTo(PermissionEnum::MANAGE_COMMENT->value);
     }
 
     public function forceDelete(User $user): bool

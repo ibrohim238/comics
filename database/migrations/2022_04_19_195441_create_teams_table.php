@@ -40,8 +40,10 @@ return new class extends Migration
         });
 
         Schema::create('teamables', function (Blueprint $table) {
+            $table->id();
             $table->foreignId('team_id')->constrained();
             $table->morphs('teamable');
+            $table->timestamps();
         });
     }
 

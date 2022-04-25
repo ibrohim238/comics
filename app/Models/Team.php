@@ -1,14 +1,13 @@
 <?php
 
-namespace App\Models\Team;
+namespace App\Models;
 
-use App\Models\TeamInvitation;
-use App\Models\User;
+use App\Enums\TeamPermissionEnum;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Database\Eloquent\Relations\MorphTo;
+use Illuminate\Database\Eloquent\Relations\MorphToMany;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
 
@@ -29,7 +28,7 @@ class Team extends Model implements HasMedia
             ->as('membership');
     }
 
-    public function hasTeamPermission(User $user, string $permission): bool
+    public function hasTeamPermission(User $user, TeamPermissionEnum $permission): bool
     {
         return $user->hasTeamPermission($this, $permission);
     }
@@ -39,8 +38,18 @@ class Team extends Model implements HasMedia
         return $this->hasMany(TeamInvitation::class);
     }
 
-    public function teamable(): MorphTo
+    public function teamable(): MorphToMany
     {
-        return $this->morphTo();
+        return $this->morphToMany(Manga::class, 'teamable');
+    }
+
+    public function hasTeamable(Teamable $teamable): bool
+    {
+        return $this->teamable()->where('id', $teamable->id)->exists();
+    }
+
+    public function chapters(): HasMany
+    {
+        return $this->hasMany(Chapter::class);
     }
 }

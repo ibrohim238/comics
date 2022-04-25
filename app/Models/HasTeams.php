@@ -1,8 +1,9 @@
 <?php
 
-namespace App\Models\Team;
+namespace App\Models;
 
-use App\Enums\TeamRolePermissionEnum;
+use App\Enums\TeamPermissionEnum;
+use App\Enums\TeamRoleEnum;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
@@ -16,13 +17,14 @@ trait HasTeams
             ->as('membership');
     }
 
-    public function ownsTeam(Team $team)
+    public function team(Team $team): Team
     {
-        if (is_null($team)) {
-            return false;
-        }
+        return $this->teams()->where('id', $team->id)->first();
+    }
 
-        return $this->id == $team->{$this->getForeignKey()};
+    public function hasTeamable(Team $team,Teamable $teamable): bool
+    {
+        return $this->team($team)->hasTeamable($teamable);
     }
 
     public function teamUsers(): HasMany
@@ -32,20 +34,20 @@ trait HasTeams
 
     public function teamRole(Team $team): string|null
     {
-        return $team->users()->findOrFail($this->user)->membership->role;
+        return $team->users()->find($this->id)?->membership->role;
     }
 
     public function hasTeamRole(Team $team, string $role): bool
     {
-        return $this->teamRole($team) ==  $role;
+        return $this->teamRole($team) == $role;
     }
 
     public function teamPermissions(Team $team): array
     {
-        return TeamRolePermissionEnum::from($this->teamRole($team))->permissions() ;
+        return TeamRoleEnum::from($this->teamRole($team))->permissions() ;
     }
 
-    public function hasTeamPermission(Team $team, string $permission): bool
+    public function hasTeamPermission(Team $team, TeamPermissionEnum $permission): bool
     {
         return in_array($permission, $this->teamPermissions($team));
     }

@@ -2,7 +2,7 @@
 
 namespace App\Versions\V1\Services;
 
-use App\Models\Team\Team;
+use App\Models\Team;
 use App\Models\TeamInvitation;
 use App\Models\User;
 

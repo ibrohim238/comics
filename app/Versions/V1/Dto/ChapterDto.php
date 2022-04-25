@@ -12,6 +12,7 @@ class ChapterDto extends DataTransferObject
     public int $number;
     public string $title;
     public int $order_column;
+    public ?array $images;
 
     /**
      * @throws UnknownProperties
