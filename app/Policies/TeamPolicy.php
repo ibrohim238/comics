@@ -4,6 +4,7 @@ namespace App\Policies;
 
 use App\Enums\PermissionEnum;
 use App\Enums\TeamPermissionEnum;
+use App\Models\Manga;
 use App\Models\Team;
 use App\Models\TeamInvitation;
 use App\Models\User;
@@ -63,6 +64,43 @@ class TeamPolicy
     public function addTeamable(User $user): bool
     {
         return $user->hasPermissionTo(PermissionEnum::MANAGE_MANGA->value);
+    }
+
+    public function chapterViewAny(User $user, Team $team): bool
+    {
+        return $user->hasTeamPermission($team, TeamPermissionEnum::MANAGE_MANGA);
+    }
+
+    public function chapterView(User $user, Team $team): bool
+    {
+        return $user->hasTeamPermission($team, TeamPermissionEnum::MANAGE_MANGA);
+    }
+
+    public function chapterCreate(User $user, Team $team, Manga $manga): bool
+    {
+        return
+            $team->hasTeamable($manga)
+            &&
+            $user->hasTeamPermission($team, TeamPermissionEnum::MANAGE_MANGA)
+        ;
+    }
+
+    public function chapterUpdate(User $user, Team $team, Manga $manga): bool
+    {
+        return
+            $team->hasTeamable($manga)
+            &&
+            $user->hasTeamPermission($team, TeamPermissionEnum::MANAGE_MANGA)
+        ;
+    }
+
+    public function chapterDelete(User $user, Team $team, Manga $manga): bool
+    {
+        return
+            $team->hasTeamable($manga)
+            &&
+            $user->hasTeamPermission($team, TeamPermissionEnum::MANAGE_MANGA)
+        ;
     }
 
     public function deleteTeamable(User $user): bool

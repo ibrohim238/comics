@@ -22,7 +22,7 @@ class TeamMangaChapterController extends Controller
      */
     public function index(Team $team, Manga $manga)
     {
-//        $this->authorize('viewAny');
+        $this->authorize('chapterViewAny', $team);
 
         $chapters = $manga->chapters()
             ->where('team_id', $team)
@@ -37,7 +37,7 @@ class TeamMangaChapterController extends Controller
      */
     public function store(Team $team, Manga $manga, ChapterRequest $request)
     {
-        $this->authorize('create', [Chapter::class, $team]);
+        $this->authorize('chapterCreate', [$team, $manga]);
 
         $chapter = app(ChapterService::class, [new Chapter()])
             ->create(ChapterDto::fromRequest($request), $team, $manga);
@@ -51,7 +51,7 @@ class TeamMangaChapterController extends Controller
      */
     public function update(Team $team, Manga $manga, Chapter $chapter, ChapterRequest $request)
     {
-        $this->authorize('update', [$chapter, $team]);
+        $this->authorize('chapterUpdate', [$team, $manga]);
 
         app(ChapterService::class, [$chapter])
             ->update(ChapterDto::fromRequest($request));
@@ -64,7 +64,7 @@ class TeamMangaChapterController extends Controller
      */
     public function destroy(Team $team, Manga $manga, Chapter $chapter)
     {
-        $this->authorize('delete', [$chapter, $team]);
+        $this->authorize('chapterDelete', [$team, $manga]);
 
         app(ChapterService::class, [$chapter])->delete();
 
