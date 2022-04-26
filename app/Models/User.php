@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Team\TeamTrait;
 use App\Versions\V1\Dto\FallbackMedia;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -20,6 +21,7 @@ class User extends Authenticatable implements HasMedia, MustVerifyEmail
     use Notifiable;
     use HasRoles;
     use InteractsWithMedia;
+    use HasTeams;
 
     /**
      * The attributes that are mass assignable.

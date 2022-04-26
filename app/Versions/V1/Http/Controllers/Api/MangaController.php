@@ -11,6 +11,8 @@ use App\Versions\V1\Http\Resources\MangaCollection;
 use App\Versions\V1\Http\Resources\MangaResource;
 use App\Versions\V1\Services\MangaService;
 use Spatie\DataTransferObject\Exceptions\UnknownProperties;
+use Spatie\MediaLibrary\MediaCollections\Exceptions\FileDoesNotExist;
+use Spatie\MediaLibrary\MediaCollections\Exceptions\FileIsTooBig;
 
 class MangaController extends Controller
 {
@@ -26,16 +28,6 @@ class MangaController extends Controller
         );
     }
 
-    /**
-     * @throws UnknownProperties
-     */
-    public function store(MangaRequest $request)
-    {
-        $manga = (new MangaService(new Manga()))->save(MangaDto::fromRequest($request));
-
-        return new MangaResource($manga);
-    }
-
     public function show(Manga $manga, ShowMangaAction $action): MangaResource
     {
         return (new MangaResource($action->execute($manga)));
@@ -43,17 +35,31 @@ class MangaController extends Controller
 
     /**
      * @throws UnknownProperties
+     * @throws FileDoesNotExist
+     * @throws FileIsTooBig
+     */
+    public function store(MangaRequest $request)
+    {
+        $manga = app(MangaService::class, [new Manga()])->save(MangaDto::fromRequest($request));
+
+        return new MangaResource($manga);
+    }
+
+    /**
+     * @throws UnknownProperties
+     * @throws FileDoesNotExist
+     * @throws FileIsTooBig
      */
     public function update(MangaRequest $request, Manga $manga)
     {
-        (new MangaService($manga))->save(MangaDto::fromRequest($request));
+        app(MangaService::class, [$manga])->save(MangaDto::fromRequest($request));
 
         return new MangaResource($manga);
     }
 
     public function destroy(Manga $manga)
     {
-        (new MangaService($manga))->delete();
+        app(MangaService::class, [$manga])->delete();
 
         return response()->noContent();
     }
