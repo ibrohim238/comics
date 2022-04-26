@@ -24,7 +24,9 @@ class TeamMangaChapterController extends Controller
     {
 //        $this->authorize('viewAny');
 
-        $chapters = $manga->chapters()->where('team_id', $team)->get();
+        $chapters = $manga->chapters()
+            ->where('team_id', $team)
+            ->get();
 
         return new ChapterCollection($chapters);
     }

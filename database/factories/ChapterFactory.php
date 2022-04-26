@@ -4,6 +4,7 @@ namespace Database\Factories;
 
 use App\Models\Chapter;
 use App\Models\Manga;
+use App\Models\Team;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 class ChapterFactory extends Factory
@@ -17,7 +18,8 @@ class ChapterFactory extends Factory
             'number' => $this->faker->numberBetween(0, 100),
             'name' => $this->faker->title,
             'order_column' =>  $this->faker->numberBetween(0, 100),
-            'manga_id' => Manga::factory()
+            'manga_id' => Manga::factory(),
+            'team_id' => Team::factory()
         ];
     }
 }

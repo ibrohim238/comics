@@ -10,15 +10,16 @@ use App\Versions\V1\Http\Resources\MangaResource;
 use App\Versions\V1\Services\TeamableService;
 use App\Versions\V1\Traits\IdentifiesModels;
 use Illuminate\Auth\Access\AuthorizationException;
+use Spatie\QueryBuilder\QueryBuilder;
 
 class TeamableController extends Controller
 {
     use IdentifiesModels;
 
-    public function index(Team $team, TeamableIndexRequest $request): MangaCollection
+    public function index(Team $team): MangaCollection
     {
-        $teamable = $team->teamable()
-            ->where('teamable_type', $request->validated())
+        $teamable = QueryBuilder::for($team->teamable())
+            ->allowedFilters(['teamable'])
             ->get();
 
         return new MangaCollection($teamable);

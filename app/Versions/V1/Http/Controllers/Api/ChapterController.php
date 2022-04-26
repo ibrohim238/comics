@@ -9,6 +9,7 @@ use App\Versions\V1\Http\Requests\Api\ChapterIndexRequest;
 use App\Versions\V1\Http\Resources\ChapterCollection;
 use App\Versions\V1\Http\Resources\ChapterResource;
 use Illuminate\Auth\Access\AuthorizationException;
+use Spatie\QueryBuilder\QueryBuilder;
 
 class ChapterController extends Controller
 {
@@ -17,9 +18,13 @@ class ChapterController extends Controller
         $this->authorizeResource(Chapter::class);
     }
 
-    public function index(Manga $manga, ChapterIndexRequest $request)
+    public function index(Manga $manga)
     {
-        $chapters = $manga->chapters()->where('team_id', $request->validated('team_id'))->get();
+        $chapters = QueryBuilder::for($manga->chapters())
+            ->allowedFilters(['team_id'])
+            ->defaultSorts('-volume', '-number')
+            ->allowedSorts('volume', 'number')
+            ->get();
 
         return new ChapterCollection($chapters);
     }
