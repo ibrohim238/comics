@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use App\Filters\QueryFilter;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
@@ -22,11 +24,16 @@ class Manga extends Model implements HasMedia, Eventable, Rateable, Commentable,
     use HasTeamable;
 
     protected $fillable = [
-        'title',
+        'name',
         'slug',
         'description',
         'published_at',
     ];
+
+    public function scopeFilter(Builder $builder, QueryFilter $filters): Builder
+    {
+        return $filters->apply($builder);
+    }
 
     public function users(): BelongsToMany
     {
@@ -41,12 +48,6 @@ class Manga extends Model implements HasMedia, Eventable, Rateable, Commentable,
     {
         return $this->hasMany(Chapter::class);
     }
-
-    public function getRouteKeyName(): string
-    {
-        return 'slug';
-    }
-
 
     public function getSlugOptions() : SlugOptions
     {

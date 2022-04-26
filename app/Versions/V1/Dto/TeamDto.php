@@ -8,7 +8,7 @@ use Spatie\DataTransferObject\Exceptions\UnknownProperties;
 
 class TeamDto extends DataTransferObject
 {
-    public string $title;
+    public string $name;
 
     /**
      * @throws UnknownProperties

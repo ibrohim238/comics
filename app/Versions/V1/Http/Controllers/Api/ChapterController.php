@@ -2,36 +2,35 @@
 
 namespace App\Versions\V1\Http\Controllers\Api;
 
+use App\Models\Chapter;
 use App\Models\Manga;
 use App\Versions\V1\Http\Controllers\Controller;
 use App\Versions\V1\Http\Requests\Api\ChapterIndexRequest;
 use App\Versions\V1\Http\Resources\ChapterCollection;
 use App\Versions\V1\Http\Resources\ChapterResource;
 use Illuminate\Auth\Access\AuthorizationException;
+use Spatie\QueryBuilder\QueryBuilder;
 
 class ChapterController extends Controller
 {
-    /**
-     * @throws AuthorizationException
-     */
-    public function index(Manga $manga, ChapterIndexRequest $request)
+    public function __construct()
     {
-        $this->authorize('viewAny');
+        $this->authorizeResource(Chapter::class);
+    }
 
-        $chapters = $manga->chapters()->where('team_id', $request->validated('team_id'))->get();
+    public function index(Manga $manga)
+    {
+        $chapters = QueryBuilder::for($manga->chapters())
+            ->allowedFilters(['team_id'])
+            ->defaultSorts('-volume', '-number')
+            ->allowedSorts('volume', 'number')
+            ->get();
 
         return new ChapterCollection($chapters);
     }
 
-    /**
-     * @throws AuthorizationException
-     */
-    public function show(Manga $manga, int $chapterOrder): ChapterResource
+    public function show(Manga $manga, Chapter $chapter): ChapterResource
     {
-        $chapter = $manga->chapters()->where('order_column', $chapterOrder)->firstOrFail();
-
-        $this->authorize('view', $chapter);
-
         return new ChapterResource($chapter->load('media'));
     }
 }

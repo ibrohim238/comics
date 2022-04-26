@@ -13,7 +13,7 @@ class MangaFactory extends Factory
     public function definition(): array
     {
         return [
-            'title' => $this->faker->title,
+            'name' => $this->faker->title,
             'description' => $this->faker->text,
             'published_at' => Carbon::now(),
         ];

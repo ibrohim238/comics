@@ -15,16 +15,18 @@ use App\Versions\V1\Services\ChapterService;
 use Illuminate\Auth\Access\AuthorizationException;
 use Spatie\DataTransferObject\Exceptions\UnknownProperties;
 
-class TeamableChapterController extends Controller
+class TeamMangaChapterController extends Controller
 {
     /**
      * @throws AuthorizationException
      */
     public function index(Team $team, Manga $manga)
     {
-        $this->authorize('viewAny');
+//        $this->authorize('viewAny');
 
-        $chapters = $manga->chapters()->where('team_id', $team)->get();
+        $chapters = $manga->chapters()
+            ->where('team_id', $team)
+            ->get();
 
         return new ChapterCollection($chapters);
     }
