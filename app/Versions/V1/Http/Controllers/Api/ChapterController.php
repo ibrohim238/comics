@@ -5,10 +5,8 @@ namespace App\Versions\V1\Http\Controllers\Api;
 use App\Models\Chapter;
 use App\Models\Manga;
 use App\Versions\V1\Http\Controllers\Controller;
-use App\Versions\V1\Http\Requests\Api\ChapterIndexRequest;
 use App\Versions\V1\Http\Resources\ChapterCollection;
 use App\Versions\V1\Http\Resources\ChapterResource;
-use Illuminate\Auth\Access\AuthorizationException;
 use Spatie\QueryBuilder\QueryBuilder;
 
 class ChapterController extends Controller

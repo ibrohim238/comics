@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-use App\Models\Team\TeamTrait;
 use App\Versions\V1\Dto\FallbackMedia;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
