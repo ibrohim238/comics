@@ -54,9 +54,9 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('teams');
-        Schema::dropIfExists('team_users');
         Schema::dropIfExists('team_invitations');
+        Schema::dropIfExists('team_users');
         Schema::dropIfExists('teamables');
+        Schema::dropIfExists('teams');
     }
 };

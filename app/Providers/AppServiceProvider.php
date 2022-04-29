@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 use App\Models\Chapter;
+use App\Models\Filter;
 use App\Models\Manga;
 use App\Models\Team;
 use App\Models\User;
@@ -37,7 +38,8 @@ class AppServiceProvider extends ServiceProvider
             'user' => User::class,
             'manga' => Manga::class,
             'chapter' => Chapter::class,
-            'team' => Team::class
+            'team' => Team::class,
+            'filter' => Filter::class,
         ]);
     }
 }

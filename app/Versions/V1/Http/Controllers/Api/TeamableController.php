@@ -21,7 +21,7 @@ class TeamableController extends Controller
 
         $model = $this->identifyModel($model, $id);
 
-        app(TeamableService::class, [$model, $team])->create();
+        app(TeamableService::class, [$model, $team])->attach();
     }
 
     /**
@@ -33,7 +33,7 @@ class TeamableController extends Controller
 
         $model = $this->identifyModel($model, $id);
 
-        app(TeamableService::class, [$model, $team]);
+        app(TeamableService::class, [$model, $team])->detach();
     }
 }
 
