@@ -7,7 +7,6 @@ use App\Models\Manga;
 use App\Models\Team;
 use App\Versions\V1\Dto\ChapterDto;
 use App\Versions\V1\Http\Controllers\Controller;
-use App\Versions\V1\Http\Requests\Api\ChapterIndexRequest;
 use App\Versions\V1\Http\Requests\Api\ChapterRequest;
 use App\Versions\V1\Http\Resources\ChapterCollection;
 use App\Versions\V1\Http\Resources\ChapterResource;
@@ -17,15 +16,25 @@ use Spatie\DataTransferObject\Exceptions\UnknownProperties;
 
 class TeamMangaChapterController extends Controller
 {
+    /**
+     * @throws AuthorizationException
+     */
     public function index(Team $team, Manga $manga)
     {
+        $this->authorize('chapterViewAny', $team);
+
         $chapters = $manga->chapters()->get();
 
         return new ChapterCollection($chapters);
     }
 
+    /**
+     * @throws AuthorizationException
+     */
     public function show(Team $team, Manga $manga, Chapter $chapter)
     {
+        $this->authorize('chapterView', $team);
+
         return new ChapterResource($chapter);
     }
 
