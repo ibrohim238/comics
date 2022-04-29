@@ -58,6 +58,9 @@ Route::prefix('v1')->group(function () {
 
     Route::delete('/team-invitations/{invitation}', [TeamInvitationController::class, 'destroy']);
 
+    Route::post('/teams/{team}/attach/{model}/{id}', [TeamableController::class, 'attach']);
+    Route::post('/teams/{team}/detach/{model}/{id}', [TeamableController::class, 'detach']);
+
     /*
      * Manga
      */
@@ -70,19 +73,12 @@ Route::prefix('v1')->group(function () {
     Route::post('/bookmarks/attach/{manga}', [BookmarksController::class, 'attach']);
     Route::post('/bookmarks/detach/{manga}', [BookmarksController::class, 'detach']);
 
-    /*
-     * Chapter
-     */
     Route::scopeBindings()->group( function () {
-
-
         Route::get('/manga/{manga:slug}/chapter', [ChapterController::class, 'index']);
         Route::get('/manga/{manga:slug}/chapter/{chapter:order_column}', [ChapterController::class, 'show']);
 
         Route::get('/teams/{team}/manga/', [TeamMangaController::class, 'index']);
         Route::get('/teams/{team}/manga/{manga}', [TeamMangaController::class, 'show']);
-        Route::post('/teams/{team}/attach/{model}/{id}', [TeamableController::class, 'attach']);
-        Route::post('/teams/{team}/detach/{model}/{id}', [TeamableController::class, 'detach']);
 
         Route::get('/teams/{team}/manga/{manga}/chapter', [TeamMangaChapterController::class, 'index']);
         Route::post('/teams/{team}/manga/{manga}/chapter', [TeamMangaChapterController::class, 'store']);
