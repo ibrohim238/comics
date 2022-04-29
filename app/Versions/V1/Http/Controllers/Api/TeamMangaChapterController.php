@@ -17,18 +17,16 @@ use Spatie\DataTransferObject\Exceptions\UnknownProperties;
 
 class TeamMangaChapterController extends Controller
 {
-    /**
-     * @throws AuthorizationException
-     */
     public function index(Team $team, Manga $manga)
     {
-        $this->authorize('chapterViewAny', $team);
-
-        $chapters = $manga->chapters()
-            ->where('team_id', $team)
-            ->get();
+        $chapters = $manga->chapters()->get();
 
         return new ChapterCollection($chapters);
+    }
+
+    public function show(Team $team, Manga $manga, Chapter $chapter)
+    {
+        return new ChapterResource($chapter);
     }
 
     /**
@@ -37,7 +35,7 @@ class TeamMangaChapterController extends Controller
      */
     public function store(Team $team, Manga $manga, ChapterRequest $request)
     {
-        $this->authorize('chapterCreate', [$team, $manga]);
+        $this->authorize('chapterCreate', $team);
 
         $chapter = app(ChapterService::class, [new Chapter()])
             ->create(ChapterDto::fromRequest($request), $team, $manga);
@@ -51,7 +49,7 @@ class TeamMangaChapterController extends Controller
      */
     public function update(Team $team, Manga $manga, Chapter $chapter, ChapterRequest $request)
     {
-        $this->authorize('chapterUpdate', [$team, $manga]);
+        $this->authorize('chapterUpdate', $team);
 
         app(ChapterService::class, [$chapter])
             ->update(ChapterDto::fromRequest($request));
@@ -64,7 +62,7 @@ class TeamMangaChapterController extends Controller
      */
     public function destroy(Team $team, Manga $manga, Chapter $chapter)
     {
-        $this->authorize('chapterDelete', [$team, $manga]);
+        $this->authorize('chapterDelete', $team);
 
         app(ChapterService::class, [$chapter])->delete();
 

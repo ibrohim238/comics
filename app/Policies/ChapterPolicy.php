@@ -18,7 +18,7 @@ class ChapterPolicy
 
     public function view(?User $user, Chapter $chapter): bool
     {
-        if (! $chapter->is_paid) {
+        if ($chapter->is_paid) {
             return false;
         }
         return true;

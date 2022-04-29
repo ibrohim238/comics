@@ -61,7 +61,12 @@ class TeamPolicy
             || $user->hasTeamPermission($invitation->team, TeamPermissionEnum::MANAGE_TEAM);
     }
 
-    public function addTeamable(User $user): bool
+    public function attachTeamable(User $user): bool
+    {
+        return $user->hasPermissionTo(PermissionEnum::MANAGE_MANGA->value);
+    }
+
+    public function detachTeamable(User $user): bool
     {
         return $user->hasPermissionTo(PermissionEnum::MANAGE_MANGA->value);
     }
@@ -76,36 +81,19 @@ class TeamPolicy
         return $user->hasTeamPermission($team, TeamPermissionEnum::MANAGE_MANGA);
     }
 
-    public function chapterCreate(User $user, Team $team, Manga $manga): bool
+    public function chapterCreate(User $user, Team $team): bool
     {
-        return
-            $team->hasTeamable($manga)
-            &&
-            $user->hasTeamPermission($team, TeamPermissionEnum::MANAGE_MANGA)
-        ;
+        return $user->hasTeamPermission($team, TeamPermissionEnum::MANAGE_MANGA);
     }
 
-    public function chapterUpdate(User $user, Team $team, Manga $manga): bool
+    public function chapterUpdate(User $user, Team $team): bool
     {
-        return
-            $team->hasTeamable($manga)
-            &&
-            $user->hasTeamPermission($team, TeamPermissionEnum::MANAGE_MANGA)
-        ;
+        return $user->hasTeamPermission($team, TeamPermissionEnum::MANAGE_MANGA);
     }
 
-    public function chapterDelete(User $user, Team $team, Manga $manga): bool
+    public function chapterDelete(User $user, Team $team): bool
     {
-        return
-            $team->hasTeamable($manga)
-            &&
-            $user->hasTeamPermission($team, TeamPermissionEnum::MANAGE_MANGA)
-        ;
-    }
-
-    public function deleteTeamable(User $user): bool
-    {
-        return $user->hasPermissionTo(PermissionEnum::MANAGE_MANGA->value);
+        return $user->hasTeamPermission($team, TeamPermissionEnum::MANAGE_MANGA);
     }
 
     public function delete(User $user, Team $team): bool

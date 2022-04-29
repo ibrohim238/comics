@@ -15,11 +15,11 @@ class TeamableService
 
     public function create(): void
     {
-        $this->team->teamable()->attach($this->teamable);
+        $this->teamable->teams()->attach($this->team);
     }
 
     public function delete(): void
     {
-        $this->team->teamable()->detach($this->teamable);
+        $this->teamable->teams()->attach($this->team);
     }
 }

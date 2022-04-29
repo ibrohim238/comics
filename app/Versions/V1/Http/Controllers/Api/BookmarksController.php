@@ -22,7 +22,7 @@ class BookmarksController extends Controller
         return new MangaCollection($bookmarks);
     }
 
-    public function add(Manga $manga)
+    public function attach(Manga $manga)
     {
         try {
             app(BookmarkService::class, [$manga, Auth::user()])->add();
@@ -33,7 +33,7 @@ class BookmarksController extends Controller
         return response(Lang::get('bookmark.created'));
     }
 
-    public function delete(Manga $manga)
+    public function detach(Manga $manga)
     {
         try {
             app(BookmarkService::class, [$manga, Auth::user()])->delete();

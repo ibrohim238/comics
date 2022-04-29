@@ -8,6 +8,6 @@ trait HasTeamable
 {
     public function teams(): MorphToMany
     {
-        return $this->morphedByMany(Team::class, 'teamable');
+        return $this->morphToMany(Team::class, 'teamable');
     }
 }

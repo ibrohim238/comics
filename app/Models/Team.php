@@ -38,14 +38,9 @@ class Team extends Model implements HasMedia
         return $this->hasMany(TeamInvitation::class);
     }
 
-    public function teamable(): MorphToMany
+    public function mangas(): MorphToMany
     {
-        return $this->morphToMany(Manga::class, 'teamable');
-    }
-
-    public function hasTeamable(Teamable $teamable): bool
-    {
-        return $this->teamable()->where('id', $teamable->id)->exists();
+        return $this->morphedByMany(Manga::class, 'teamable');
     }
 
     public function chapters(): HasMany

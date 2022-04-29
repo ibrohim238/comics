@@ -30,11 +30,6 @@ class Manga extends Model implements HasMedia, Eventable, Rateable, Commentable,
         'published_at',
     ];
 
-    public function scopeFilter(Builder $builder, QueryFilter $filters): Builder
-    {
-        return $filters->apply($builder);
-    }
-
     public function users(): BelongsToMany
     {
         return $this->belongsToMany(
