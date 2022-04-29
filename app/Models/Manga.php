@@ -11,7 +11,7 @@ use Spatie\MediaLibrary\InteractsWithMedia;
 use Spatie\Sluggable\HasSlug;
 use Spatie\Sluggable\SlugOptions;
 
-class Manga extends Model implements HasMedia, Eventable, Rateable, Commentable
+class Manga extends Model implements HasMedia, Eventable, Rateable, Commentable, Teamable
 {
     use HasFactory;
     use HasSlug;
@@ -19,9 +19,10 @@ class Manga extends Model implements HasMedia, Eventable, Rateable, Commentable
     use HasRatings;
     use HasComments;
     use InteractsWithMedia;
+    use HasTeamable;
 
     protected $fillable = [
-        'title',
+        'name',
         'slug',
         'description',
         'published_at',
@@ -40,12 +41,6 @@ class Manga extends Model implements HasMedia, Eventable, Rateable, Commentable
     {
         return $this->hasMany(Chapter::class);
     }
-
-    public function getRouteKeyName(): string
-    {
-        return 'slug';
-    }
-
 
     public function getSlugOptions() : SlugOptions
     {

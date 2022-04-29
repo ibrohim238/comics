@@ -13,9 +13,8 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('likes', function (Blueprint $table) {
-            $table->morphs('likeable');
-            $table->foreignId('user_id')->constrained();
+        Schema::table('chapters', function (Blueprint $table) {
+            $table->foreignId('team_id')->after('manga_id')->constrained();
         });
     }
 
@@ -26,6 +25,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('likes');
+        Schema::dropColumns('chapters', 'team_id');
     }
 };

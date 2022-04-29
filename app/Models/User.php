@@ -20,6 +20,7 @@ class User extends Authenticatable implements HasMedia, MustVerifyEmail
     use Notifiable;
     use HasRoles;
     use InteractsWithMedia;
+    use HasTeams;
 
     /**
      * The attributes that are mass assignable.

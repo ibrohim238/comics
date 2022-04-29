@@ -40,10 +40,10 @@ class CommentController extends Controller
      * @throws UnknownProperties
      * @throws Exception
      */
-    public function store(CommentRequest $request, string $model, int $id): CommentResource
+    public function store(CommentRequest $request, string $model, int $id, CommentService $service): CommentResource
     {
         $model = $this->identifyModel($model, $id);
-        $comment = (new CommentService())->create($model, Auth::user(), CommentDto::fromRequest($request));
+        $comment = $service->create($model, Auth::user(), CommentDto::fromRequest($request));
 
         return new CommentResource($comment);
     }
@@ -54,13 +54,13 @@ class CommentController extends Controller
     public function update(
         Comment $comment,
         CommentRequest $request,
-        CommentService $commentService
+        CommentService $service
     ) {
-        $commentService->update($comment, CommentDto::fromRequest($request));
+        $service->update($comment, CommentDto::fromRequest($request));
     }
 
-    public function destroy(Comment $comment, CommentService $commentService)
+    public function destroy(Comment $comment, CommentService $service)
     {
-        $commentService->delete($comment);
+        $service->delete($comment);
     }
 }

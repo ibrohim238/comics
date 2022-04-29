@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
 
@@ -18,13 +19,17 @@ class Chapter extends Model implements HasMedia, Eventable, Likeable, Commentabl
     protected $fillable = [
         'volume',
         'number',
-        'title',
-        'order_column',
+        'name',
+        'is_paid',
     ];
 
-
-    public function getRouteKeyName(): string
+    public function manga(): BelongsTo
     {
-        return 'order_column';
+        return $this->belongsTo(Manga::class);
+    }
+
+    public function team(): BelongsTo
+    {
+        return $this->belongsTo(Team::class);
     }
 }
