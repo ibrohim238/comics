@@ -17,7 +17,7 @@ class FilterController extends Controller
     public function index(): FilterCollection
     {
         $filters = QueryBuilder::for(Filter::class)
-//            ->allowedFilters(['filter_type_id'])
+            ->allowedFilters(['type'])
             ->get();
 
         return new FilterCollection($filters);

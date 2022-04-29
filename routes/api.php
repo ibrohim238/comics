@@ -68,9 +68,9 @@ Route::prefix('v1')->group(function () {
      */
     Route::apiResource('manga', MangaController::class)->parameter('manga', 'manga:slug');
 
-    Route::resource('filter', FilterController::class);
-    Route::post('/filter/{filter}/attach/{model}/{id}', [FilterableController::class, 'attach']);
-    Route::post('/filter/{filter}/detach/{model}/{id', [FilterableController::class, 'detach']);
+    Route::resource('filters', FilterController::class);
+    Route::post('/filters/{filter}/attach/{model}/{id}', [FilterableController::class, 'attach']);
+    Route::post('/filters/{filter}/detach/{model}/{id', [FilterableController::class, 'detach']);
 
     /*
      * Bookmarks

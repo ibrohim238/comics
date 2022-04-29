@@ -9,7 +9,7 @@ trait HasFilters
 {
     public function filters(): MorphToMany
     {
-        return $this->morphToMany(Filter::class, 'filterables');
+        return $this->morphToMany(Filter::class, 'filterable');
     }
 
     public function filterType(FilterTypeEnum $filterTypeEnum): MorphToMany
@@ -25,5 +25,10 @@ trait HasFilters
     public function categories(): MorphToMany
     {
         return $this->filterType(FilterTypeEnum::CATEGORY_TYPE);
+    }
+
+    public function tags(): MorphToMany
+    {
+        return $this->filterType(FilterTypeEnum::TAG_TYPE);
     }
 }

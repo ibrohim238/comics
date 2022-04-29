@@ -2,7 +2,9 @@
 
 namespace App\Versions\V1\Http\Requests\Api;
 
+use App\Enums\FilterTypeEnum;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rules\Enum;
 
 /**
  * @property-read string $name
@@ -17,7 +19,7 @@ class FilterRequest extends FormRequest
         return [
             'name' => ['required', 'string'],
             'description' => ['nullable', 'string'],
-            'type' => ['required', 'string']
+            'type' => [new Enum(FilterTypeEnum::class)]
         ];
     }
 }

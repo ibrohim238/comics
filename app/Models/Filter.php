@@ -12,12 +12,13 @@ class Filter extends Model
     use HasFactory;
 
     protected $fillable = [
-      'name',
-      'description',
+        'name',
+        'description',
+        'type'
     ];
 
     public function mangas(): MorphToMany
     {
-        return $this->morphedByMany(Manga::class, 'filterables');
+        return $this->morphedByMany(Manga::class, 'filterable');
     }
 }

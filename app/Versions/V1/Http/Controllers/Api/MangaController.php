@@ -10,9 +10,12 @@ use App\Versions\V1\Http\Requests\Api\MangaRequest;
 use App\Versions\V1\Http\Resources\MangaCollection;
 use App\Versions\V1\Http\Resources\MangaResource;
 use App\Versions\V1\Services\MangaService;
+use Illuminate\Contracts\Database\Eloquent\Builder;
 use Spatie\DataTransferObject\Exceptions\UnknownProperties;
 use Spatie\MediaLibrary\MediaCollections\Exceptions\FileDoesNotExist;
 use Spatie\MediaLibrary\MediaCollections\Exceptions\FileIsTooBig;
+use Spatie\QueryBuilder\AllowedFilter;
+use Spatie\QueryBuilder\QueryBuilder;
 
 class MangaController extends Controller
 {
@@ -23,9 +26,14 @@ class MangaController extends Controller
 
     public function index()
     {
-        return new MangaCollection(
-            Manga::query()->get()
-        );
+        $mangas = QueryBuilder::for(Manga::class)
+            ->allowedFilters(
+                AllowedFilter::exact('genres', 'genres.name'),
+                AllowedFilter::exact('categories', 'categories.name'),
+                AllowedFilter::exact('tags', 'tags.name')
+            )->get();
+
+        return new MangaCollection($mangas);
     }
 
     public function show(Manga $manga, ShowMangaAction $action): MangaResource
