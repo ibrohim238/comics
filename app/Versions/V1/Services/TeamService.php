@@ -50,14 +50,18 @@ class TeamService
      * @throws FileDoesNotExist
      * @throws FileIsTooBig
      */
-    public function addImage()
+    public function addImage(): static
     {
         $this->team->addMediaFromRequest('image')->toMediaCollection();
+
+        return $this;
     }
 
-    public function delete()
+    public function delete(): static
     {
         $this->team->clearMediaCollection();
         $this->team->delete();
+
+        return $this;
     }
 }

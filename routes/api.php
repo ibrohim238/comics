@@ -4,11 +4,13 @@ use App\Enums\CommentableTypeEnum;
 use App\Versions\V1\Http\Controllers\Api\BookmarksController;
 use App\Versions\V1\Http\Controllers\Api\ChapterController;
 use App\Versions\V1\Http\Controllers\Api\CommentController;
+use App\Versions\V1\Http\Controllers\Api\FilterableController;
+use App\Versions\V1\Http\Controllers\Api\FilterController;
 use App\Versions\V1\Http\Controllers\Api\MangaController;
-use App\Versions\V1\Http\Controllers\Api\TeamMangaChapterController;
 use App\Versions\V1\Http\Controllers\Api\TeamableController;
 use App\Versions\V1\Http\Controllers\Api\TeamController;
 use App\Versions\V1\Http\Controllers\Api\TeamInvitationController;
+use App\Versions\V1\Http\Controllers\Api\TeamMangaChapterController;
 use App\Versions\V1\Http\Controllers\Api\TeamMangaController;
 use App\Versions\V1\Http\Controllers\Api\TeamMemberController;
 use App\Versions\V1\Http\Controllers\Api\UserController;
@@ -65,6 +67,10 @@ Route::prefix('v1')->group(function () {
      * Manga
      */
     Route::apiResource('manga', MangaController::class)->parameter('manga', 'manga:slug');
+
+    Route::resource('filter', FilterController::class);
+    Route::post('/filter/{filter}/attach/{model}/{id}', [FilterableController::class, 'attach']);
+    Route::post('/filter/{filter}/detach/{model}/{id', [FilterableController::class, 'detach']);
 
     /*
      * Bookmarks

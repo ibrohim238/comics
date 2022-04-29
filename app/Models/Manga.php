@@ -11,7 +11,7 @@ use Spatie\MediaLibrary\InteractsWithMedia;
 use Spatie\Sluggable\HasSlug;
 use Spatie\Sluggable\SlugOptions;
 
-class Manga extends Model implements HasMedia, Eventable, Rateable, Commentable, Teamable
+class Manga extends Model implements HasMedia, Eventable, Rateable, Commentable, Teamable, Filterable
 {
     use HasFactory;
     use HasSlug;
@@ -20,6 +20,7 @@ class Manga extends Model implements HasMedia, Eventable, Rateable, Commentable,
     use HasComments;
     use InteractsWithMedia;
     use HasTeamable;
+    use HasFilters;
 
     protected $fillable = [
         'name',
