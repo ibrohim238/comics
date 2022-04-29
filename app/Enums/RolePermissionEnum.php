@@ -16,14 +16,7 @@ enum RolePermissionEnum: string
     {
         return match ($this) {
             self::OWNER => [
-                PermissionEnum::VIEW_ADMIN_PANEL,
-                PermissionEnum::MANAGE_MANGA,
-                PermissionEnum::MANAGE_USER,
-                PermissionEnum::MANAGE_COMMENT,
-                PermissionEnum::ASSIGN_MODERATOR,
-                PermissionEnum::ASSIGN_ADMIN,
-                PermissionEnum::MANAGE_TEAM,
-                PermissionEnum::CREATE_TEAM
+                TeamPermissionEnum::cases()
             ],
             self::ADMIN => [
                 PermissionEnum::VIEW_ADMIN_PANEL,
