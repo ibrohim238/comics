@@ -81,6 +81,7 @@ Route::prefix('v1')->group(function () {
     Route::post('/bookmarks/detach/{manga}', [BookmarksController::class, 'detach']);
 
     Route::get('/notifications', [NotificationController::class, 'index']);
+    Route::get('/notifications/{groupId}', [NotificationController::class, 'more']);
     Route::get('/notifications/read/{id}', [NotificationController::class, 'read']);
     Route::get('/notifications/unread/{id}', [NotificationController::class, 'unread']);
     Route::get('/notifications/readAll', [NotificationController::class, 'readAll']);

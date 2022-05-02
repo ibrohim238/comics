@@ -22,7 +22,18 @@ class NotificationController extends Controller
     public function index(Request $request)
     {
         $notifications = Auth::user()->notifications()
-            ->whereNull('read_at', 'and', $request->get('viewed', false))
+            ->select('*')
+            ->groupBy('data->group_id')
+            ->get();
+
+        return new NotificationCollection($notifications);
+    }
+
+    public function more($groupId)
+    {
+        $notifications = Auth::user()->notifications()
+            ->where('data->group_id', $groupId)
+            ->orderByDesc('created_at')
             ->get();
 
         return new NotificationCollection($notifications);
