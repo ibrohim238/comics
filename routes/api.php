@@ -7,6 +7,7 @@ use App\Versions\V1\Http\Controllers\Api\CommentController;
 use App\Versions\V1\Http\Controllers\Api\FilterableController;
 use App\Versions\V1\Http\Controllers\Api\FilterController;
 use App\Versions\V1\Http\Controllers\Api\MangaController;
+use App\Versions\V1\Http\Controllers\Api\NotificationController;
 use App\Versions\V1\Http\Controllers\Api\TeamableController;
 use App\Versions\V1\Http\Controllers\Api\TeamController;
 use App\Versions\V1\Http\Controllers\Api\TeamInvitationController;
@@ -78,6 +79,11 @@ Route::prefix('v1')->group(function () {
     Route::get('/bookmarks', [BookmarksController::class, 'index']);
     Route::post('/bookmarks/attach/{manga}', [BookmarksController::class, 'attach']);
     Route::post('/bookmarks/detach/{manga}', [BookmarksController::class, 'detach']);
+
+    Route::get('/notifications', [NotificationController::class, 'index']);
+    Route::get('/notifications/read/{id}', [NotificationController::class, 'read']);
+    Route::get('/notifications/unread/{id}', [NotificationController::class, 'unread']);
+    Route::get('/notifications/readAll', [NotificationController::class, 'readAll']);
 
     Route::scopeBindings()->group( function () {
         Route::get('/manga/{manga:slug}/chapter', [ChapterController::class, 'index']);

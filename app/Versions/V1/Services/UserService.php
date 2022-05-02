@@ -9,9 +9,14 @@ use Illuminate\Database\Eloquent\Model;
 
 class UserService
 {
+    public function __construct(
+      public User $user
+    ) {
+    }
+
     public function create(UserDto $dto): Model|User
     {
-        $user = User::create($dto->toArray());
+        $user = $this->user->create($dto->toArray());
         $user->assignRole(RolePermissionEnum::USER->value);
 
         return $user;
