@@ -36,6 +36,13 @@ class MangaController extends Controller
         return new MangaCollection($mangas);
     }
 
+    public function random()
+    {
+        $manga = Manga::inRandomOrder()->first();
+
+        return response(route('manga.show', $manga));
+    }
+
     public function show(Manga $manga, ShowMangaAction $action): MangaResource
     {
         return (new MangaResource($action->execute($manga)));
@@ -48,7 +55,7 @@ class MangaController extends Controller
      */
     public function store(MangaRequest $request)
     {
-        $manga = app(MangaService::class, [new Manga()])->save(MangaDto::fromRequest($request));
+        $manga = app(MangaService::class)->save(MangaDto::fromRequest($request));
 
         return new MangaResource($manga);
     }

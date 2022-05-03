@@ -4,7 +4,7 @@ namespace App\Versions\V1\Http\Resources;
 
 use Illuminate\Http\Resources\Json\ResourceCollection;
 
-class UserCollection extends ResourceCollection
+class NotificationCollection extends ResourceCollection
 {
-    public $collects = UserResource::class;
+    public $collects = NotificationResource::class;
 }

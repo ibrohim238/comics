@@ -2,12 +2,14 @@
 
 namespace App\Versions\V1\Dto;
 
+use Illuminate\Support\Facades\Hash;
 use Spatie\DataTransferObject\DataTransferObject;
 use Spatie\DataTransferObject\Exceptions\UnknownProperties;
 
 class UserDto extends DataTransferObject
 {
     public string $name;
+    public string $username;
     public string $email;
     public string $password;
 
@@ -20,7 +22,7 @@ class UserDto extends DataTransferObject
             'name' => $data['username'],
             'username' => $data['username'],
             'email' => $data['email'],
-            'password' => $data['password'],
+            'password' => Hash::make($data['password']),
         ]);
     }
 }

@@ -16,27 +16,27 @@ enum RolePermissionEnum: string
     {
         return match ($this) {
             self::OWNER => [
-                TeamPermissionEnum::cases()
+                PermissionEnum::values()
             ],
             self::ADMIN => [
-                PermissionEnum::VIEW_ADMIN_PANEL,
-                PermissionEnum::MANAGE_MANGA,
-                PermissionEnum::MANAGE_USER,
-                PermissionEnum::MANAGE_COMMENT,
-                PermissionEnum::ASSIGN_MODERATOR,
-                PermissionEnum::MANAGE_TEAM,
-                PermissionEnum::CREATE_TEAM
+                PermissionEnum::VIEW_ADMIN_PANEL->value,
+                PermissionEnum::MANAGE_MANGA->value,
+                PermissionEnum::MANAGE_USER->value,
+                PermissionEnum::MANAGE_COMMENT->value,
+                PermissionEnum::ASSIGN_MODERATOR->value,
+                PermissionEnum::MANAGE_TEAM->value,
+                PermissionEnum::CREATE_TEAM->value
             ],
             self::MODERATOR => [
-                PermissionEnum::VIEW_ADMIN_PANEL,
-                PermissionEnum::MANAGE_MANGA,
-                PermissionEnum::MANAGE_COMMENT,
-                PermissionEnum::MANAGE_USER,
-                PermissionEnum::ASSIGN_EDITOR,
-                PermissionEnum::CREATE_TEAM
+                PermissionEnum::VIEW_ADMIN_PANEL->value,
+                PermissionEnum::MANAGE_MANGA->value,
+                PermissionEnum::MANAGE_COMMENT->value,
+                PermissionEnum::MANAGE_USER->value,
+                PermissionEnum::ASSIGN_EDITOR->value,
+                PermissionEnum::CREATE_TEAM->value
             ],
             self::EDITOR => [
-                PermissionEnum::CREATE_TEAM
+                PermissionEnum::CREATE_TEAM->value
             ],
             self::USER => [
 
