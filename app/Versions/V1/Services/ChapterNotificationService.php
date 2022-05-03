@@ -5,27 +5,21 @@ namespace App\Versions\V1\Services;
 use App\Models\Chapter;
 use App\Models\User;
 use App\Notifications\ChapterCreated;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\Notification;
 
 class ChapterNotificationService
 {
     public function create(Chapter $chapter)
     {
-        $users = User::all();
+        $users = $this->getUsersWithManga($chapter->manga_id);
 
-        Notification::send($users, new ChapterCreated($this->prepareData($chapter)));
+        Notification::send($users, new ChapterCreated($chapter));
     }
 
-    protected function prepareData(Chapter $chapter): array
+    public function getUsersWithManga(int $mangaId): Collection
     {
-        $manga = $chapter->manga;
-        $type = $chapter->is_paid ? 'бесплатном' : 'платном';
-
-        return [
-            'image' => $manga->getFirstMediaUrl(),
-            'message' => "$manga->name добавлен $chapter->volume том $chapter->number глава в $type доступе.",
-            'url' => route('manga.show', $manga),
-            'group_id' => $manga->id
-        ];
+        //@TODO: change that
+        return User::all();
     }
 }

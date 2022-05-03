@@ -2,29 +2,40 @@
 
 namespace App\Versions\V1\Http\Controllers\Api;
 
+use App\Models\Notification;
 use App\Models\User;
+use App\Versions\V1\Dto\NotificationDto;
 use App\Versions\V1\Http\Controllers\Controller;
 use App\Versions\V1\Http\Resources\NotificationCollection;
 use App\Versions\V1\Services\NotificationService;
+use App\Versions\V1\Transformers\NotificationTransformer;
+use Illuminate\Database\Query\JoinClause;
 use Illuminate\Http\Request;
+use Illuminate\Notifications\DatabaseNotification;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class NotificationController extends Controller
 {
-    public User $user;
-
-    public function __construct()
-    {
-        $this->middleware('auth:api');
-    }
-
     public function index(Request $request)
     {
+        $subLatestOfMany = Auth::user()->notifications()
+            ->select(DB::raw('max(created_at) as time_aggregate'), 'data->group_id as group_id')
+            ->groupBy('group_id');
+
+        $onClosure = function (JoinClause $join) {
+            $join
+                ->on('notifications.created_at', '=', 'latestOfMany.time_aggregate')
+                ->on('notifications.data->group_id', '=', 'latestOfMany.group_id');
+        };
+
         $notifications = Auth::user()->notifications()
-            ->where('type', $request->get('type', false))
-            ->select('*')
-            ->groupBy('data->group_id')
-            ->get();
+            ->joinSub($subLatestOfMany, 'latestofMany', $onClosure)
+            ->get()
+            ->transform(
+                fn(DatabaseNotification $notification): NotificationDto => app(NotificationTransformer::class)
+                    ->transform($notification)
+            );
 
         return new NotificationCollection($notifications);
     }

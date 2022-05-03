@@ -11,7 +11,7 @@ class ChapterCreated extends Notification
     use Queueable;
 
     public function __construct(
-        public array $data
+y        public Chapter $chapter
     ) {
     }
 
@@ -29,10 +29,8 @@ class ChapterCreated extends Notification
     public function toArray($notifiable): array
     {
         return [
-            'image' => $this->data['image'],
-            'message' => $this->data['message'],
-            'url' => $this->data['url'],
-            'group_id' => $this->data['group_id']
+            'chapter_id' => $this->chapter->id,
+            'group_id' => $this->chapter->manga_id,
         ];
     }
 }

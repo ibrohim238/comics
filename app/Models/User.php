@@ -7,6 +7,7 @@ use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Notifications\DatabaseNotification;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Passport\HasApiTokens;
 use Spatie\MediaLibrary\HasMedia;
@@ -76,5 +77,10 @@ class User extends Authenticatable implements HasMedia, MustVerifyEmail
         $media = $this->getMedia($collectionName, $filters);
 
         return $media->first() ?? new FallbackMedia($collectionName, $this->getFallbackMediaUrl($collectionName));
+    }
+
+    public function notifications()
+    {
+        return $this->morphMany(DatabaseNotification::class, 'notifiable');
     }
 }
