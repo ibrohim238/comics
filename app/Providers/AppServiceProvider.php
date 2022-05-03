@@ -34,7 +34,7 @@ class AppServiceProvider extends ServiceProvider
             return config('app.url').'/reset-password?token='.$token.'&email='.urlencode($notifiable->email);
         });
 
-        Relation::enforceMorphMap([
+        Relation::MorphMap([
             'user' => User::class,
             'manga' => Manga::class,
             'chapter' => Chapter::class,

@@ -38,7 +38,7 @@ class TeamController extends Controller
      */
     public function store(TeamRequest $request)
     {
-        $team = app(TeamService::class, [new Team()])->create(TeamDto::fromRequest($request), Auth::user());
+        $team = app(TeamService::class)->create(TeamDto::fromRequest($request), Auth::user());
 
         return new TeamResource($team);
     }

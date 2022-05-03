@@ -5,6 +5,7 @@ namespace App\Versions\V1\Http\Controllers\Api;
 use App\Models\User;
 use App\Versions\V1\Http\Controllers\Controller;
 use App\Versions\V1\Http\Resources\NotificationCollection;
+use App\Versions\V1\Services\NotificationService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -15,13 +16,12 @@ class NotificationController extends Controller
     public function __construct()
     {
         $this->middleware('auth:api');
-
-        $this->user = Auth::user();
     }
 
     public function index(Request $request)
     {
         $notifications = Auth::user()->notifications()
+            ->where('type', $request->get('type', false))
             ->select('*')
             ->groupBy('data->group_id')
             ->get();
@@ -41,32 +41,26 @@ class NotificationController extends Controller
 
     public function read($id)
     {
-        $notification = Auth::user()->notifications()->where('id', $id)->first();
-        $notification->markAsRead();
+        app(NotificationService::class, [Auth::user()])->read($id);
     }
 
     public function unread($id)
     {
-        $notification = Auth::user()->notifications()->where('id', $id)->first();
-        $notification->markAsUnread();
+        app(NotificationService::class, [Auth::user()])->unRead($id);
     }
 
     public function readSet(array $ids)
     {
-        $notifications = $this->user->notifications()->whereIn('id', $ids)->get();
-
-        $notifications->markAsRead();
+        app(NotificationService::class, [Auth::user()])->readSet($ids);
     }
 
     public function unReadSet(array $ids)
     {
-        $notifications = $this->user->notifications()->whereIn('id', $ids)->get();
-
-        $notifications->markAsUnread();
+        app(NotificationService::class, [Auth::user()])->unReadSet($ids);
     }
 
     public function readAll()
     {
-        Auth::user()->unreadNotifications->markAsRead();
+        app(NotificationService::class, [Auth::user()])->readAll();
     }
 }

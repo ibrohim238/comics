@@ -13,6 +13,11 @@ use Illuminate\Support\Facades\Lang;
 
 class BookmarksController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth:api');
+    }
+
     public function index()
     {
         /** @var User $user */

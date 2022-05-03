@@ -4,6 +4,7 @@ use App\Enums\CommentableTypeEnum;
 use App\Versions\V1\Http\Controllers\Api\BookmarksController;
 use App\Versions\V1\Http\Controllers\Api\ChapterController;
 use App\Versions\V1\Http\Controllers\Api\CommentController;
+use App\Versions\V1\Http\Controllers\Api\HistoryController;
 use App\Versions\V1\Http\Controllers\Api\FilterableController;
 use App\Versions\V1\Http\Controllers\Api\FilterController;
 use App\Versions\V1\Http\Controllers\Api\MangaController;
@@ -30,6 +31,13 @@ use Illuminate\Support\Facades\Route;
 
 Route::prefix('v1')->group(function () {
     /*
+     * Admin
+     */
+    Route::prefix('panel')->group(function () {
+        require('admin.php');
+    });
+
+    /*
      * Auth
      */
     require ('auth.php');
@@ -47,12 +55,7 @@ Route::prefix('v1')->group(function () {
     /**
      * Teams
      */
-
-    Route::get('/teams', [TeamController::class, 'index']);
-    Route::post('/teams', [TeamController::class, 'store']);
-    Route::get('/teams/{team}', [TeamController::class, 'show']);
-    Route::put('/teams/{team}', [TeamController::class, 'update']);
-    Route::delete('/teams/{team}', [TeamController::class, 'destroy']);
+    Route::apiResource('teams', TeamController::class);
     Route::post('/teams/{team}/members/{user}', [TeamMemberController::class, 'store']);
     Route::put('/teams/{team}/members/{user}', [TeamMemberController::class, 'update']);
     Route::delete('/teams/{team}/members/{user}', [TeamMemberController::class, 'destroy']);
@@ -67,9 +70,12 @@ Route::prefix('v1')->group(function () {
     /*
      * Manga
      */
+    Route::get('/manga/random', [MangaController::class, 'random']);
+
     Route::apiResource('manga', MangaController::class)->parameter('manga', 'manga:slug');
 
-    Route::resource('filters', FilterController::class);
+
+    Route::apiResource('filters', FilterController::class);
     Route::post('/filters/{filter}/attach/{model}/{id}', [FilterableController::class, 'attach']);
     Route::post('/filters/{filter}/detach/{model}/{id', [FilterableController::class, 'detach']);
 
@@ -86,9 +92,11 @@ Route::prefix('v1')->group(function () {
     Route::get('/notifications/unread/{id}', [NotificationController::class, 'unread']);
     Route::get('/notifications/readAll', [NotificationController::class, 'readAll']);
 
+    Route::get('history', HistoryController::class);
+
     Route::scopeBindings()->group( function () {
-        Route::get('/manga/{manga:slug}/chapter', [ChapterController::class, 'index']);
-        Route::get('/manga/{manga:slug}/chapter/{chapter:order_column}', [ChapterController::class, 'show']);
+        Route::get('/mangas/{manga:slug}/chapter', [ChapterController::class, 'index']);
+        Route::get('/mangas/{manga:slug}/chapter/{chapter:order_column}', [ChapterController::class, 'show']);
 
         Route::get('/teams/{team}/manga/', [TeamMangaController::class, 'index']);
         Route::get('/teams/{team}/manga/{manga}', [TeamMangaController::class, 'show']);
