@@ -1,27 +1,27 @@
 <?php
 
-namespace App\Versions\V1\Services;
+namespace App\Versions\V1\Services\Admin;
 
 use App\Enums\RolePermissionEnum;
 use App\Models\User;
-use App\Versions\V1\Dto\UserDto;
+use App\Versions\V1\Dto\AdminUserDto;
 use Illuminate\Database\Eloquent\Model;
 
 class UserService
 {
     public function __construct(
-      public User $user
+        public User $user
     ) {
     }
 
-    public function create(UserDto $dto): Model|User
+    public function update(AdminUserDto $dto): Model|User
     {
         $this->fill($dto)->save()->assignRole(RolePermissionEnum::USER);
 
         return $this->user;
     }
 
-    public function fill(UserDto $dto): static
+    public function fill(AdminUserDto $dto): static
     {
         $this->user->fill($dto->toArray());
 
