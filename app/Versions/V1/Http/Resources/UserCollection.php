@@ -6,5 +6,5 @@ use Illuminate\Http\Resources\Json\ResourceCollection;
 
 class UserCollection extends ResourceCollection
 {
-    public $collects = UserCollection::class;
+    public $collects = UserResource::class;
 }

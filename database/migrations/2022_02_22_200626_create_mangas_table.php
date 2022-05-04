@@ -12,8 +12,8 @@ class CreateMangasTable extends Migration
             $table->id();
             $table->string('name');
             $table->string('slug');
-            $table->string('description');
-            $table->timestamp('published_at');
+            $table->string('description')->nullable();
+            $table->timestamp('published_at')->nullable();
             $table->timestamps();
         });
     }

@@ -9,11 +9,36 @@ use Illuminate\Database\Eloquent\Model;
 
 class UserService
 {
+    public function __construct(
+      public User $user
+    ) {
+    }
+
     public function create(UserDto $dto): Model|User
     {
-        $user = User::create($dto->toArray());
-        $user->assignRole(RolePermissionEnum::USER->value);
+        $this->fill($dto)->save()->assignRole(RolePermissionEnum::USER);
 
-        return $user;
+        return $this->user;
+    }
+
+    public function fill(UserDto $dto): static
+    {
+        $this->user->fill($dto->toArray());
+
+        return $this;
+    }
+
+    public function save(): static
+    {
+        $this->user->save();
+
+        return $this;
+    }
+
+    public function assignRole(RolePermissionEnum $rolePermissionEnum): static
+    {
+        $this->user->assignRole($rolePermissionEnum->value);
+
+        return $this;
     }
 }

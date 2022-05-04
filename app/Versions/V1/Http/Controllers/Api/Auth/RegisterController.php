@@ -66,8 +66,8 @@ class RegisterController extends Controller
      * @return User
      * @throws UnknownProperties
      */
-    protected function create(array $data, UserService $service)
+    protected function create(array $data)
     {
-        return $service->create(UserDto::fromArray($data));
+        return app(UserService::class)->create(UserDto::fromArray($data));
     }
 }

@@ -2,8 +2,9 @@
 
 namespace App\Versions\V1\Observers;
 
-use App\Enums\EnumTypeEnum;
+use App\Enums\EventTypeEnum;
 use App\Models\Chapter;
+use App\Versions\V1\Services\ChapterNotificationService;
 use App\Versions\V1\Services\EventService;
 use Illuminate\Support\Facades\Auth;
 use function app;
@@ -18,7 +19,8 @@ class ChapterObserver
      */
     public function created(Chapter $chapter)
     {
-        app(EventService::class)->create($chapter, Auth::user(), EnumTypeEnum::CREATE_TYPE);
+        app(EventService::class)->create($chapter, Auth::user(), EventTypeEnum::CREATE_TYPE);
+        app(ChapterNotificationService::class)->create($chapter);
     }
 
     /**
@@ -29,7 +31,8 @@ class ChapterObserver
      */
     public function updated(Chapter $chapter)
     {
-        app(EventService::class)->create($chapter, Auth::user(), EnumTypeEnum::UPDATE_TYPE);
+        app(EventService::class)->create($chapter, Auth::user(), EventTypeEnum::UPDATE_TYPE);
+        app(ChapterNotificationService::class)->create($chapter);
     }
 
     /**
@@ -40,7 +43,7 @@ class ChapterObserver
      */
     public function deleted(Chapter $chapter)
     {
-        app(EventService::class)->create($chapter, Auth::user(), EnumTypeEnum::DELETE_TYPE);
+        app(EventService::class)->create($chapter, Auth::user(), EventTypeEnum::DELETE_TYPE);
     }
 
     /**
