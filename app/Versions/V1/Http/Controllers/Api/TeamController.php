@@ -9,6 +9,7 @@ use App\Versions\V1\Http\Requests\Api\TeamRequest;
 use App\Versions\V1\Http\Resources\TeamCollection;
 use App\Versions\V1\Http\Resources\TeamResource;
 use App\Versions\V1\Services\TeamService;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Spatie\DataTransferObject\Exceptions\UnknownProperties;
 use Spatie\MediaLibrary\MediaCollections\Exceptions\FileDoesNotExist;
@@ -21,11 +22,11 @@ class TeamController extends Controller
         $this->authorizeResource(Team::class);
     }
 
-    public function index()
+    public function index(Request $request)
     {
-        return new TeamCollection(
-            Team::query()->get()
-        );
+        $teams = Team::query()->paginate($request->get('count'));
+
+        return new TeamCollection($teams);
     }
 
     public function show(Team $team)

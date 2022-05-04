@@ -32,7 +32,8 @@ class MangaController extends Controller
                 AllowedFilter::exact('genres', 'genres.name'),
                 AllowedFilter::exact('categories', 'categories.name'),
                 AllowedFilter::exact('tags', 'tags.name')
-            )->paginate()->appends($request);
+            )
+            ->paginate($request->get('count'));
 
         return new MangaCollection($mangas);
     }

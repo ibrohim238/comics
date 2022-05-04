@@ -7,11 +7,11 @@ use Illuminate\Database\Query\Builder as QueryBuilder;
 
 trait GroupedLastScope
 {
-    public function scopeLastPerGroup(Builder $query, string $column): Builder
+    public function scopeLastPerGroup(Builder $query, string $column, string $maxColumn = 'id'): Builder
     {
-        return $query->whereIn('id', function (QueryBuilder $query) use ($column) {
+        return $query->whereIn($maxColumn, function (QueryBuilder $query) use ($column, $maxColumn) {
             return $query->from(static::getTable())
-                ->selectRaw("max(id)")
+                ->selectRaw("max($maxColumn)")
                 ->groupBy($column);
         });
     }
