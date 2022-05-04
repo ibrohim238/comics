@@ -13,7 +13,13 @@ class HistoryController
     {
         $events = Event::query()
             ->with('eventable')
-            ->whereMorphRelation('eventable', Chapter::class,'type', '!=', EventTypeEnum::DELETE_TYPE->value)
+            ->whereMorphRelation(
+                'eventable',
+                Chapter::class,
+                'type',
+                '!=',
+                EventTypeEnum::DELETE_TYPE->value
+            )
             ->get();
 
         return new EventCollection($events->load('eventable.manga.media'));

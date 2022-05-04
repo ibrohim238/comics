@@ -11,6 +11,7 @@ use App\Versions\V1\Http\Resources\MangaCollection;
 use App\Versions\V1\Http\Resources\MangaResource;
 use App\Versions\V1\Services\MangaService;
 use Illuminate\Contracts\Database\Eloquent\Builder;
+use Illuminate\Http\Request;
 use Spatie\DataTransferObject\Exceptions\UnknownProperties;
 use Spatie\MediaLibrary\MediaCollections\Exceptions\FileDoesNotExist;
 use Spatie\MediaLibrary\MediaCollections\Exceptions\FileIsTooBig;
@@ -24,14 +25,14 @@ class MangaController extends Controller
         $this->authorizeResource(Manga::class);
     }
 
-    public function index()
+    public function index(Request $request)
     {
         $mangas = QueryBuilder::for(Manga::class)
             ->allowedFilters(
                 AllowedFilter::exact('genres', 'genres.name'),
                 AllowedFilter::exact('categories', 'categories.name'),
                 AllowedFilter::exact('tags', 'tags.name')
-            )->get();
+            )->paginate()->appends($request);
 
         return new MangaCollection($mangas);
     }

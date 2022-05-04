@@ -18,8 +18,8 @@ class NotificationController extends Controller
     public function index(Request $request)
     {
         $notifications = Auth::user()->notifications()
-            ->lastPerGroup('data->group_id', 'created_at')
-            ->get()
+            ->lastPerGroup('data->group_id')
+            ->paginate()
             ->transform(
                 fn(DatabaseNotification $notification): NotificationDto => app(NotificationTransformer::class)
                     ->transform($notification)

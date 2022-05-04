@@ -8,4 +8,6 @@ use Illuminate\Notifications\DatabaseNotification;
 class Notification extends DatabaseNotification
 {
     use GroupedLastScope;
+
+    protected $keyType = 'int';
 }

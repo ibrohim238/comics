@@ -102,7 +102,6 @@ namespace App\Models{
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property-read \Illuminate\Database\Eloquent\Model|\Eloquent $eventable
  * @property-read \App\Models\User|null $user
- * @method static \Illuminate\Database\Eloquent\Builder|Event lastPerGroup(string $column, string $columnMax)
  * @method static \Illuminate\Database\Eloquent\Builder|Event newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Event newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Event query()
@@ -211,7 +210,7 @@ namespace App\Models{
 /**
  * App\Models\Notification
  *
- * @property string $id
+ * @property int $id
  * @property string $type
  * @property string $notifiable_type
  * @property int $notifiable_id
