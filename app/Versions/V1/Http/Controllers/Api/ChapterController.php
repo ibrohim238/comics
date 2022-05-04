@@ -20,7 +20,6 @@ class ChapterController extends Controller
     public function index(Manga $manga, Request $request)
     {
         $chapters = QueryBuilder::for($manga->chapters())
-            ->with()
             ->allowedFilters(['team_id'])
             ->defaultSorts('-volume', '-number')
             ->allowedSorts('volume', 'number')
