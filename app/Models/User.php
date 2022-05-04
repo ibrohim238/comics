@@ -6,6 +6,7 @@ use App\Versions\V1\Dto\FallbackMedia;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\DatabaseNotification;
 use Illuminate\Notifications\Notifiable;
@@ -79,8 +80,8 @@ class User extends Authenticatable implements HasMedia, MustVerifyEmail
         return $media->first() ?? new FallbackMedia($collectionName, $this->getFallbackMediaUrl($collectionName));
     }
 
-    public function notifications()
+    public function notifications(): MorphMany
     {
-        return $this->morphMany(DatabaseNotification::class, 'notifiable');
+        return $this->morphMany(Notification::class, 'notifiable');
     }
 }

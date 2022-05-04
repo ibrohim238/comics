@@ -2,8 +2,6 @@
 
 namespace App\Versions\V1\Http\Controllers\Api;
 
-use App\Models\Notification;
-use App\Models\User;
 use App\Versions\V1\Dto\NotificationDto;
 use App\Versions\V1\Http\Controllers\Controller;
 use App\Versions\V1\Http\Resources\NotificationCollection;
@@ -19,18 +17,8 @@ class NotificationController extends Controller
 {
     public function index(Request $request)
     {
-        $subLatestOfMany = Auth::user()->notifications()
-            ->select(DB::raw('max(created_at) as time_aggregate'), 'data->group_id as group_id')
-            ->groupBy('group_id');
-
-        $onClosure = function (JoinClause $join) {
-            $join
-                ->on('notifications.created_at', '=', 'latestOfMany.time_aggregate')
-                ->on('notifications.data->group_id', '=', 'latestOfMany.group_id');
-        };
-
         $notifications = Auth::user()->notifications()
-            ->joinSub($subLatestOfMany, 'latestofMany', $onClosure)
+            ->lastPerGroup('data->group_id', 'created_at')
             ->get()
             ->transform(
                 fn(DatabaseNotification $notification): NotificationDto => app(NotificationTransformer::class)

@@ -11,17 +11,11 @@ class ChapterCreated extends Notification
     use Queueable;
 
     public function __construct(
-y        public Chapter $chapter
+        public Chapter $chapter
     ) {
     }
 
-    /**
-     * Get the notification's delivery channels.
-     *
-     * @param  mixed  $notifiable
-     * @return array
-     */
-    public function via($notifiable): array
+    public function via(): array
     {
         return ['database'];
     }

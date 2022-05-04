@@ -79,14 +79,16 @@ Route::prefix('v1')->group(function () {
     Route::post('/filters/{filter}/attach/{model}/{id}', [FilterableController::class, 'attach']);
     Route::post('/filters/{filter}/detach/{model}/{id', [FilterableController::class, 'detach']);
 
+    Route::group(['middleware' => 'auth'], function () {
     /*
      * Bookmarks
      */
-    Route::get('/bookmarks', [BookmarksController::class, 'index']);
-    Route::post('/bookmarks/attach/{manga}', [BookmarksController::class, 'attach']);
-    Route::post('/bookmarks/detach/{manga}', [BookmarksController::class, 'detach']);
-
-    Route::group(['middleware' => 'auth'], function () {
+        Route::get('/bookmarks', [BookmarksController::class, 'index']);
+        Route::post('/bookmarks/attach/{manga}', [BookmarksController::class, 'attach']);
+        Route::post('/bookmarks/detach/{manga}', [BookmarksController::class, 'detach']);
+    /*
+     * Notifications
+     */
         Route::get('/notifications', [NotificationController::class, 'index']);
         Route::get('/notifications/{groupId}', [NotificationController::class, 'more']);
         Route::get('/notifications/read/{id}', [NotificationController::class, 'read']);

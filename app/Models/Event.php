@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Versions\V1\Traits\GroupedLastScope;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
