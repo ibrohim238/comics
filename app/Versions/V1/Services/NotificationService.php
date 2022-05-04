@@ -2,6 +2,7 @@
 
 namespace App\Versions\V1\Services;
 
+use App\Models\Notification;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
@@ -14,14 +15,14 @@ class NotificationService
     ) {
     }
 
-    public function read(int $id): void
+    public function read(Notification $notification): void
     {
-        $this->get($id)->markAsRead();
+        $notification->markAsRead();
     }
 
-    public function unRead(int $id): void
+    public function unRead(Notification $notification): void
     {
-        $this->get($id)->markAsUnread();
+        $notification->markAsUnread();
     }
 
     public function readSet(array $ids): void
@@ -37,11 +38,6 @@ class NotificationService
     public function readAll()
     {
         $this->user->unreadNotifications->markAsRead();
-    }
-
-    protected function get($id): Model|MorphMany|null
-    {
-        return $this->user->notifications()->where('id', $id)->first();
     }
 
     protected function getCollection(array $ids): Collection

@@ -7,6 +7,7 @@ use App\Models\Manga;
 use App\Versions\V1\Http\Controllers\Controller;
 use App\Versions\V1\Http\Resources\ChapterCollection;
 use App\Versions\V1\Http\Resources\ChapterResource;
+use Illuminate\Http\Request;
 use Spatie\QueryBuilder\QueryBuilder;
 
 class ChapterController extends Controller
@@ -16,19 +17,20 @@ class ChapterController extends Controller
         $this->authorizeResource(Chapter::class);
     }
 
-    public function index(Manga $manga)
+    public function index(Manga $manga, Request $request)
     {
         $chapters = QueryBuilder::for($manga->chapters())
+            ->with()
             ->allowedFilters(['team_id'])
             ->defaultSorts('-volume', '-number')
             ->allowedSorts('volume', 'number')
-            ->get();
+            ->paginate($request->get('count'));
 
         return new ChapterCollection($chapters);
     }
 
     public function show(Manga $manga, Chapter $chapter): ChapterResource
     {
-        return new ChapterResource($chapter->load('media'));
+        return new ChapterResource($chapter->load('media', 'manga.media'));
     }
 }
