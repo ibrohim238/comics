@@ -4,8 +4,6 @@ namespace App\Versions\V1\Services;
 
 use App\Models\Notification;
 use App\Models\User;
-use Illuminate\Database\Eloquent\Collection;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 
 class NotificationService
@@ -40,8 +38,8 @@ class NotificationService
         $this->user->unreadNotifications->markAsRead();
     }
 
-    protected function getCollection(array $ids): Collection
+    protected function getCollection(array $ids): MorphMany
     {
-        return $this->user->notifications()->whereIn('id', $ids)->get();
+        return $this->user->notifications()->whereIn('id', $ids);
     }
 }

@@ -17,6 +17,7 @@ class NotificationController extends Controller
     public function index(Request $request)
     {
         $notifications = Auth::user()->notifications()
+            ->whereNull('read_at', 'and', $request->get('viewed', false))
             ->lastPerGroup('data->group_id', 'baseId')
             ->paginate($request->get('count'));
 
@@ -30,12 +31,17 @@ class NotificationController extends Controller
         return new NotificationCollection($notifications);
     }
 
-    public function more(Notification $notification)
+    public function more(Notification $notification, Request $request)
     {
         $notifications = Auth::user()->notifications()
-            ->where('data->group_id', $notification->data->group_id)
+            ->whereNull('read_at', 'and', $request->get('viewed', false))
+            ->where('data->group_id', $notification->data['group_id'])
             ->orderByDesc('created_at')
-            ->get();
+            ->get()
+            ->transform(
+                fn(DatabaseNotification $notification): NotificationDto => app(NotificationTransformer::class)
+                    ->transform($notification)
+            );
 
         return new NotificationCollection($notifications);
     }
