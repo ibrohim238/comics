@@ -3,6 +3,7 @@
 namespace App\Versions\V1\Http\Resources;
 
 use App\Models\Chapter;
+use App\Models\Coupon;
 use App\Models\Event;
 use App\Models\Manga;
 use App\Versions\V1\Traits\WhenMorphToLoaded;
@@ -24,6 +25,7 @@ class EventResource extends JsonResource
             'eventable' => $this->whenMorphToLoaded('eventable', [
                 Chapter::class => ChapterResource::class,
                 Manga::class => MangaResource::class,
+                Coupon::class => CouponResource::class,
             ])
         ];
     }

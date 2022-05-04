@@ -15,8 +15,8 @@ class CouponResource extends JsonResource
         return [
             'code' => $this->code,
             'data' => $this->data,
+            'used' => $this->countActivated(),
             'limit' => $this->limit,
-            'count' => $this->countActivated(),
             'users' => new UserCollection($this->whenLoaded('users')),
         ];
     }
