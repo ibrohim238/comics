@@ -31,7 +31,7 @@ class CommentController extends Controller
     public function index(string $model, int $id)
     {
         $model = $this->identifyModel($model, $id);
-        $comments = $model->comments()->get();
+        $comments = $model->comments()->with('user')->get();
 
         return new CommentCollection($comments);
     }

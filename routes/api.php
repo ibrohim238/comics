@@ -33,7 +33,7 @@ Route::prefix('v1')->group(function () {
     /*
      * Admin
      */
-    Route::prefix('panel')->group(function () {
+    Route::prefix('panel')->middleware('permission:view admin panel')->group(function () {
         require('admin.php');
     });
 

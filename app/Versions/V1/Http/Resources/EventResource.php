@@ -20,6 +20,7 @@ class EventResource extends JsonResource
         return [
             'id' => $this->id,
             'type' => $this->type,
+            'model_type' => $this->eventable_type,
             'eventable' => $this->whenMorphToLoaded('eventable', [
                 Chapter::class => ChapterResource::class,
                 Manga::class => MangaResource::class,
