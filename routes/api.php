@@ -90,7 +90,7 @@ Route::prefix('v1')->group(function () {
      * Notifications
      */
         Route::get('/notifications', [NotificationController::class, 'index']);
-        Route::get('/notifications/{notification}', [NotificationController::class, 'more']);
+        Route::get('/notifications/{groupId}', [NotificationController::class, 'more']);
         Route::post('/notifications/read/{notification}', [NotificationController::class, 'read']);
         Route::post('/notifications/unread/{notification}', [NotificationController::class, 'unread']);
         Route::post('/notifications/readSet/{ids}', [NotificationController::class, 'readSet']);
