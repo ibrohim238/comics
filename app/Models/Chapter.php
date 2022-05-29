@@ -23,6 +23,10 @@ class Chapter extends Model implements HasMedia, Eventable, Likeable, Commentabl
         'is_paid',
     ];
 
+    protected $casts = [
+        'is_paid' => 'bool',
+    ];
+
     public function manga(): BelongsTo
     {
         return $this->belongsTo(Manga::class);

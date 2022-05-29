@@ -32,11 +32,15 @@ class CouponController extends Controller
 
     public function update(CouponRequest $request, Coupon $coupon)
     {
-        app(CouponService::class, [$coupon])->update(CouponDto::fromRequest($request));
+        app(CouponService::class, [
+            'coupon' => $coupon
+        ])->update(CouponDto::fromRequest($request));
     }
 
     public function destroy(Coupon $coupon)
     {
-        app(CouponService::class, [$coupon])->delete();
+        app(CouponService::class, [
+            'coupon' => $coupon
+        ])->delete();
     }
 }

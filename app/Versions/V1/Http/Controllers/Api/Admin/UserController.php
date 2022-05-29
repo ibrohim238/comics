@@ -27,7 +27,9 @@ class UserController extends Controller
 
     public function update(User $user, UserRequest $request)
     {
-        app(UserService::class, [$user])->update(AdminUserDto::fromRequest($request));
+        app(UserService::class, [
+            'user' => $user
+        ])->update(AdminUserDto::fromRequest($request));
 
         return new UserResource($user);
     }

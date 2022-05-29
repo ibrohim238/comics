@@ -49,14 +49,18 @@ class TeamController extends Controller
      */
     public function update(Team $team, TeamRequest $request)
     {
-        app(TeamService::class, [$team])->update(TeamDto::fromRequest($request));
+        app(TeamService::class, [
+            'team' => $team
+        ])->update(TeamDto::fromRequest($request));
 
         return new TeamResource($team);
     }
 
     public function destroy(Team $team)
     {
-        app(TeamService::class, [$team])->delete();
+        app(TeamService::class, [
+            'team' => $team
+        ])->delete();
 
         return response()->noContent();
     }

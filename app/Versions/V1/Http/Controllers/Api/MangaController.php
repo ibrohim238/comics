@@ -70,14 +70,18 @@ class MangaController extends Controller
      */
     public function update(MangaRequest $request, Manga $manga)
     {
-        app(MangaService::class, [$manga])->save(MangaDto::fromRequest($request));
+        app(MangaService::class, [
+            'manga' => $manga
+        ])->save(MangaDto::fromRequest($request));
 
         return new MangaResource($manga);
     }
 
     public function destroy(Manga $manga)
     {
-        app(MangaService::class, [$manga])->delete();
+        app(MangaService::class, [
+            'manga' => $manga
+        ])->delete();
 
         return response()->noContent();
     }

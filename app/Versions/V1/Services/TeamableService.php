@@ -8,8 +8,8 @@ use App\Models\Teamable;
 class TeamableService
 {
     public function __construct(
+        public Team $team,
         public Teamable $teamable,
-        public Team $team
     ) {
     }
 

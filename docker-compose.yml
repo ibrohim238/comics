@@ -1,7 +1,7 @@
 version: '3'
 services:
   nginx:
-    container_name: nginx
+    container_name: comics_nginx
     image: nginx:latest
     ports:
       - "${APP_PORT:-8035}:80"
@@ -12,7 +12,7 @@ services:
       - app
       - db
   app:
-    container_name: app
+    container_name: comics_app
     build:
       context: .
       dockerfile: docker/php-fpm/Dockerfile
@@ -22,7 +22,7 @@ services:
     depends_on:
       - db
   db:
-    container_name: db
+    container_name: comics_db
     platform: linux/x86_64
     image: mysql:8.0
     ports:
