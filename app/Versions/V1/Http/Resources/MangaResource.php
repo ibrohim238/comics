@@ -14,10 +14,10 @@ class MangaResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'title' => $this->title,
+            'name' => $this->name,
             'slug' => $this->slug,
             'description' => $this->description,
-            'media' => new MediaCollection($this->whenLoaded('media')),
+            'media' => new MediaResource($this->getFirstMedia()),
             'rating' => round($this->ratings_avg_rating ?? 0, 3),
         ];
     }

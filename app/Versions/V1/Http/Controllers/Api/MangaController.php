@@ -28,7 +28,7 @@ class MangaController extends Controller
     public function index(Request $request)
     {
         $mangas = QueryBuilder::for(Manga::class)
-            ->with('media')
+            ->with('media', 'ratings')
             ->allowedFilters(
                 AllowedFilter::exact('genres', 'genres.name'),
                 AllowedFilter::exact('categories', 'categories.name'),

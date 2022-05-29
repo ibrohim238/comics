@@ -43,6 +43,11 @@ class Manga extends Model implements HasMedia, Eventable, Rateable, Commentable,
         return $this->hasMany(Chapter::class);
     }
 
+    public function firstMedia()
+    {
+
+    }
+
     public function registerMediaCollections(): void
     {
         $this
