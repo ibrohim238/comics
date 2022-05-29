@@ -10,11 +10,17 @@ class ChapterLikeController
 {
     public function add(Chapter $chapter)
     {
-        app(LikeService::class, [$chapter, Auth::user()])->add();
+        app(LikeService::class, [
+            'chapter' => $chapter,
+            'user' => Auth::user()
+        ])->add();
     }
 
     public function delete(Chapter $chapter)
     {
-        app(LikeService::class, [$chapter, Auth::user()])->delete();
+        app(LikeService::class, [
+            'chapter' => $chapter,
+            'user' => Auth::user()
+        ])->delete();
     }
 }

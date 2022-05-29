@@ -46,7 +46,7 @@ class TeamMangaChapterController extends Controller
     {
         $this->authorize('chapterCreate', $team);
 
-        $chapter = app(ChapterService::class, [new Chapter()])
+        $chapter = app(ChapterService::class)
             ->create(ChapterDto::fromRequest($request), $team, $manga);
 
         return new ChapterResource($chapter);

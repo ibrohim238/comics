@@ -16,11 +16,17 @@ class MangaRatingController
      */
     public function add(Manga $manga, RatingRequest $request)
     {
-        app(RatingService::class, [$manga, Auth::user()])->add(RatingDto::fromRequest($request));
+        app(RatingService::class, [
+            'manga' => $manga,
+            'user' => Auth::user(),
+            ])->add(RatingDto::fromRequest($request));
     }
 
     public function delete(Manga $manga)
     {
-        app(RatingService::class, [$manga, Auth::user()])->delete();
+        app(RatingService::class, [
+            'manga' =>$manga,
+            'user' => Auth::user()
+        ])->delete();
     }
 }

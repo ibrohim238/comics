@@ -43,14 +43,18 @@ class FilterController extends Controller
      */
     public function update(Filter $filter, FilterRequest $request): FilterResource
     {
-        app(FilterService::class, [$filter])->update(FilterDto::fromRequest($request));
+        app(FilterService::class, [
+            'filter' => $filter
+        ])->update(FilterDto::fromRequest($request));
 
         return new FilterResource($filter);
     }
 
     public function destroy(Filter $filter)
     {
-        app(FilterService::class, [$filter])->delete();
+        app(FilterService::class, [
+            'filter' => $filter
+        ])->delete();
 
         return response()->noContent();
     }

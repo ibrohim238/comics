@@ -25,7 +25,10 @@ class BookmarksController extends Controller
     public function attach(Manga $manga)
     {
         try {
-            app(BookmarkService::class, [$manga, Auth::user()])->add();
+            app(BookmarkService::class, [
+                'manga' => $manga,
+                'user' => Auth::user()
+            ])->add();
         } catch (BookmarksException $exception) {
             return response($exception->getMessage());
         }
@@ -36,7 +39,10 @@ class BookmarksController extends Controller
     public function detach(Manga $manga)
     {
         try {
-            app(BookmarkService::class, [$manga, Auth::user()])->delete();
+            app(BookmarkService::class, [
+                'manga' => $manga,
+                'user' => Auth::user()
+            ])->delete();
         } catch (BookmarksException $exception) {
             return response($exception->getMessage());
         }

@@ -7,18 +7,36 @@ use App\Models\User;
 
 class TeamMemberService
 {
-    public function add(Team $team, User $user, string $role): void
-    {
-        $team->users()->attach($user->id, ['role' => $role]);
+    public function __construct(
+        public Team $team,
+        public User $user,
+    ) {
     }
 
-    public function update(Team $team, User $user, string $role): void
+    public function add(string $role): void
     {
-        $team->users()->updateExistingPivot($user->id, ['role' => $role]);
+        $this->team
+            ->users()
+            ->attach(
+                $this->user->id,
+                ['role' => $role]
+            );
     }
 
-    public function  remove(Team $team, User $user): void
+    public function update(string $role): void
     {
-        $team->users()->detach($user);
+        $this->team
+            ->users()
+            ->updateExistingPivot(
+                $this->user->id,
+                ['role' => $role]
+            );
+    }
+
+    public function  remove(): void
+    {
+        $this->team
+            ->users()
+            ->detach($this->user);
     }
 }

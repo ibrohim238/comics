@@ -15,13 +15,19 @@ class FilterableController extends Controller
     {
         $model = $this->identifyModel($model, $id);
 
-        app(FilterableService::class, [$filter, $model])->attach();
+        app(FilterableService::class, [
+            'filter' =>$filter,
+            'filterable' => $model,
+        ])->attach();
     }
 
     public function detach(Filter $filter, string $model, int $id)
     {
         $model = $this->identifyModel($model, $id);
 
-        app(FilterableService::class, [$filter, $model])->detach();
+        app(FilterableService::class, [
+            'filter' =>$filter,
+            'filterable' => $model,
+        ])->detach();
     }
 }

@@ -107,11 +107,7 @@ Route::prefix('v1')->group(function () {
         Route::get('/teams/{team}/manga/', [TeamMangaController::class, 'index']);
         Route::get('/teams/{team}/manga/{manga}', [TeamMangaController::class, 'show']);
 
-        Route::get('/teams/{team}/manga/{manga}/chapter', [TeamMangaChapterController::class, 'index']);
-        Route::post('/teams/{team}/manga/{manga}/chapter', [TeamMangaChapterController::class, 'store']);
-        Route::get('/teams/{team}/manga/{manga}/chapter/{chapter}', [TeamMangaChapterController::class, 'show']);
-        Route::patch('/teams/{team}/manga/{manga}/chapter/{chapter}', [TeamMangaChapterController::class, 'update']);
-        Route::delete('/teams/{team}/manga/{manga}/chapter/{chapter}', [TeamMangaChapterController::class, 'destroy']);
+        Route::apiResource('teams.manga.chapter', TeamMangaChapterController::class);
     });
 
     /*

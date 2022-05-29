@@ -8,7 +8,6 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
-use Illuminate\Notifications\DatabaseNotification;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Passport\HasApiTokens;
 use Spatie\MediaLibrary\HasMedia;
@@ -65,6 +64,11 @@ class User extends Authenticatable implements HasMedia, MustVerifyEmail
         );
     }
 
+    public function notifications(): MorphMany
+    {
+        return $this->morphMany(Notification::class, 'notifiable');
+    }
+
     public function registerMediaCollections(): void
     {
         $this
@@ -75,13 +79,8 @@ class User extends Authenticatable implements HasMedia, MustVerifyEmail
 
     public function getFirstMedia(string $collectionName = 'default', $filters = [])
     {
-        $media = $this->getMedia($collectionName, $filters);
+        $media = $this->getFirstMediaUrl();
 
         return $media->first() ?? new FallbackMedia($collectionName, $this->getFallbackMediaUrl($collectionName));
-    }
-
-    public function notifications(): MorphMany
-    {
-        return $this->morphMany(Notification::class, 'notifiable');
     }
 }
