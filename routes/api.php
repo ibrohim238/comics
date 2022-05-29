@@ -33,7 +33,7 @@ Route::prefix('v1')->group(function () {
     /*
      * Admin
      */
-    Route::prefix('panel')->group(function () {
+    Route::prefix('panel')->middleware('permission:view admin panel')->group(function () {
         require('admin.php');
     });
 
@@ -91,9 +91,11 @@ Route::prefix('v1')->group(function () {
      */
         Route::get('/notifications', [NotificationController::class, 'index']);
         Route::get('/notifications/{groupId}', [NotificationController::class, 'more']);
-        Route::get('/notifications/read/{id}', [NotificationController::class, 'read']);
-        Route::get('/notifications/unread/{id}', [NotificationController::class, 'unread']);
-        Route::get('/notifications/readAll', [NotificationController::class, 'readAll']);
+        Route::post('/notifications/read/{notification}', [NotificationController::class, 'read']);
+        Route::post('/notifications/unread/{notification}', [NotificationController::class, 'unread']);
+        Route::post('/notifications/readSet/{ids}', [NotificationController::class, 'readSet']);
+        Route::post('/notifications/unReadSet/{ids}', [NotificationController::class, 'unReadSet']);
+        Route::post('/notifications/readAll', [NotificationController::class, 'readAll']);
     });
 
     Route::get('history', HistoryController::class);

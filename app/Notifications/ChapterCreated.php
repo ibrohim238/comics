@@ -11,7 +11,7 @@ class ChapterCreated extends Notification
     use Queueable;
 
     public function __construct(
-        public Chapter $chapter
+        public Chapter $chapter,
     ) {
     }
 

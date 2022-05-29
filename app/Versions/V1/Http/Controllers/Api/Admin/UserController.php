@@ -9,12 +9,13 @@ use App\Versions\V1\Http\Requests\Api\Admin\UserRequest;
 use App\Versions\V1\Http\Resources\UserCollection;
 use App\Versions\V1\Http\Resources\UserResource;
 use App\Versions\V1\Services\Admin\UserService;
+use Illuminate\Http\Request;
 
 class UserController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $users = User::query()->get();
+        $users = User::query()->paginate($request->get('count'));
 
         return new UserCollection($users);
     }

@@ -4,7 +4,6 @@ namespace App\Versions\V1\Observers;
 
 use App\Enums\EventTypeEnum;
 use App\Models\Chapter;
-use App\Models\User;
 use App\Versions\V1\Services\ChapterNotificationService;
 use App\Versions\V1\Services\EventService;
 use Illuminate\Support\Facades\Auth;

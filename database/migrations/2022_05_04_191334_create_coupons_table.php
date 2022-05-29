@@ -13,13 +13,12 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('notifications', function (Blueprint $table) {
-            $table->id('baseId');
-            $table->uuid('id');
-            $table->string('type');
-            $table->morphs('notifiable');
+        Schema::create('coupons', function (Blueprint $table) {
+            $table->id();
+            $table->string('code');
             $table->text('data');
-            $table->timestamp('read_at')->nullable();
+            $table->integer('limit')->nullable();
+            $table->timestamp('ends_at')->nullable();
             $table->timestamps();
         });
     }
@@ -31,6 +30,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('notifications');
+        Schema::dropIfExists('coupons');
     }
 };

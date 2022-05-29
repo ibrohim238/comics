@@ -6,16 +6,23 @@ use App\Enums\EventTypeEnum;
 use App\Models\Chapter;
 use App\Models\Event;
 use App\Versions\V1\Http\Resources\EventCollection;
+use Illuminate\Http\Request;
 
 class HistoryController
 {
-    public function __invoke()
+    public function __invoke(Request $request)
     {
         $events = Event::query()
-            ->with('eventable')
-            ->whereMorphRelation('eventable', Chapter::class,'type', '!=', EventTypeEnum::DELETE_TYPE->value)
-            ->get();
+            ->with('eventable.manga.media')
+            ->whereMorphRelation(
+                'eventable',
+                Chapter::class,
+                'type',
+                '!=',
+                EventTypeEnum::DELETE_TYPE->value
+            )
+            ->paginate($request->get('count'));
 
-        return new EventCollection($events->load('eventable.manga.media'));
+        return new EventCollection($events);
     }
 }
