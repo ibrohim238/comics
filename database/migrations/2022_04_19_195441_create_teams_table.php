@@ -31,7 +31,7 @@ return new class extends Migration
 
         Schema::create('team_invitations', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('team_id')->constrained()->cascadeOnDelete();
+            $table->foreignId('team_id')->constrained();
             $table->foreignId('user_id')->constrained();
             $table->string('role')->nullable();
             $table->timestamps();
@@ -54,8 +54,8 @@ return new class extends Migration
      */
     public function down()
     {
+        Schema::dropIfExists('team_user');
         Schema::dropIfExists('team_invitations');
-        Schema::dropIfExists('team_users');
         Schema::dropIfExists('teamables');
         Schema::dropIfExists('teams');
     }

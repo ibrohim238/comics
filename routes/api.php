@@ -56,56 +56,56 @@ Route::prefix('v1')->group(function () {
      * Teams
      */
     Route::apiResource('teams', TeamController::class);
-    Route::post('/teams/{team}/members/{user}', [TeamMemberController::class, 'store']);
-    Route::put('/teams/{team}/members/{user}', [TeamMemberController::class, 'update']);
-    Route::delete('/teams/{team}/members/{user}', [TeamMemberController::class, 'destroy']);
+    Route::post('/teams/{team}/members/{user}', [TeamMemberController::class, 'store'])->name('team-member.store');
+    Route::put('/teams/{team}/members/{user}', [TeamMemberController::class, 'update'])->name('team-member.update');
+    Route::delete('/teams/{team}/members/{user}', [TeamMemberController::class, 'destroy'])->name('team-member.destroy');
 
-    Route::get('/team-invitations/{invitation}', [TeamInvitationController::class, 'accept']);
+    Route::get('/team-invitations/{invitation}', [TeamInvitationController::class, 'accept'])->name('team-invitation.accept');
 
-    Route::delete('/team-invitations/{invitation}', [TeamInvitationController::class, 'destroy']);
+    Route::delete('/team-invitations/{invitation}', [TeamInvitationController::class, 'destroy'])->name('team-invitation.destroy');
 
-    Route::post('/teams/{team}/attach/{model}/{id}', [TeamableController::class, 'attach']);
-    Route::post('/teams/{team}/detach/{model}/{id}', [TeamableController::class, 'detach']);
+    Route::post('/teams/{team}/attach/{model}/{id}', [TeamableController::class, 'attach'])->name('teamable.attach');
+    Route::post('/teams/{team}/detach/{model}/{id}', [TeamableController::class, 'detach'])->name('teamable.detach');
 
     /*
      * Manga
      */
-    Route::get('/manga/random', [MangaController::class, 'random']);
+    Route::get('/mangas/random', [MangaController::class, 'random'])->name('manga.random');
 
-    Route::apiResource('manga', MangaController::class)->parameter('manga', 'manga:slug');
+    Route::apiResource('mangas', MangaController::class)->parameter('manga', 'manga:slug');
 
 
     Route::apiResource('filters', FilterController::class);
-    Route::post('/filters/{filter}/attach/{model}/{id}', [FilterableController::class, 'attach']);
-    Route::post('/filters/{filter}/detach/{model}/{id', [FilterableController::class, 'detach']);
+    Route::post('/filters/{filter}/attach/{model}/{id}', [FilterableController::class, 'attach'])->name('filterable.attach');
+    Route::post('/filters/{filter}/detach/{model}/{id', [FilterableController::class, 'detach'])->name('filterable.detach');
 
     Route::group(['middleware' => 'auth'], function () {
     /*
      * Bookmarks
      */
-        Route::get('/bookmarks', [BookmarksController::class, 'index']);
-        Route::post('/bookmarks/attach/{manga}', [BookmarksController::class, 'attach']);
-        Route::post('/bookmarks/detach/{manga}', [BookmarksController::class, 'detach']);
+        Route::get('/bookmarks', [BookmarksController::class, 'index'])->name('bookmarks.index');
+        Route::post('/bookmarks/attach/{manga}', [BookmarksController::class, 'attach'])->name('bookmarks.attach');
+        Route::post('/bookmarks/detach/{manga}', [BookmarksController::class, 'detach'])->name('bookmarks.detach');
     /*
      * Notifications
      */
-        Route::get('/notifications', [NotificationController::class, 'index']);
-        Route::get('/notifications/{groupId}', [NotificationController::class, 'more']);
-        Route::post('/notifications/read/{notification}', [NotificationController::class, 'read']);
-        Route::post('/notifications/unread/{notification}', [NotificationController::class, 'unread']);
-        Route::post('/notifications/readSet/{ids}', [NotificationController::class, 'readSet']);
-        Route::post('/notifications/unReadSet/{ids}', [NotificationController::class, 'unReadSet']);
-        Route::post('/notifications/readAll', [NotificationController::class, 'readAll']);
+        Route::get('/notifications', [NotificationController::class, 'index'])->name('notification.index');
+        Route::get('/notifications/more/{groupId}', [NotificationController::class, 'more'])->name('notification.more');
+        Route::post('/notifications/read/{notification}', [NotificationController::class, 'read'])->name('notification.read');
+        Route::post('/notifications/unread/{notification}', [NotificationController::class, 'unread'])->name('notification.unread');
+        Route::post('/notifications/readSet/{ids}', [NotificationController::class, 'readSet'])->name('notifications.readSet');
+        Route::post('/notifications/unReadSet/{ids}', [NotificationController::class, 'unReadSet'])->name('notifications.unReadSet');
+        Route::post('/notifications/readAll', [NotificationController::class, 'readAll'])->name('notifications.readAll');
     });
 
     Route::get('history', HistoryController::class);
 
     Route::scopeBindings()->group( function () {
-        Route::get('/mangas/{manga:slug}/chapter', [ChapterController::class, 'index']);
-        Route::get('/mangas/{manga:slug}/chapter/{chapter:order_column}', [ChapterController::class, 'show']);
+        Route::get('/mangas/{manga:slug}/chapter', [ChapterController::class, 'index'])->name('chapter.index');
+        Route::get('/mangas/{manga:slug}/chapter/{chapter:order_column}', [ChapterController::class, 'show'])->name('chapter.show');
 
-        Route::get('/teams/{team}/manga/', [TeamMangaController::class, 'index']);
-        Route::get('/teams/{team}/manga/{manga}', [TeamMangaController::class, 'show']);
+        Route::get('/teams/{team}/manga/', [TeamMangaController::class, 'index'])->name('teams.manga.index');
+        Route::get('/teams/{team}/manga/{manga}', [TeamMangaController::class, 'show'])->name('teams.manga.show');
 
         Route::apiResource('teams.manga.chapter', TeamMangaChapterController::class);
     });
@@ -114,12 +114,16 @@ Route::prefix('v1')->group(function () {
      * Comments
      */
     Route::get('/comment/{model}/{id}', [CommentController::class, 'index'])
+        ->name('comment.index')
         ->whereIn('model', CommentableTypeEnum::values())
         ->whereNumber('id');
     Route::post('/comment/{model}/{id}', [CommentController::class, 'store'])
+        ->name('comment.store')
         ->whereIn('model', CommentableTypeEnum::values())
         ->whereNumber('id');
 
-    Route::patch('/comment/{comment}', [CommentController::class, 'update']);
-    Route::delete('/comment/{comment}', [CommentController::class, 'destroy']);
+    Route::patch('/comment/{comment}', [CommentController::class, 'update'])
+        ->name('comment.update');
+    Route::delete('/comment/{comment}', [CommentController::class, 'destroy'])
+        ->name('comment.destroy');
 });

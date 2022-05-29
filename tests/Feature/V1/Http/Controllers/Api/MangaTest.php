@@ -1,21 +1,30 @@
 <?php
 
-namespace Tests\Feature\V1\Http\Api\Controllers;
+namespace Tests\Feature\V1\Http\Controllers\Api;
 
+use App\Enums\RolePermissionEnum;
 use App\Models\Manga;
+use App\Models\User;
 use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 use function route;
 
-class NotebookTest extends TestCase
+class MangaTest extends TestCase
 {
     use WithFaker;
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        $this->seed();
+    }
 
     public function testIndexOk()
     {
         $manga = Manga::factory()->create()->loadAvg('ratings', 'rating');
 
-        $response = $this->getJson(route('coupon.index'));
+        $response = $this->getJson(route('mangas.index'));
 
         $response
             ->assertOk()
@@ -26,7 +35,7 @@ class NotebookTest extends TestCase
                        'name' => $manga->name,
                        'slug' => $manga->slug,
                        'description' => $manga->description,
-                       'media' => $manga->getFirstMediaUrl(),
+                       'media' => null,
                        'rating' => round($mangaRating->manga_ratings_avg_rating ?? 0, 2)
                    ]
                ]
@@ -37,7 +46,7 @@ class NotebookTest extends TestCase
     {
         $manga = Manga::factory()->create()->loadAvg('ratings', 'rating');
 
-        $response = $this->getJson(route('coupon.show'));
+        $response = $this->getJson(route('mangas.show', $manga));
 
         $response
             ->assertOk()
@@ -47,7 +56,7 @@ class NotebookTest extends TestCase
                     'name' => $manga->name,
                     'slug' => $manga->slug,
                     'description' => $manga->description,
-                    'media' => $manga->getFirstMediaUrl(),
+                    'media' => null,
                     'rating' => round($mangaRating->manga_ratings_avg_rating ?? 0, 2)
                 ]
             ]);
@@ -55,14 +64,18 @@ class NotebookTest extends TestCase
 
     public function testShowNotFound()
     {
-        $response = $this->getJson(route('coupon.show', 'n'));
+        $response = $this->getJson(route('mangas.show', 'n'));
 
         $response->assertNotFound();
     }
 
     public function testStoreOk()
     {
-        $response = $this->postJson(route('manga.store'), [
+        $user = User::factory()->create()
+            ->assignRole(RolePermissionEnum::OWNER->value);
+
+        $response = $this->actingAs($user)
+            ->postJson(route('mangas.store'), [
             'name' => $this->faker->name,
             'description' => $this->faker->text,
             'published_at' => $this->faker->dateTime
@@ -73,22 +86,30 @@ class NotebookTest extends TestCase
 
     public function testStoreErrorValidateName()
     {
-        $response = $this->postJson(route('manga.store'), [
+        $user = User::factory()->create()
+            ->assignRole(RolePermissionEnum::OWNER->value);
+
+        $response = $this->actingAs($user)
+            ->postJson(route('mangas.store'), [
             'name' => 'err',
             'description' => $this->faker->text,
             'published_at' => $this->faker->dateTime,
         ]);
 
         $response
-            ->assertJsonValidationErrors('name')
+            ->assertJsonValidationErrors(['name'])
             ->assertUnprocessable();
     }
 
     public function testUpdateOk()
     {
+        $user = User::factory()->create()
+            ->assignRole(RolePermissionEnum::OWNER->value);
+
         $manga = Manga::factory()->create();
 
-        $response = $this->patchJson(route('manga.update', $manga), [
+        $response = $this->actingAs($user)
+            ->patchJson(route('mangas.update', $manga), [
            'name' => $this->faker->name,
            'description'  => $this->faker->text,
            'published_at' => $this->faker->dateTime,
@@ -99,7 +120,11 @@ class NotebookTest extends TestCase
 
     public function testUpdateNotFound()
     {
-        $response = $this->patchJson(route('manga.update', 'n'), [
+        $user = User::factory()->create()
+            ->assignRole(RolePermissionEnum::OWNER->value);
+
+        $response = $this->actingAs($user)
+            ->patchJson(route('mangas.update', 'n'), [
             'name' => $this->faker->name,
             'description'  => $this->faker->text,
             'published_at' => $this->faker->dateTime,
@@ -110,16 +135,24 @@ class NotebookTest extends TestCase
 
     public function testDeleteOk()
     {
+        $user = User::factory()->create()
+            ->assignRole(RolePermissionEnum::OWNER->value);
+
         $manga = Manga::factory()->create();
 
-        $response = $this->deleteJson(route('manga.destroy', $manga));
+        $response = $this->actingAs($user)
+            ->deleteJson(route('mangas.destroy', $manga));
 
         $response->assertNoContent();
     }
 
     public function testDeleteNotFound()
     {
-        $response = $this->deleteJson(route('manga.destroy', 'n'));
+        $user = User::factory()->create()
+            ->assignRole(RolePermissionEnum::OWNER->value);
+
+        $response = $this->actingAs($user)
+            ->deleteJson(route('mangas.destroy', 'n'));
 
         $response->assertNotFound();
     }

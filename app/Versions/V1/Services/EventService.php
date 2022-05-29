@@ -13,7 +13,7 @@ class EventService
     {
         $eventable->events()
             ->create(EventDto::fromArray([
-                'user_id' => $user->id,
+                'user_id' => $user->id ?? null,
                 'type' => $type->value,
             ])->toArray());
     }
