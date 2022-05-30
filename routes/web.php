@@ -14,7 +14,5 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    $user = \App\Models\User::factory()->create();
-
-    dd($user);
+    return view('welcome');
 });

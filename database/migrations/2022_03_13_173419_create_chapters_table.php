@@ -15,15 +15,15 @@ return new class extends Migration
     {
         Schema::create('chapters', function (Blueprint $table) {
             $table->id();
+            $table->bigInteger('order');
             $table->integer('volume');
             $table->float('number');
             $table->string('name');
             $table->boolean('is_paid')->default(false);
             $table->foreignId('manga_id')->constrained();
-            $table->unsignedInteger('order_column');
             $table->timestamps();
 
-            $table->unique(['manga_id', 'order_column']);
+            $table->unique(['manga_id', 'order']);
         });
     }
 

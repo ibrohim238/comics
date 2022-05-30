@@ -15,13 +15,13 @@ namespace App\Models{
  * App\Models\Chapter
  *
  * @property int $id
+ * @property int $order
  * @property int $volume
  * @property float $number
  * @property string $name
- * @property int $is_paid
+ * @property bool $is_paid
  * @property int $manga_id
  * @property int $team_id
- * @property int $order_column
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Comment[] $comments
@@ -34,6 +34,8 @@ namespace App\Models{
  * @property-read \Spatie\MediaLibrary\MediaCollections\Models\Collections\MediaCollection|\Spatie\MediaLibrary\MediaCollections\Models\Media[] $media
  * @property-read int|null $media_count
  * @property-read \App\Models\Team $team
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\User[] $users
+ * @property-read int|null $users_count
  * @method static \Database\Factories\ChapterFactory factory(...$parameters)
  * @method static \Illuminate\Database\Eloquent\Builder|Chapter newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Chapter newQuery()
@@ -44,7 +46,7 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|Chapter whereMangaId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Chapter whereName($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Chapter whereNumber($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Chapter whereOrderColumn($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Chapter whereOrder($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Chapter whereTeamId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Chapter whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Chapter whereVolume($value)
@@ -87,6 +89,35 @@ namespace App\Models{
  * @method static \Illuminate\Database\Query\Builder|Comment withoutTrashed()
  */
 	class Comment extends \Eloquent {}
+}
+
+namespace App\Models{
+/**
+ * App\Models\Coupon
+ *
+ * @property int $id
+ * @property string $code
+ * @property string $data
+ * @property int|null $limit
+ * @property \Illuminate\Support\Carbon|null $ends_at
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Event[] $events
+ * @property-read int|null $events_count
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\User[] $users
+ * @property-read int|null $users_count
+ * @method static \Illuminate\Database\Eloquent\Builder|Coupon newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Coupon newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Coupon query()
+ * @method static \Illuminate\Database\Eloquent\Builder|Coupon whereCode($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Coupon whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Coupon whereData($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Coupon whereEndsAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Coupon whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Coupon whereLimit($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Coupon whereUpdatedAt($value)
+ */
+	class Coupon extends \Eloquent implements \App\Models\Eventable {}
 }
 
 namespace App\Models{
@@ -210,7 +241,8 @@ namespace App\Models{
 /**
  * App\Models\Notification
  *
- * @property int $id
+ * @property int $baseId
+ * @property string $id
  * @property string $type
  * @property string $notifiable_type
  * @property int $notifiable_id
@@ -221,12 +253,13 @@ namespace App\Models{
  * @property-read \Illuminate\Database\Eloquent\Model|\Eloquent $notifiable
  * @method static \Illuminate\Notifications\DatabaseNotificationCollection|static[] all($columns = ['*'])
  * @method static \Illuminate\Notifications\DatabaseNotificationCollection|static[] get($columns = ['*'])
- * @method static \Illuminate\Database\Eloquent\Builder|Notification lastPerGroup(string $column, string $columnMax)
+ * @method static \Illuminate\Database\Eloquent\Builder|Notification lastPerGroup(string $column, string $maxColumn = 'id')
  * @method static \Illuminate\Database\Eloquent\Builder|Notification newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Notification newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Notification query()
  * @method static \Illuminate\Database\Eloquent\Builder|DatabaseNotification read()
  * @method static \Illuminate\Database\Eloquent\Builder|DatabaseNotification unread()
+ * @method static \Illuminate\Database\Eloquent\Builder|Notification whereBaseId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Notification whereCreatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Notification whereData($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Notification whereId($value)

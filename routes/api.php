@@ -72,7 +72,7 @@ Route::prefix('v1')->group(function () {
      */
     Route::get('/mangas/random', [MangaController::class, 'random'])->name('manga.random');
 
-    Route::apiResource('mangas', MangaController::class)->parameter('manga', 'manga:slug');
+    Route::apiResource('mangas', MangaController::class)->parameter('mangas', 'manga:slug');
 
 
     Route::apiResource('filters', FilterController::class);
@@ -102,7 +102,7 @@ Route::prefix('v1')->group(function () {
 
     Route::scopeBindings()->group( function () {
         Route::get('/mangas/{manga:slug}/chapter', [ChapterController::class, 'index'])->name('chapter.index');
-        Route::get('/mangas/{manga:slug}/chapter/{chapter:order_column}', [ChapterController::class, 'show'])->name('chapter.show');
+        Route::get('/mangas/{manga:slug}/chapter/{chapter:order}', [ChapterController::class, 'show'])->name('chapter.show');
 
         Route::get('/teams/{team}/manga/', [TeamMangaController::class, 'index'])->name('teams.manga.index');
         Route::get('/teams/{team}/manga/{manga}', [TeamMangaController::class, 'show'])->name('teams.manga.show');

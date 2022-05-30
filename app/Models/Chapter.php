@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Versions\V1\Traits\Sortable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -15,8 +16,17 @@ class Chapter extends Model implements HasMedia, Eventable, Likeable, Commentabl
     use HasEvents;
     use HasLikes;
     use HasComments;
+    use Sortable;
+
+    public function __construct(array $attributes = [])
+    {
+        parent::__construct($attributes);
+
+        static::$orderType = 'manga_id';
+    }
 
     protected $fillable = [
+        'order',
         'volume',
         'number',
         'name',

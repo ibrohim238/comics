@@ -5,6 +5,8 @@ namespace Tests\Feature\V1\Http\Controllers\Api;
 use App\Enums\RolePermissionEnum;
 use App\Models\Manga;
 use App\Models\User;
+use App\Versions\V1\Http\Resources\MangaCollection;
+use App\Versions\V1\Http\Resources\MangaResource;
 use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 use function route;
@@ -22,24 +24,15 @@ class MangaTest extends TestCase
 
     public function testIndexOk()
     {
-        $manga = Manga::factory()->create()->loadAvg('ratings', 'rating');
+        $mangas = Manga::factory()->count('3')->create()->loadAvg('ratings', 'rating');
 
         $response = $this->getJson(route('mangas.index'));
 
         $response
             ->assertOk()
-            ->assertJsonFragment([
-               'data' => [
-                   [
-                       'id' => $manga->id,
-                       'name' => $manga->name,
-                       'slug' => $manga->slug,
-                       'description' => $manga->description,
-                       'media' => null,
-                       'rating' => round($mangaRating->manga_ratings_avg_rating ?? 0, 2)
-                   ]
-               ]
-            ]);
+            ->assertJsonFragment(
+                (new MangaCollection($mangas))->response()->getData(true)
+            );
     }
 
     public function testShowOk()
@@ -50,16 +43,9 @@ class MangaTest extends TestCase
 
         $response
             ->assertOk()
-            ->assertJsonFragment([
-                'data' => [
-                    'id' => $manga->id,
-                    'name' => $manga->name,
-                    'slug' => $manga->slug,
-                    'description' => $manga->description,
-                    'media' => null,
-                    'rating' => round($mangaRating->manga_ratings_avg_rating ?? 0, 2)
-                ]
-            ]);
+            ->assertJsonFragment(
+                (new MangaResource($manga))->response()->getData(true)
+            );
     }
 
     public function testShowNotFound()
