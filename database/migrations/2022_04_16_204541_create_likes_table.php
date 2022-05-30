@@ -14,8 +14,10 @@ return new class extends Migration
     public function up()
     {
         Schema::create('likes', function (Blueprint $table) {
+            $table->id();
             $table->morphs('likeable');
             $table->foreignId('user_id')->constrained();
+            $table->timestamps();
         });
     }
 
