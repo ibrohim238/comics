@@ -1,11 +1,12 @@
 <?php
 
-namespace App\Models;
+namespace App\Traits;
 
+use App\Models\Event;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\Eloquent\Relations\Relation;
-use phpDocumentor\Reflection\Types\Static_;
 
 trait HasEvents
 {

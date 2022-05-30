@@ -3,7 +3,7 @@
 namespace App\Versions\V1\Services;
 
 use App\Enums\EventTypeEnum;
-use App\Models\Eventable;
+use App\Interfaces\Eventable;
 use App\Models\User;
 use App\Versions\V1\Dto\EventDto;
 

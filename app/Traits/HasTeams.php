@@ -1,10 +1,11 @@
 <?php
 
-namespace App\Models;
+namespace App\Traits;
 
+use App\Models\Team;
 use Illuminate\Database\Eloquent\Relations\MorphToMany;
 
-trait HasTeamable
+trait HasTeams
 {
     public function teams(): MorphToMany
     {

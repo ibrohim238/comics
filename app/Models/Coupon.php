@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use App\Interfaces\Eventable;
+use App\Traits\HasEvents;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 

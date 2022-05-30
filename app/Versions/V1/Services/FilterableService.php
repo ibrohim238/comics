@@ -2,9 +2,8 @@
 
 namespace App\Versions\V1\Services;
 
+use App\Interfaces\Filterable;
 use App\Models\Filter;
-use App\Models\Filterable;
-use App\Models\Manga;
 
 class FilterableService
 {

@@ -18,7 +18,7 @@ class ChapterResource extends JsonResource
             'number' => $this->number,
             'title' => $this->name,
             'order' => $this->order,
-            'likes' => $this->likes()->count(),
+            'likes' => $this->likesCount(),
             'manga' => new MangaResource($this->whenLoaded('manga')),
             'media' => new MediaCollection($this->whenLoaded('media')),
         ];

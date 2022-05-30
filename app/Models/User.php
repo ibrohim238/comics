@@ -2,10 +2,16 @@
 
 namespace App\Models;
 
+use App\Interfaces\Ratingable;
+use App\Traits\CanLikes;
+use App\Traits\CanRates;
+use App\Traits\CanRatings;
+use App\Traits\CanTeams;
 use App\Versions\V1\Dto\FallbackMedia;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -21,7 +27,6 @@ class User extends Authenticatable implements HasMedia, MustVerifyEmail
     use Notifiable;
     use HasRoles;
     use InteractsWithMedia;
-    use HasTeams;
 
     /**
      * The attributes that are mass assignable.
@@ -53,6 +58,11 @@ class User extends Authenticatable implements HasMedia, MustVerifyEmail
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    public function chapterLikes()
+    {
+        $this->morphedByMany(Chapter::class, 'likeable');
+    }
 
     public function bookmarks(): BelongsToMany
     {

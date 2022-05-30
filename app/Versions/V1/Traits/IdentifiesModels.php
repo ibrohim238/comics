@@ -2,9 +2,6 @@
 
 namespace App\Versions\V1\Traits;
 
-use App\Models\Chapter;
-use App\Models\Commentable;
-use App\Models\Manga;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\Relation;
 

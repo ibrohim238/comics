@@ -28,8 +28,6 @@ namespace App\Models{
  * @property-read int|null $comments_count
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Event[] $events
  * @property-read int|null $events_count
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Like[] $likes
- * @property-read int|null $likes_count
  * @property-read \App\Models\Manga $manga
  * @property-read \Spatie\MediaLibrary\MediaCollections\Models\Collections\MediaCollection|\Spatie\MediaLibrary\MediaCollections\Models\Media[] $media
  * @property-read int|null $media_count
@@ -51,7 +49,7 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|Chapter whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Chapter whereVolume($value)
  */
-	class Chapter extends \Eloquent implements \Spatie\MediaLibrary\HasMedia, \App\Models\Eventable, \App\Models\Likeable, \App\Models\Commentable {}
+	class Chapter extends \Eloquent implements \Spatie\MediaLibrary\HasMedia, \App\Interfaces\Eventable, \App\Interfaces\Commentable {}
 }
 
 namespace App\Models{
@@ -117,7 +115,7 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|Coupon whereLimit($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Coupon whereUpdatedAt($value)
  */
-	class Coupon extends \Eloquent implements \App\Models\Eventable {}
+	class Coupon extends \Eloquent implements \App\Interfaces\Eventable {}
 }
 
 namespace App\Models{
@@ -174,23 +172,6 @@ namespace App\Models{
 
 namespace App\Models{
 /**
- * App\Models\Like
- *
- * @property string $likeable_type
- * @property int $likeable_id
- * @property int $user_id
- * @method static \Illuminate\Database\Eloquent\Builder|Like newModelQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|Like newQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|Like query()
- * @method static \Illuminate\Database\Eloquent\Builder|Like whereLikeableId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Like whereLikeableType($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Like whereUserId($value)
- */
-	class Like extends \Eloquent {}
-}
-
-namespace App\Models{
-/**
  * App\Models\Manga
  *
  * @property int $id
@@ -214,7 +195,7 @@ namespace App\Models{
  * @property-read int|null $genres_count
  * @property-read \Spatie\MediaLibrary\MediaCollections\Models\Collections\MediaCollection|\Spatie\MediaLibrary\MediaCollections\Models\Media[] $media
  * @property-read int|null $media_count
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Rating[] $ratings
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Rate[] $ratings
  * @property-read int|null $ratings_count
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Filter[] $tags
  * @property-read int|null $tags_count
@@ -234,7 +215,7 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|Manga whereSlug($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Manga whereUpdatedAt($value)
  */
-	class Manga extends \Eloquent implements \Spatie\MediaLibrary\HasMedia, \App\Models\Eventable, \App\Models\Rateable, \App\Models\Commentable, \App\Models\Teamable, \App\Models\Filterable {}
+	class Manga extends \Eloquent implements \Spatie\MediaLibrary\HasMedia, \App\Interfaces\Eventable, \App\Interfaces\Ratingable, \App\Interfaces\Commentable, \App\Interfaces\Teamable, \App\Interfaces\Filterable {}
 }
 
 namespace App\Models{
@@ -276,19 +257,27 @@ namespace App\Models{
 /**
  * App\Models\Rating
  *
- * @property int $rating
+ * @property int $id
+ * @property int $user_id
  * @property string $rateable_type
  * @property int $rateable_id
- * @property int $user_id
- * @property-read \Illuminate\Database\Eloquent\Model|\Eloquent $manga
+ * @property int $value
+ * @property string $type
+ * @property string|null $created_at
+ * @property string|null $updated_at
+ * @property-read \Illuminate\Database\Eloquent\Model|\Eloquent $rateable
  * @property-read \App\Models\User $user
- * @method static \Illuminate\Database\Eloquent\Builder|Rating newModelQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|Rating newQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|Rating query()
- * @method static \Illuminate\Database\Eloquent\Builder|Rating whereRateableId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Rating whereRateableType($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Rating whereRating($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Rating whereUserId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Rate newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Rate newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Rate query()
+ * @method static \Illuminate\Database\Eloquent\Builder|Rate whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Rate whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Rate whereRateableId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Rate whereRateableType($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Rate whereType($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Rate whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Rate whereUserId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Rate whereValue($value)
  */
 	class Rating extends \Eloquent {}
 }

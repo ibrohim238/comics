@@ -16,13 +16,6 @@ class ChapterTest extends TestCase
 {
     use WithFaker;
 
-    protected function setUp(): void
-    {
-        parent::setUp();
-
-        $this->seed();
-    }
-
     public function testIndexOk()
     {
         $manga = Manga::factory()->create();

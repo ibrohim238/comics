@@ -1,6 +1,8 @@
 <?php
 
 use App\Enums\CommentableTypeEnum;
+use App\Enums\LikeableTypeEnum;
+use App\Enums\RatingableTypeEnum;
 use App\Versions\V1\Http\Controllers\Api\BookmarksController;
 use App\Versions\V1\Http\Controllers\Api\ChapterController;
 use App\Versions\V1\Http\Controllers\Api\CommentController;
@@ -9,6 +11,7 @@ use App\Versions\V1\Http\Controllers\Api\FilterableController;
 use App\Versions\V1\Http\Controllers\Api\FilterController;
 use App\Versions\V1\Http\Controllers\Api\MangaController;
 use App\Versions\V1\Http\Controllers\Api\NotificationController;
+use App\Versions\V1\Http\Controllers\Api\RateableController;
 use App\Versions\V1\Http\Controllers\Api\TeamableController;
 use App\Versions\V1\Http\Controllers\Api\TeamController;
 use App\Versions\V1\Http\Controllers\Api\TeamInvitationController;
@@ -80,15 +83,33 @@ Route::prefix('v1')->group(function () {
     Route::post('/filters/{filter}/detach/{model}/{id', [FilterableController::class, 'detach'])->name('filterable.detach');
 
     Route::group(['middleware' => 'auth'], function () {
-    /*
-     * Bookmarks
-     */
+        Route::post('/rating/{model}/{id}', [RateableController::class, 'rate'])
+            ->name('rating.rate')
+            ->whereIn('model', RatingableTypeEnum::values())
+            ->whereNumber('id');
+        Route::delete('/rating/{model}/{id}', [RateableController::class, 'unRate'])
+            ->name('rating.un-rate')
+            ->whereIn('model', RatingableTypeEnum::values())
+            ->whereNumber('id');
+
+        Route::post('/like/{model}/{id}', [RateableController::class, 'rate'])
+            ->name('like.rate')
+            ->whereIn('model', LikeableTypeEnum::values())
+            ->whereNumber('id');
+        Route::delete('/like/{model}/{id}', [RateableController::class, 'unRate'])
+            ->name('like.un-rate')
+            ->whereIn('model', LikeableTypeEnum::values())
+            ->whereNumber('id');
+
+        /*
+         * Bookmarks
+         */
         Route::get('/bookmarks', [BookmarksController::class, 'index'])->name('bookmarks.index');
-        Route::post('/bookmarks/attach/{manga}', [BookmarksController::class, 'attach'])->name('bookmarks.attach');
-        Route::post('/bookmarks/detach/{manga}', [BookmarksController::class, 'detach'])->name('bookmarks.detach');
-    /*
-     * Notifications
-     */
+        Route::post('/bookmarks/{manga}', [BookmarksController::class, 'attach'])->name('bookmarks.attach');
+        Route::delete('/bookmarks/{manga}', [BookmarksController::class, 'detach'])->name('bookmarks.detach');
+        /*
+         * Notifications
+         */
         Route::get('/notifications', [NotificationController::class, 'index'])->name('notification.index');
         Route::get('/notifications/more/{groupId}', [NotificationController::class, 'more'])->name('notification.more');
         Route::post('/notifications/read/{notification}', [NotificationController::class, 'read'])->name('notification.read');
@@ -101,6 +122,9 @@ Route::prefix('v1')->group(function () {
     Route::get('history', HistoryController::class);
 
     Route::scopeBindings()->group( function () {
+        /*
+         * Chapter
+         */
         Route::get('/mangas/{manga:slug}/chapter', [ChapterController::class, 'index'])->name('chapter.index');
         Route::get('/mangas/{manga:slug}/chapter/{chapter:order}', [ChapterController::class, 'show'])->name('chapter.show');
 

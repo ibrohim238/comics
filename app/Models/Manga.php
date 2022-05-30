@@ -2,25 +2,39 @@
 
 namespace App\Models;
 
+use App\Interfaces\Commentable;
+use App\Interfaces\Eventable;
+use App\Interfaces\Filterable;
+use App\Interfaces\Rateable;
+use App\Interfaces\Ratingable;
+use App\Interfaces\Teamable;
+use App\Traits\HasComments;
+use App\Traits\HasRates;
+use App\Traits\HasEvents;
+use App\Traits\HasFilters;
+use App\Traits\HasRatings;
+use App\Traits\HasTeams;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
 use Spatie\Sluggable\HasSlug;
 use Spatie\Sluggable\SlugOptions;
 
-class Manga extends Model implements HasMedia, Eventable, Rateable, Commentable, Teamable, Filterable
+class Manga extends Model implements HasMedia, Eventable, Commentable, Teamable, Filterable, Rateable, Ratingable
 {
     use HasFactory;
     use HasSlug;
     use HasEvents;
-    use HasRatings;
     use HasComments;
     use InteractsWithMedia;
-    use HasTeamable;
+    use HasTeams;
     use HasFilters;
+    use HasRates;
+    use HasRatings;
 
     protected $fillable = [
         'name',
@@ -41,11 +55,6 @@ class Manga extends Model implements HasMedia, Eventable, Rateable, Commentable,
     public function chapters(): HasMany
     {
         return $this->hasMany(Chapter::class);
-    }
-
-    public function firstMedia()
-    {
-
     }
 
     public function registerMediaCollections(): void

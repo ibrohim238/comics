@@ -1,13 +1,16 @@
 <?php
 
-namespace App\Models;
+namespace App\Traits;
 
 use App\Enums\TeamPermissionEnum;
 use App\Enums\TeamRoleEnum;
+use App\Interfaces\Teamable;
+use App\Models\Team;
+use App\Models\TeamUser;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
-trait HasTeams
+trait CanTeams
 {
     public function teams(): BelongsToMany
     {
