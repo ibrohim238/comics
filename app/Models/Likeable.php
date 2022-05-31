@@ -2,9 +2,9 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Relations\MorphMany;
+use Illuminate\Database\Eloquent\Relations\MorphToMany;
 
 interface Likeable
 {
-    public function likes(): MorphMany;
+    public function likes(): MorphToMany;
 }

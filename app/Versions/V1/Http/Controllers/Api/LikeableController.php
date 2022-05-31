@@ -26,7 +26,7 @@ class LikeableController extends Controller
             return response($exception->getMessage());
         }
 
-        return response(Lang::get('likeable.add'));
+        return response(Lang::get('likeable.add'), 201);
     }
 
     public function delete(string $model, int $id)
