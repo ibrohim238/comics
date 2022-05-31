@@ -95,16 +95,6 @@ Route::prefix('v1')->group(function () {
             ->name('likeable.delete')
             ->whereIn('model', LikeableTypeEnum::values())
             ->whereNumber('id');
-
-        Route::post('/rating/{model}/{id}', [RatingableController::class, 'updateOrCreate'])
-            ->name('raingable.add')
-            ->whereIn('model', RatingableTypeEnum::values())
-            ->whereNumber('id');
-        Route::delete('/rating/{model}/{id}', [RatingableController::class, 'delete'])
-            ->name('raingable.delete')
-            ->whereIn('model', RatingableTypeEnum::values())
-            ->whereNumber('id');
-
     /*
      * Bookmarks
      */

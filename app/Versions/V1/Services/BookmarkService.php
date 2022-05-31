@@ -16,7 +16,7 @@ class BookmarkService
 
     public function add(): void
     {
-        if($this->exists()) {
+        if($this->user->bookmarks()->where('id', $this->manga->id)->exists()) {
             throw BookmarksException::exists();
         }
 
@@ -25,18 +25,10 @@ class BookmarkService
 
     public function delete(): void
     {
-        if(! $this->exists()) {
+        if(!$this->user->bookmarks()->where('id', $this->manga->id)->exists()) {
             throw BookmarksException::notFound();
         }
 
         $this->user->bookmarks()->detach([$this->manga->id]);
-    }
-
-    private function exists(): bool
-    {
-        return $this->user
-            ->bookmarks()
-            ->where('id', $this->manga->id)
-            ->exists();
     }
 }
