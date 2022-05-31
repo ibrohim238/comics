@@ -2,12 +2,12 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Relations\MorphMany;
+use Illuminate\Database\Eloquent\Relations\MorphToMany;
 
 trait HasLikes
 {
-    public function likes(): MorphMany
+    public function likes(): MorphToMany
     {
-        return $this->morphMany(Like::class, 'likeable');
+        return $this->morphToMany(User::class, 'likeable');
     }
 }
