@@ -21,7 +21,10 @@ class LikeableService
             throw LikealeException::exists();
         }
 
-        $this->likeable->likes()->create(['user_id' => $this->user->id]);
+        $this
+            ->likeable
+            ->likes()
+            ->attach([$this->user->id]);
     }
 
     public function delete()
@@ -32,8 +35,7 @@ class LikeableService
 
         $this->likeable
             ->likes()
-            ->where('user_id', $this->user->id)
-            ->delete();
+            ->detach([$this->user->id]);
     }
 
     private function exists(): bool
