@@ -2,6 +2,7 @@
 
 namespace App\Versions\V1\Services;
 
+use App\Exceptions\RatingableException;
 use App\Models\Rateable;
 use App\Models\Rating;
 use App\Models\User;
@@ -15,9 +16,8 @@ class RatingService
     ) {
     }
 
-    public function add(RatingDto $dto)
+    public function updateOrCreate(RatingDto $dto)
     {
-        /* @var Rating $rating*/
         $this->rateable->ratings()
             ->updateOrCreate([
                 'user_id' => $this->user->id,
@@ -26,6 +26,10 @@ class RatingService
 
     public function delete(): void
     {
+        if (! $this->rateable->ratings()->where('user_id', $this->user->id)->exists()) {
+            throw RatingableException::notFound();
+        }
+
         $this->rateable->ratings()
             ->where('user_id', $this->user->id)
             ->delete();

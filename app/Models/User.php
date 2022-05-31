@@ -54,6 +54,11 @@ class User extends Authenticatable implements HasMedia, MustVerifyEmail
         'email_verified_at' => 'datetime',
     ];
 
+    public function chapterLikes()
+    {
+        $this->morphedByMany(Chapter::class, 'likeable');
+    }
+
     public function bookmarks(): BelongsToMany
     {
         return $this->belongsToMany(
