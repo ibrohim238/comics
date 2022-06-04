@@ -33,7 +33,7 @@ class RateRequest extends FormRequest
 
         return [
             'value' => $value,
-            'type' => ['required', new Enum(RatesTypeEnum::class)],
+            'type' => [new Enum(RatesTypeEnum::class)],
         ];
     }
 }

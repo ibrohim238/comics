@@ -28,7 +28,6 @@ class RatingService
                         ->except('type')
                         ->toArray()
                 );
-
             return Lang::get('rateable.update', ['type' => $dto->type]);
         }
 

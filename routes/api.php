@@ -2,6 +2,7 @@
 
 use App\Enums\CommentableTypeEnum;
 use App\Enums\LikeableTypeEnum;
+use App\Enums\RatesTypeEnum;
 use App\Enums\RatingableTypeEnum;
 use App\Versions\V1\Http\Controllers\Api\BookmarksController;
 use App\Versions\V1\Http\Controllers\Api\ChapterController;
@@ -83,23 +84,41 @@ Route::prefix('v1')->group(function () {
     Route::post('/filters/{filter}/detach/{model}/{id', [FilterableController::class, 'detach'])->name('filterable.detach');
 
     Route::group(['middleware' => 'auth'], function () {
-        Route::post('/rating/{model}/{id}', [RateableController::class, 'rate'])
+        foreach (RatesTypeEnum::values() as $type) {
+            Route::post("/$type/{model}/{id}", [RateableController::class, 'rate'])
+                ->name('rating.rate')
+                ->whereIn('model', RatesTypeEnum::tryFrom($type)->rateable())
+                ->whereNumber('id');
+        }
+        Route::post('/{type}/{model}/{id}', [RateableController::class, 'rate'])
             ->name('rating.rate')
-            ->whereIn('model', RatingableTypeEnum::values())
+            ->whereIn('model', request()->get('type'))
             ->whereNumber('id');
         Route::delete('/rating/{model}/{id}', [RateableController::class, 'unRate'])
             ->name('rating.un-rate')
             ->whereIn('model', RatingableTypeEnum::values())
             ->whereNumber('id');
 
-        Route::post('/like/{model}/{id}', [RateableController::class, 'rate'])
-            ->name('like.rate')
-            ->whereIn('model', LikeableTypeEnum::values())
-            ->whereNumber('id');
-        Route::delete('/like/{model}/{id}', [RateableController::class, 'unRate'])
-            ->name('like.un-rate')
-            ->whereIn('model', LikeableTypeEnum::values())
-            ->whereNumber('id');
+        Route::controller(RateableController::class)->group(function () {
+            Route::post('/rating/{model}/{id}', 'rate')
+                ->whereIn('model', RatingableTypeEnum::values())
+                ->whereNumber('id')
+                ->name('rating.rate');
+            Route::delete('/rating/{model}/{id}', 'unRate')
+                ->whereIn('model', RatingableTypeEnum::values())
+                ->whereNumber('id')
+                ->name('rating.un-rate');
+
+            Route::post('/like/{model}/{id}', 'rate')
+                ->whereIn('model', LikeableTypeEnum::values())
+                ->whereNumber('id')
+                ->name('like.rate');
+            Route::delete('/like/{model}/{id}', 'unRate')
+                ->whereIn('model', LikeableTypeEnum::values())
+                ->whereNumber('id')
+                ->name('like.un-rate');
+        });
+
 
         /*
          * Bookmarks

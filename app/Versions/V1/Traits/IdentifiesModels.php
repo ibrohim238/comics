@@ -16,6 +16,7 @@ trait IdentifiesModels
 //        };
         $model = Relation::getMorphedModel($type);
 
+        /* @var Model $model*/
         return $model::findOrFail($id);
     }
 }
