@@ -31,6 +31,6 @@ class ChapterController extends Controller
 
     public function show(Manga $manga, Chapter $chapter): ChapterResource
     {
-        return new ChapterResource($chapter->loadCount('likes')->load('media', 'manga.media'));
+        return new ChapterResource($chapter->load('media', 'manga.media', 'votes'));
     }
 }

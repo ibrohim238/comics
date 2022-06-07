@@ -1,8 +1,8 @@
 <?php
 
 namespace Tests\Feature\V1\Http\Controllers\Api;
-
 use App\Models\Chapter;
+use App\Models\Comment;
 use App\Models\User;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Support\Facades\Lang;
@@ -10,7 +10,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Tests\TestCase;
 use function route;
 
-class ChapterLikeTest extends TestCase
+class ChapterVoteTest extends TestCase
 {
     use WithFaker;
 
@@ -20,29 +20,22 @@ class ChapterLikeTest extends TestCase
 
         $chapter = Chapter::factory()->create();
 
-        $value = $this->faker->numberBetween(0, 1);
-
         $response = $this->actingAs($user)
-            ->postJson(route('like.rate', [getMorphedType($chapter::class), $chapter->id]), [
-                'value' => $value
-            ]);
+            ->postJson(route('vote.rate', [getMorphedType($chapter::class), $chapter->id]));
 
         $response->assertOk()
             ->assertJsonFragment([
-                'message' => Lang::choice('rateable.like.create', $value)
+                'message' => Lang::get('rateable.create')
             ]);
     }
 
-    public function testAttachUnauthorized()
+    public function testStoreUnauthorized()
     {
 
         $chapter = Chapter::factory()->create();
 
-
         $response = $this
-            ->postJson(route('like.rate', [getMorphedType($chapter::class), $chapter->id]), [
-                'value' => $this->faker->numberBetween(0, 1)
-            ]);
+            ->postJson(route('vote.rate', [getMorphedType($chapter::class), $chapter->id]));
 
         $response->assertUnauthorized();
     }
@@ -55,36 +48,28 @@ class ChapterLikeTest extends TestCase
 
 
         $this->actingAs($user)
-            ->postJson(route('like.rate', [getMorphedType($chapter::class), $chapter->id]), [
-                'value' => $this->faker->numberBetween(0, 1)
-            ]);
-
-        $value = $this->faker->numberBetween(0, 1);
+            ->postJson(route('vote.rate', [getMorphedType($chapter::class), $chapter->id]));
 
         $response = $this->actingAs($user)
-            ->postJson(route('like.rate', [getMorphedType($chapter::class), $chapter->id]), [
-                'value' => $value
-            ]);
+            ->postJson(route('vote.rate', [getMorphedType($chapter::class), $chapter->id]));
 
         $response->assertOk()
             ->assertJsonFragment([
-                'message' => Lang::choice('rateable.like.create', $value)
+                'message' => Lang::get('rateable.create')
             ]);
     }
 
-    public function testDetachOk()
+    public function testDeleteOk()
     {
         $user = User::factory()->create();
 
         $chapter = Chapter::factory()->create();
 
         $this->actingAs($user)
-            ->postJson(route('like.rate', [getMorphedType($chapter::class), $chapter->id]), [
-                'value' => $this->faker->numberBetween(0, 1)
-            ]);
+            ->postJson(route('vote.rate', [getMorphedType($chapter::class), $chapter->id]));
 
         $response = $this->actingAs($user)
-            ->deleteJson(route('like.un-rate', [getMorphedType($chapter::class), $chapter->id]));
+            ->deleteJson(route('vote.un-rate', [getMorphedType($chapter::class), $chapter->id]));
 
         $response->assertOk()
             ->assertJsonFragment([
@@ -92,14 +77,14 @@ class ChapterLikeTest extends TestCase
             ]);
     }
 
-    public function testDetachBusy()
+    public function testDeleteBusy()
     {
         $user = User::factory()->create();
 
         $chapter = Chapter::factory()->create();
 
         $response = $this->actingAs($user)
-            ->deleteJson(route('like.un-rate', [getMorphedType($chapter::class), $chapter->id]));
+            ->deleteJson(route('vote.un-rate', [getMorphedType($chapter::class), $chapter->id]));
 
         $response->assertStatus(Response::HTTP_BAD_REQUEST)
             ->assertJsonFragment([
@@ -107,14 +92,12 @@ class ChapterLikeTest extends TestCase
             ]);
     }
 
-    public function testDetachUnauthorized()
+    public function testDeleteUnauthorized()
     {
-
         $chapter = Chapter::factory()->create();
 
-
         $response = $this
-            ->deleteJson(route('like.un-rate', [getMorphedType($chapter::class), $chapter->id]));
+            ->deleteJson(route('vote.un-rate', [getMorphedType($chapter::class), $chapter->id]));
 
         $response->assertUnauthorized();
     }

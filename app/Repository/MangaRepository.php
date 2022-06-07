@@ -9,7 +9,7 @@ use Spatie\QueryBuilder\QueryBuilder;
 
 class MangaRepository
 {
-    public function paginate(int $per_page): LengthAwarePaginator
+    public function paginate(?int $per_page): LengthAwarePaginator
     {
         return QueryBuilder::for(Manga::class)
             ->with('media', 'ratings', 'chapterVotes')

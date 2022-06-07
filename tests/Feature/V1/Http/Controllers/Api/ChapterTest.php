@@ -39,7 +39,7 @@ class ChapterTest extends TestCase
 
         $response->assertOk()
             ->assertJsonFragment(
-                (new ChapterResource($chapter->load('media', 'manga.media')))->response()->getData(true)
+                (new ChapterResource($chapter->load('media', 'manga.media', 'votes')))->response()->getData(true)
             );
     }
 
