@@ -13,9 +13,13 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('likes', function (Blueprint $table) {
-            $table->morphs('likeable');
+        Schema::create('rates', function (Blueprint $table) {
+            $table->id();
+            $table->smallInteger('value')->nullable();
+            $table->string('type');
             $table->foreignId('user_id')->constrained();
+            $table->morphs('rateable');
+            $table->timestamps();
         });
     }
 
@@ -26,6 +30,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('likes');
+        Schema::dropIfExists('rates');
     }
 };

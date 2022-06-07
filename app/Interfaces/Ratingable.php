@@ -1,10 +1,12 @@
 <?php
 
-namespace App\Models;
+namespace App\Interfaces;
 
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 
-interface Rateable
+interface Ratingable
 {
+    public function rates(): MorphMany;
+
     public function ratings(): MorphMany;
 }

@@ -33,3 +33,5 @@ services:
       MYSQL_USER: homestead
       MYSQL_PASSWORD: secret
       MYSQL_ROOT_PASSWORD: supersecret
+  redis:
+    image: redis:4

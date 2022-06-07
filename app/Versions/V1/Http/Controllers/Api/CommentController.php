@@ -2,6 +2,7 @@
 
 namespace App\Versions\V1\Http\Controllers\Api;
 
+use App\Models\Chapter;
 use App\Models\Comment;
 use App\Models\Manga;
 use App\Versions\V1\Dto\CommentDto;
@@ -12,7 +13,7 @@ use App\Versions\V1\Http\Resources\CommentResource;
 use App\Versions\V1\Services\CommentService;
 use App\Versions\V1\Traits\IdentifiesModels;
 use Exception;
-use Illuminate\Database\Eloquent\Relations\Relation;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Spatie\DataTransferObject\Exceptions\UnknownProperties;
 
@@ -28,10 +29,13 @@ class CommentController extends Controller
     /**
      * @throws Exception
      */
-    public function index(string $model, int $id)
+    public function index(string $model, int $id, Request $request)
     {
         $model = $this->identifyModel($model, $id);
-        $comments = $model->comments()->with('user')->get();
+
+        /* @var Manga|Chapter $model*/
+        $comments = $model->comments()->with('user', 'likes')
+            ->paginate($request->get('count'));
 
         return new CommentCollection($comments);
     }

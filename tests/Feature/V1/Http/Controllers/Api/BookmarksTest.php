@@ -7,6 +7,7 @@ use App\Models\User;
 use App\Versions\V1\Http\Resources\MangaCollection;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Support\Facades\Lang;
+use Symfony\Component\HttpFoundation\Response;
 use Tests\TestCase;
 use function route;
 
@@ -21,10 +22,14 @@ class BookmarksTest extends TestCase
         $mangas = Manga::factory()->count(3)->create();
 
         foreach ($mangas as $manga) {
-            $user->bookmarks()->attach(['manga_id' => $manga->id]);
+            $user
+                ->bookmarks()
+                ->attach(['manga_id' => $manga->id]);
         }
 
-        $response = $this->actingAs($user)->getJson(route('bookmarks.index'));
+        $response = $this
+            ->actingAs($user)
+            ->getJson(route('bookmarks.index'));
 
         $response
             ->assertOk()
@@ -35,7 +40,8 @@ class BookmarksTest extends TestCase
 
     public function testIndexUnauthorized()
     {
-        $response = $this->getJson(route('bookmarks.index'));
+        $response = $this
+            ->getJson(route('bookmarks.index'));
 
         $response->assertUnauthorized();
     }
@@ -46,9 +52,14 @@ class BookmarksTest extends TestCase
 
         $manga = Manga::factory()->create();
 
-        $response = $this->actingAs($user)->postJson(route('bookmarks.attach', $manga));
+        $response = $this
+            ->actingAs($user)
+            ->postJson(route('bookmarks.attach', $manga));
 
-        $response->assertOk();
+        $response->assertOk()
+            ->assertJsonFragment([
+                'message' => Lang::get('bookmark.created')
+            ]);
     }
 
     public function testAttachBusy()
@@ -57,22 +68,30 @@ class BookmarksTest extends TestCase
 
         $manga = Manga::factory()->create();
 
-        $this->actingAs($user)->postJson(route('bookmarks.attach', $manga));
+        $this
+            ->actingAs($user)
+            ->postJson(route('bookmarks.attach', $manga));
 
-        $response = $this->actingAs($user)->postJson(route('bookmarks.attach', $manga));
+        $response = $this
+            ->actingAs($user)
+            ->postJson(route('bookmarks.attach', $manga));
 
         $response
-            ->assertOk()
-            ->assertSee(Lang::get('bookmark.unique'));
+            ->assertStatus(Response::HTTP_BAD_REQUEST)
+            ->assertJsonFragment([
+                'message' => Lang::get('bookmark.unique')
+            ]);
     }
 
     public function testAttachUnauthorized()
     {
         $manga = Manga::factory()->create();
 
-        $response = $this->postJson(route('bookmarks.attach', $manga));
+        $response = $this
+            ->postJson(route('bookmarks.attach', $manga));
 
-        $response->assertUnauthorized();
+        $response
+            ->assertUnauthorized();
     }
 
     public function testDetachOk()
@@ -81,9 +100,18 @@ class BookmarksTest extends TestCase
 
         $manga = Manga::factory()->create();
 
-        $response = $this->actingAs($user)->postJson(route('bookmarks.detach', $manga));
+        $this
+            ->actingAs($user)
+            ->postJson(route('bookmarks.attach', $manga));
 
-        $response->assertOk();
+        $response = $this
+            ->actingAs($user)
+            ->deleteJson(route('bookmarks.detach', $manga));
+
+        $response->assertOk()
+            ->assertJsonFragment([
+                'message' => Lang::get('bookmark.deleted')
+            ]);
     }
 
     public function testDetachBusy()
@@ -92,20 +120,21 @@ class BookmarksTest extends TestCase
 
         $manga = Manga::factory()->create();
 
-        $this->actingAs($user)->postJson(route('bookmarks.detach', $manga));
-
-        $response = $this->actingAs($user)->postJson(route('bookmarks.detach', $manga));
+        $response = $this->actingAs($user)
+            ->deleteJson(route('bookmarks.detach', $manga));
 
         $response
-            ->assertOk()
-            ->assertSee(Lang::get('bookmark.notFound'));
+            ->assertStatus(Response::HTTP_BAD_REQUEST)
+            ->assertJsonFragment([
+                'message' => Lang::get('bookmark.notFound')
+            ]);
     }
 
     public function testDetachUnauthorized()
     {
         $manga = Manga::factory()->create();
 
-        $response = $this->postJson(route('bookmarks.detach', $manga));
+        $response = $this->deleteJson(route('bookmarks.detach', $manga));
 
         $response->assertUnauthorized();
     }

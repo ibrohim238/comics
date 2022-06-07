@@ -2,8 +2,8 @@
 
 namespace App\Versions\V1\Services;
 
+use App\Interfaces\Commentable;
 use App\Models\Comment;
-use App\Models\Commentable;
 use App\Models\User;
 use App\Versions\V1\Dto\CommentDto;
 

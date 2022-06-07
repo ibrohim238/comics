@@ -24,7 +24,7 @@ class MangaTest extends TestCase
 
     public function testIndexOk()
     {
-        $mangas = Manga::factory()->count('3')->create()->loadAvg('ratings', 'rating');
+        $mangas = Manga::factory()->count('3')->create()->load('ratings', 'chapterVotes');
 
         $response = $this->getJson(route('mangas.index'));
 
@@ -37,7 +37,7 @@ class MangaTest extends TestCase
 
     public function testShowOk()
     {
-        $manga = Manga::factory()->create()->loadAvg('ratings', 'rating');
+        $manga = Manga::factory()->create();
 
         $response = $this->getJson(route('mangas.show', $manga));
 

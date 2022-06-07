@@ -16,13 +16,6 @@ class ChapterTest extends TestCase
 {
     use WithFaker;
 
-    protected function setUp(): void
-    {
-        parent::setUp();
-
-        $this->seed();
-    }
-
     public function testIndexOk()
     {
         $manga = Manga::factory()->create();
@@ -46,7 +39,7 @@ class ChapterTest extends TestCase
 
         $response->assertOk()
             ->assertJsonFragment(
-                (new ChapterResource($chapter->load('media', 'manga.media')))->response()->getData(true)
+                (new ChapterResource($chapter->load('media', 'manga.media', 'votes')))->response()->getData(true)
             );
     }
 

@@ -1,8 +1,9 @@
 <?php
 
-namespace App\Models;
+namespace App\Traits;
 
 use App\Enums\FilterTypeEnum;
+use App\Models\Filter;
 use Illuminate\Database\Eloquent\Relations\MorphToMany;
 
 trait HasFilters

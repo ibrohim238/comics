@@ -3,6 +3,7 @@
 namespace App\Versions\V1\Http\Controllers\Api;
 
 use App\Models\Manga;
+use App\Repository\MangaRepository;
 use App\Versions\V1\Actions\ShowMangaAction;
 use App\Versions\V1\Dto\MangaDto;
 use App\Versions\V1\Http\Controllers\Controller;
@@ -25,18 +26,9 @@ class MangaController extends Controller
         $this->authorizeResource(Manga::class);
     }
 
-    public function index(Request $request)
+    public function index(Request $request, MangaRepository $repository)
     {
-        $mangas = QueryBuilder::for(Manga::class)
-            ->with('media', 'ratings')
-            ->allowedFilters(
-                AllowedFilter::exact('genres', 'genres.name'),
-                AllowedFilter::exact('categories', 'categories.name'),
-                AllowedFilter::exact('tags', 'tags.name')
-            )
-            ->paginate($request->get('count'));
-
-        return new MangaCollection($mangas);
+        return new MangaCollection($repository->paginate($request->get('count')));
     }
 
     public function random()
@@ -46,9 +38,9 @@ class MangaController extends Controller
         return response(route('manga.show', $manga));
     }
 
-    public function show(Manga $manga, ShowMangaAction $action): MangaResource
+    public function show(Manga $manga): MangaResource
     {
-        return (new MangaResource($action->execute($manga)));
+        return (new MangaResource($manga->loadAvg('ratings', 'value')));
     }
 
     /**
