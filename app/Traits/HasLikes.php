@@ -2,22 +2,20 @@
 
 namespace App\Traits;
 
-use App\Versions\V1\Reporters\RateReporter;
+use App\Enums\RatesTypeEnum;
+use Illuminate\Database\Eloquent\Relations\MorphMany;
 
 trait HasLikes
 {
-    public function likesDislikesCount(): int
+    public function likes(): MorphMany
     {
-        return RateReporter::fromRateable($this)->count();
+        return $this->rates()->where('type', RatesTypeEnum::LIKE_TYPE->value);
     }
 
     public function likesCount(): int
     {
-        return RateReporter::fromRateable($this)->likesCount();
-    }
-
-    public function dislikesCount(): int
-    {
-        return RateReporter::fromRateable($this)->dislikesCount();
+        return
+            $this->likes()->where('value', true)->count()
+            - $this->likes()->where('value', false)->count();
     }
 }

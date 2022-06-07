@@ -15,7 +15,7 @@ return new class extends Migration
     {
         Schema::create('rates', function (Blueprint $table) {
             $table->id();
-            $table->smallInteger('value');
+            $table->smallInteger('value')->nullable();
             $table->string('type');
             $table->foreignId('user_id')->constrained();
             $table->morphs('rateable');

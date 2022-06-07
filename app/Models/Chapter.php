@@ -2,22 +2,24 @@
 
 namespace App\Models;
 
+use App\Enums\RatesTypeEnum;
 use App\Interfaces\Commentable;
 use App\Interfaces\Eventable;
 use App\Interfaces\Rateable;
-use App\Interfaces\Likeable;
+use App\Interfaces\Votable;
 use App\Traits\HasComments;
 use App\Traits\HasRates;
 use App\Traits\HasEvents;
-use App\Traits\HasLikes;
+use App\Traits\HasVotes;
 use App\Versions\V1\Traits\Sortable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
 
-class Chapter extends Model implements HasMedia, Eventable, Commentable, Rateable, Likeable
+class Chapter extends Model implements HasMedia, Eventable, Commentable, Rateable, Votable
 {
     use HasFactory;
     use InteractsWithMedia;
@@ -25,7 +27,7 @@ class Chapter extends Model implements HasMedia, Eventable, Commentable, Rateabl
     use HasComments;
     use Sortable;
     use HasRates;
-    use HasLikes;
+    use HasVotes;
 
     public function __construct(array $attributes = [])
     {

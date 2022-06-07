@@ -25,15 +25,19 @@ class RateRequest extends FormRequest
      */
     public function rules(): array
     {
-        $value = match ($this->type) {
-            RatesTypeEnum::LIKE_TYPE->value => ['required', 'boolean'],
-            RatesTypeEnum::RATING_TYPE->value => ['required', 'numeric', 'min:0', 'max:5'],
+        return match ($this->type) {
+            RatesTypeEnum::RATING_TYPE->value => [
+                'value' => ['required', 'numeric', 'min:0', 'max:5'],
+                'type' => [new Enum(RatesTypeEnum::class)]
+            ],
+            RatesTypeEnum::LIKE_TYPE->value => [
+                'value' => ['required', 'boolean'],
+                'type' => [new Enum(RatesTypeEnum::class)]
+            ],
+            RatesTypeEnum::VOTE_TYPE->value => [
+                'type' => [new Enum(RatesTypeEnum::class)]
+            ],
             default => throw new Exception('Unexpected match value'),
         };
-
-        return [
-            'value' => $value,
-            'type' => [new Enum(RatesTypeEnum::class)],
-        ];
     }
 }

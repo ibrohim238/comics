@@ -2,17 +2,13 @@
 
 namespace App\Traits;
 
-use App\Versions\V1\Reporters\RateReporter;
+use App\Enums\RatesTypeEnum;
+use Illuminate\Database\Eloquent\Relations\MorphMany;
 
 trait HasRatings
 {
-    public function ratingsAvg(): float
+    public function ratings(): MorphMany
     {
-        return RateReporter::fromRateable($this)->avg();
-    }
-
-    public function ratingsCount(): int
-    {
-        return RateReporter::fromRateable($this)->count();
+        return $this->rates()->where('type', RatesTypeEnum::RATING_TYPE->value);
     }
 }

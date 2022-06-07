@@ -28,9 +28,13 @@ namespace App\Models{
  * @property-read int|null $comments_count
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Event[] $events
  * @property-read int|null $events_count
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Rate[] $likes
+ * @property-read int|null $likes_count
  * @property-read \App\Models\Manga $manga
  * @property-read \Spatie\MediaLibrary\MediaCollections\Models\Collections\MediaCollection|\Spatie\MediaLibrary\MediaCollections\Models\Media[] $media
  * @property-read int|null $media_count
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Rate[] $rates
+ * @property-read int|null $rates_count
  * @property-read \App\Models\Team $team
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\User[] $users
  * @property-read int|null $users_count
@@ -49,7 +53,7 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|Chapter whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Chapter whereVolume($value)
  */
-	class Chapter extends \Eloquent implements \Spatie\MediaLibrary\HasMedia, \App\Interfaces\Eventable, \App\Interfaces\Commentable {}
+	class Chapter extends \Eloquent implements \Spatie\MediaLibrary\HasMedia, \App\Interfaces\Eventable, \App\Interfaces\Commentable, \App\Interfaces\Rateable, \App\Interfaces\Likeable {}
 }
 
 namespace App\Models{
@@ -195,6 +199,8 @@ namespace App\Models{
  * @property-read int|null $genres_count
  * @property-read \Spatie\MediaLibrary\MediaCollections\Models\Collections\MediaCollection|\Spatie\MediaLibrary\MediaCollections\Models\Media[] $media
  * @property-read int|null $media_count
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Rate[] $rates
+ * @property-read int|null $rates_count
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Rate[] $ratings
  * @property-read int|null $ratings_count
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Filter[] $tags
@@ -215,7 +221,7 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|Manga whereSlug($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Manga whereUpdatedAt($value)
  */
-	class Manga extends \Eloquent implements \Spatie\MediaLibrary\HasMedia, \App\Interfaces\Eventable, \App\Interfaces\Ratingable, \App\Interfaces\Commentable, \App\Interfaces\Teamable, \App\Interfaces\Filterable {}
+	class Manga extends \Eloquent implements \Spatie\MediaLibrary\HasMedia, \App\Interfaces\Eventable, \App\Interfaces\Commentable, \App\Interfaces\Teamable, \App\Interfaces\Filterable, \App\Interfaces\Rateable, \App\Interfaces\Ratingable {}
 }
 
 namespace App\Models{
@@ -255,16 +261,16 @@ namespace App\Models{
 
 namespace App\Models{
 /**
- * App\Models\Rating
+ * App\Models\Rate
  *
  * @property int $id
+ * @property int $value
+ * @property \App\Enums\RatesTypeEnum $type
  * @property int $user_id
  * @property string $rateable_type
  * @property int $rateable_id
- * @property int $value
- * @property string $type
- * @property string|null $created_at
- * @property string|null $updated_at
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
  * @property-read \Illuminate\Database\Eloquent\Model|\Eloquent $rateable
  * @property-read \App\Models\User $user
  * @method static \Illuminate\Database\Eloquent\Builder|Rate newModelQuery()
@@ -279,7 +285,7 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|Rate whereUserId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Rate whereValue($value)
  */
-	class Rating extends \Eloquent {}
+	class Rate extends \Eloquent {}
 }
 
 namespace App\Models{
@@ -411,10 +417,6 @@ namespace App\Models{
  * @property-read int|null $permissions_count
  * @property-read \Illuminate\Database\Eloquent\Collection|\Spatie\Permission\Models\Role[] $roles
  * @property-read int|null $roles_count
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\TeamUser[] $teamUsers
- * @property-read int|null $team_users_count
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Team[] $teams
- * @property-read int|null $teams_count
  * @property-read \Illuminate\Database\Eloquent\Collection|\Laravel\Passport\Token[] $tokens
  * @property-read int|null $tokens_count
  * @method static \Database\Factories\UserFactory factory(...$parameters)

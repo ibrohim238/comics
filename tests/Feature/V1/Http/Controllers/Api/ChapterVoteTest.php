@@ -1,8 +1,8 @@
 <?php
 
 namespace Tests\Feature\V1\Http\Controllers\Api;
-
-use App\Models\Manga;
+use App\Models\Chapter;
+use App\Models\Comment;
 use App\Models\User;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Support\Facades\Lang;
@@ -10,7 +10,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Tests\TestCase;
 use function route;
 
-class MangaRatingTest extends TestCase
+class ChapterVoteTest extends TestCase
 {
     use WithFaker;
 
@@ -18,12 +18,10 @@ class MangaRatingTest extends TestCase
     {
         $user = User::factory()->create();
 
-        $manga = Manga::factory()->create();
+        $chapter = Chapter::factory()->create();
 
         $response = $this->actingAs($user)
-            ->postJson(route('rating.rate', [getMorphedType($manga::class), $manga->id]), [
-                'value' => $this->faker->numberBetween(0, 5),
-            ]);
+            ->postJson(route('vote.rate', [getMorphedType($chapter::class), $chapter->id]));
 
         $response->assertOk()
             ->assertJsonFragment([
@@ -34,13 +32,10 @@ class MangaRatingTest extends TestCase
     public function testStoreUnauthorized()
     {
 
-        $manga = Manga::factory()->create();
-
+        $chapter = Chapter::factory()->create();
 
         $response = $this
-            ->postJson(route('rating.rate', [getMorphedType($manga::class), $manga->id]), [
-                'value' => $this->faker->numberBetween(1, 5)
-            ]);
+            ->postJson(route('vote.rate', [getMorphedType($chapter::class), $chapter->id]));
 
         $response->assertUnauthorized();
     }
@@ -49,18 +44,14 @@ class MangaRatingTest extends TestCase
     {
         $user = User::factory()->create();
 
-        $manga = Manga::factory()->create();
+        $chapter = Chapter::factory()->create();
 
 
         $this->actingAs($user)
-            ->postJson(route('rating.rate', [getMorphedType($manga::class), $manga->id]), [
-                'value' => $this->faker->numberBetween(1, 5)
-            ]);
+            ->postJson(route('vote.rate', [getMorphedType($chapter::class), $chapter->id]));
 
         $response = $this->actingAs($user)
-            ->postJson(route('rating.rate', [getMorphedType($manga::class), $manga->id]), [
-                'value' => $this->faker->numberBetween(0, 5),
-            ]);
+            ->postJson(route('vote.rate', [getMorphedType($chapter::class), $chapter->id]));
 
         $response->assertOk()
             ->assertJsonFragment([
@@ -72,15 +63,13 @@ class MangaRatingTest extends TestCase
     {
         $user = User::factory()->create();
 
-        $manga = Manga::factory()->create();
+        $chapter = Chapter::factory()->create();
 
         $this->actingAs($user)
-            ->postJson(route('rating.rate', [getMorphedType($manga::class), $manga->id]), [
-                'value' => $this->faker->numberBetween(1, 5)
-            ]);
+            ->postJson(route('vote.rate', [getMorphedType($chapter::class), $chapter->id]));
 
         $response = $this->actingAs($user)
-            ->deleteJson(route('rating.un-rate', [getMorphedType($manga::class), $manga->id]));
+            ->deleteJson(route('vote.un-rate', [getMorphedType($chapter::class), $chapter->id]));
 
         $response->assertOk()
             ->assertJsonFragment([
@@ -92,10 +81,10 @@ class MangaRatingTest extends TestCase
     {
         $user = User::factory()->create();
 
-        $manga = Manga::factory()->create();
+        $chapter = Chapter::factory()->create();
 
         $response = $this->actingAs($user)
-            ->deleteJson(route('rating.un-rate', [getMorphedType($manga::class), $manga->id]));
+            ->deleteJson(route('vote.un-rate', [getMorphedType($chapter::class), $chapter->id]));
 
         $response->assertStatus(Response::HTTP_BAD_REQUEST)
             ->assertJsonFragment([
@@ -105,14 +94,10 @@ class MangaRatingTest extends TestCase
 
     public function testDeleteUnauthorized()
     {
-
-        $manga = Manga::factory()->create();
-
+        $chapter = Chapter::factory()->create();
 
         $response = $this
-            ->deleteJson(route('rating.un-rate', [getMorphedType($manga::class), $manga->id]), [
-                'value' => $this->faker->numberBetween(1, 5)
-            ]);
+            ->deleteJson(route('vote.un-rate', [getMorphedType($chapter::class), $chapter->id]));
 
         $response->assertUnauthorized();
     }
