@@ -8,7 +8,5 @@ interface Ratingable
 {
     public function rates(): MorphMany;
 
-    public function ratingsAvg();
-
-    public function ratingsCount(): int;
+    public function ratings(): MorphMany;
 }

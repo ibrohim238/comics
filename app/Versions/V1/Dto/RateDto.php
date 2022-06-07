@@ -8,8 +8,8 @@ use Spatie\DataTransferObject\Exceptions\UnknownProperties;
 
 class RateDto extends DataTransferObject
 {
-    public int $value;
-    public ?string $type;
+    public ?int $value;
+    public string $type;
 
     /**
      * @throws UnknownProperties

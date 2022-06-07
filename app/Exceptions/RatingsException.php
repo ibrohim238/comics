@@ -7,8 +7,8 @@ use RuntimeException;
 
 class RatingsException extends RuntimeException
 {
-    public static function notFound(string $type): self
+    public static function notFound(): self
     {
-        return new self(Lang::get('rateable.notFound', ['type' => $type]));
+        return new self(Lang::get('rateable.notFound'));
     }
 }

@@ -7,7 +7,6 @@ use App\Versions\V1\Dto\RateDto;
 use App\Versions\V1\Http\Controllers\Controller;
 use App\Versions\V1\Http\Requests\Api\RateRequest;
 use App\Versions\V1\Services\RatingService;
-use App\Versions\V1\Traits\IdentifiesModels;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Lang;
@@ -42,6 +41,6 @@ class RateableController extends Controller
             return response(['message' => $exception->getMessage()], Response::HTTP_BAD_REQUEST);
         }
 
-        return response(['message' => Lang::get('rateable.delete', ['type' => $type])]);
+        return response(['message' => Lang::get("rateable.delete")]);
     }
 }

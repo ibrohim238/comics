@@ -20,15 +20,16 @@ class MangaRatingTest extends TestCase
 
         $manga = Manga::factory()->create();
 
+        $value = $this->faker->numberBetween(0, 5);
 
         $response = $this->actingAs($user)
             ->postJson(route('rating.rate', [getMorphedType($manga::class), $manga->id]), [
-                'value' => $this->faker->numberBetween(1, 5)
+                'value' => $value
             ]);
 
         $response->assertOk()
             ->assertJsonFragment([
-                'message' => Lang::get('rateable.create', ['type' => 'rating'])
+                'message' => Lang::get('rateable.rating.create', ['value' => $value])
             ]);
     }
 
@@ -58,14 +59,16 @@ class MangaRatingTest extends TestCase
                 'value' => $this->faker->numberBetween(1, 5)
             ]);
 
+        $value = $this->faker->numberBetween(1, 5);
+
         $response = $this->actingAs($user)
             ->postJson(route('rating.rate', [getMorphedType($manga::class), $manga->id]), [
-                'value' => $this->faker->numberBetween(1, 5)
+                'value' => $value
             ]);
 
         $response->assertOk()
             ->assertJsonFragment([
-                'message' => Lang::get('rateable.update', ['type' => 'rating'])
+                'message' => Lang::get('rateable.rating.create', ['value' => $value])
             ]);
     }
 
@@ -85,7 +88,7 @@ class MangaRatingTest extends TestCase
 
         $response->assertOk()
             ->assertJsonFragment([
-                'message' => Lang::get('rateable.delete', ['type' => 'rating'])
+                'message' => Lang::get('rateable.delete')
             ]);
     }
 
@@ -100,7 +103,7 @@ class MangaRatingTest extends TestCase
 
         $response->assertStatus(Response::HTTP_BAD_REQUEST)
             ->assertJsonFragment([
-                'message' => Lang::get('rateable.notFound', ['type' => 'rating'])
+                'message' => Lang::get('rateable.notFound')
             ]);
     }
 

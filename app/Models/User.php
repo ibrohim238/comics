@@ -2,22 +2,19 @@
 
 namespace App\Models;
 
-use App\Interfaces\Ratingable;
-use App\Traits\CanLikes;
 use App\Traits\CanRates;
-use App\Traits\CanRatings;
 use App\Traits\CanTeams;
 use App\Versions\V1\Dto\FallbackMedia;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
-use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Passport\HasApiTokens;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
+use Spatie\MediaLibrary\MediaCollections\Models\Media;
 use Spatie\Permission\Traits\HasRoles;
 
 class User extends Authenticatable implements HasMedia, MustVerifyEmail
@@ -27,6 +24,8 @@ class User extends Authenticatable implements HasMedia, MustVerifyEmail
     use Notifiable;
     use HasRoles;
     use InteractsWithMedia;
+    use CanTeams;
+    use CanRates;
 
     /**
      * The attributes that are mass assignable.
@@ -87,10 +86,10 @@ class User extends Authenticatable implements HasMedia, MustVerifyEmail
             ->useFallbackUrl(url('/media/avatar.png'));
     }
 
-    public function getFirstMedia(string $collectionName = 'default', $filters = [])
+    public function getFirstFallbackOrMedia(string $collectionName = 'default', $filters = []): FallbackMedia|Media
     {
-        $media = $this->getFirstMediaUrl();
+        $media = $this->getFirstMedia();
 
-        return $media->first() ?? new FallbackMedia($collectionName, $this->getFallbackMediaUrl($collectionName));
+        return $media ?? new FallbackMedia($collectionName, $this->getFallbackMediaUrl($collectionName));
     }
 }

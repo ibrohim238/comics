@@ -2,8 +2,10 @@
 
 namespace App\Versions\V1\Services;
 
+use App\Enums\RatesTypeEnum;
 use App\Exceptions\RatingsException;
 use App\Interfaces\Rateable;
+use App\Models\Rate;
 use App\Models\User;
 use App\Versions\V1\Dto\RateDto;
 use App\Versions\V1\Reporters\RateReporter;
@@ -21,26 +23,22 @@ class RatingService
 
     public function rate(RateDto $dto)
     {
-        if ($this->exists($dto->type)) {
-            $this->getRatesWithType($dto->type)
-                ->update(
-                    $dto
-                        ->except('type')
-                        ->toArray()
-                );
-            return Lang::get('rateable.update', ['type' => $dto->type]);
-        }
-
         $this->getRatesWithType($dto->type)
-            ->create($this->prepareData($dto));
+            ->updateOrCreate([
+                'user_id' => $this->user->id,
+                'type' => $dto->type,
+                ], $dto
+                    ->except('type')
+                    ->toArray()
+            );
 
-        return Lang::get('rateable.create', ['type' => $dto->type]);
+        return Lang::get('rateable.create');
     }
 
-    public function unRate(string $type): bool|int
+    public function unRate(string $type): int
     {
         if (!$this->exists($type)) {
-            throw RatingsException::notFound($type);
+            throw RatingsException::notFound();
         }
 
         return $this->getRatesWithType($type)
@@ -60,10 +58,5 @@ class RatingService
             ->type($type)
             ->rateable($this->rateable)
             ->relation();
-    }
-
-    private function prepareData(RateDto $dto): int|array
-    {
-        return array_merge($dto->toArray(), ['user_id' => $this->user->id]);
     }
 }

@@ -20,15 +20,16 @@ class ChapterLikeTest extends TestCase
 
         $chapter = Chapter::factory()->create();
 
+        $value = $this->faker->numberBetween(0, 1);
 
         $response = $this->actingAs($user)
             ->postJson(route('like.rate', [getMorphedType($chapter::class), $chapter->id]), [
-                'value' => $this->faker->numberBetween(0, 1)
+                'value' => $value
             ]);
 
         $response->assertOk()
             ->assertJsonFragment([
-                'message' => Lang::get('rateable.create', ['type' => 'like'])
+                'message' => Lang::choice('rateable.like.create', $value)
             ]);
     }
 
@@ -58,14 +59,16 @@ class ChapterLikeTest extends TestCase
                 'value' => $this->faker->numberBetween(0, 1)
             ]);
 
+        $value = $this->faker->numberBetween(0, 1);
+
         $response = $this->actingAs($user)
             ->postJson(route('like.rate', [getMorphedType($chapter::class), $chapter->id]), [
-                'value' => $this->faker->numberBetween(0, 1)
+                'value' => $value
             ]);
 
         $response->assertOk()
             ->assertJsonFragment([
-                'message' => Lang::get('rateable.update', ['type' => 'like'])
+                'message' => Lang::choice('rateable.like.create', $value)
             ]);
     }
 
@@ -85,7 +88,7 @@ class ChapterLikeTest extends TestCase
 
         $response->assertOk()
             ->assertJsonFragment([
-                'message' => Lang::get('rateable.delete', ['type' => 'like'])
+                'message' => Lang::get('rateable.delete')
             ]);
     }
 
@@ -100,7 +103,7 @@ class ChapterLikeTest extends TestCase
 
         $response->assertStatus(Response::HTTP_BAD_REQUEST)
             ->assertJsonFragment([
-                'message' => Lang::get('rateable.notFound', ['type' => 'like'])
+                'message' => Lang::get('rateable.notFound')
             ]);
     }
 
