@@ -34,21 +34,15 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::prefix('v1')->group(function () {
-    /*
-     * Admin
-     */
+    /* Admin */
     Route::prefix('panel')->middleware('permission:view admin panel')->group(function () {
         require('admin.php');
     });
 
-    /*
-     * Auth
-     */
+    /* Auth */
     require ('auth.php');
 
-    /*
-     * User
-     */
+    /* User */
     Route::get('user', [UserController::class, 'show']);
 
     Route::patch('user', [UserController::class, 'update']);
@@ -56,9 +50,7 @@ Route::prefix('v1')->group(function () {
     Route::delete('user', [UserController::class, 'destroy']);
 
 
-    /**
-     * Teams
-     */
+    /* Teams */
     Route::apiResource('teams', TeamController::class);
     Route::post('/teams/{team}/members/{user}', [TeamMemberController::class, 'store'])->name('team-member.store');
     Route::put('/teams/{team}/members/{user}', [TeamMemberController::class, 'update'])->name('team-member.update');
@@ -71,18 +63,11 @@ Route::prefix('v1')->group(function () {
     Route::post('/teams/{team}/attach/{model}/{id}', [TeamableController::class, 'attach'])->name('teamable.attach');
     Route::post('/teams/{team}/detach/{model}/{id}', [TeamableController::class, 'detach'])->name('teamable.detach');
 
-    /*
-     * Manga
-     */
+    /* Manga */
     Route::get('/mangas/random', [MangaController::class, 'random'])->name('manga.random');
-
     Route::apiResource('mangas', MangaController::class)->parameter('mangas', 'manga:slug');
 
-
     Route::apiResource('filters', FilterController::class);
-    Route::post('/filters/{filter}/attach/{model}/{id}', [FilterableController::class, 'attach'])->name('filterable.attach');
-    Route::post('/filters/{filter}/detach/{model}/{id', [FilterableController::class, 'detach'])->name('filterable.detach');
-
 
     Route::group(['middleware' => 'auth'], function () {
         foreach (RatesTypeEnum::values() as $type) {
@@ -129,9 +114,7 @@ Route::prefix('v1')->group(function () {
         Route::apiResource('teams.manga.chapter', TeamMangaChapterController::class);
     });
 
-    /*
-     * Comments
-     */
+    /* Comments */
     Route::get('/comment/{model}/{id}', [CommentController::class, 'index'])
         ->name('comment.index')
         ->whereIn('model', CommentableTypeEnum::values())
@@ -140,7 +123,6 @@ Route::prefix('v1')->group(function () {
         ->name('comment.store')
         ->whereIn('model', CommentableTypeEnum::values())
         ->whereNumber('id');
-
     Route::patch('/comment/{comment}', [CommentController::class, 'update'])
         ->name('comment.update');
     Route::delete('/comment/{comment}', [CommentController::class, 'destroy'])
