@@ -19,6 +19,7 @@ class MangaController extends Controller
 {
     public function __construct()
     {
+        $this->middleware('auth')->except('index', 'show');
         $this->authorizeResource(Manga::class);
     }
 

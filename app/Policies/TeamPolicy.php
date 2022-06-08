@@ -8,6 +8,7 @@ use App\Models\Team;
 use App\Models\TeamInvitation;
 use App\Models\User;
 use App\Policies\Traits\ChapterTeamTrait;
+use App\Policies\Traits\MangaTeamTrait;
 use App\Policies\Traits\TeamableTrait;
 use Illuminate\Auth\Access\HandlesAuthorization;
 
@@ -15,6 +16,7 @@ class TeamPolicy
 {
     use HandlesAuthorization;
     use ChapterTeamTrait;
+    use MangaTeamTrait;
     use TeamableTrait;
 
     public function viewAny(?User $user): bool

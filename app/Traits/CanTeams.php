@@ -20,14 +20,14 @@ trait CanTeams
             ->as('membership');
     }
 
-    public function team(Team $team): Team
+    public function findTeam(Team $team)
     {
-        return $this->teams()->where('id', $team->id)->first();
+        return $this->teams()->where('team_id', $team->id)->first();
     }
 
     public function hasTeamable(Team $team,Teamable $teamable): bool
     {
-        return $this->team($team)->hasTeamable($teamable);
+        return $this->findTeam($team)->hasTeamable($teamable);
     }
 
     public function teamUsers(): HasMany
@@ -35,9 +35,9 @@ trait CanTeams
         return $this->hasMany(TeamUser::class);
     }
 
-    public function teamRole(Team $team): string|null
+    public function teamRole(Team $team)
     {
-        return $team->users()->find($this->id)?->membership->role;
+        return $this->findTeam($team)?->membership->role;
     }
 
     public function hasTeamRole(Team $team, string $role): bool
@@ -47,7 +47,7 @@ trait CanTeams
 
     public function teamPermissions(Team $team): array
     {
-        return TeamRoleEnum::from($this->teamRole($team))->permissions() ;
+        return TeamRoleEnum::tryFrom($this->teamRole($team))?->permissions() ?? [];
     }
 
     public function hasTeamPermission(Team $team, TeamPermissionEnum $permission): bool
