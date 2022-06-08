@@ -23,7 +23,7 @@ class MangaPolicy
 
     public function create(User $user): bool
     {
-        return true;
+        return $user->hasPermissionTo(PermissionEnum::MANAGE_MANGA->value);
     }
 
     public function update(User $user, Manga $manga): bool

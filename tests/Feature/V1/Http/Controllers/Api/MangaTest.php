@@ -20,11 +20,14 @@ class MangaTest extends TestCase
         parent::setUp();
 
         $this->seed();
+        $this->user = User::factory()->create();
+
+        $this->user->assignRole('owner');
     }
 
     public function testIndexOk()
     {
-        $mangas = Manga::factory()->count('3')->create()->load('ratings', 'chapterVotes');
+        $mangas = Manga::factory()->count('3')->create();
 
         $response = $this->getJson(route('mangas.index'));
 
@@ -57,10 +60,7 @@ class MangaTest extends TestCase
 
     public function testStoreOk()
     {
-        $user = User::factory()->create()
-            ->assignRole(RolePermissionEnum::OWNER->value);
-
-        $response = $this->actingAs($user)
+        $response = $this->actingAs($this->user)
             ->postJson(route('mangas.store'), [
             'name' => $this->faker->name,
             'description' => $this->faker->text,
@@ -72,10 +72,7 @@ class MangaTest extends TestCase
 
     public function testStoreErrorValidateName()
     {
-        $user = User::factory()->create()
-            ->assignRole(RolePermissionEnum::OWNER->value);
-
-        $response = $this->actingAs($user)
+        $response = $this->actingAs($this->user)
             ->postJson(route('mangas.store'), [
             'name' => 'err',
             'description' => $this->faker->text,
@@ -87,14 +84,37 @@ class MangaTest extends TestCase
             ->assertUnprocessable();
     }
 
-    public function testUpdateOk()
+    public function testStoreUnauthorized()
     {
-        $user = User::factory()->create()
-            ->assignRole(RolePermissionEnum::OWNER->value);
+        $response = $this
+            ->postJson(route('mangas.store'), [
+                'name' => 'err',
+                'description' => $this->faker->text,
+                'published_at' => $this->faker->dateTime,
+            ]);
 
-        $manga = Manga::factory()->create();
+        $response->assertUnauthorized();
+    }
+
+    public function testStoreForbidden()
+    {
+        $user = User::factory()->create();
 
         $response = $this->actingAs($user)
+            ->postJson(route('mangas.store'), [
+                'name' => 'err',
+                'description' => $this->faker->text,
+                'published_at' => $this->faker->dateTime,
+            ]);
+
+        $response->assertForbidden();
+    }
+
+    public function testUpdateOk()
+    {
+        $manga = Manga::factory()->create();
+
+        $response = $this->actingAs($this->user)
             ->patchJson(route('mangas.update', $manga), [
            'name' => $this->faker->name,
            'description'  => $this->faker->text,
@@ -102,6 +122,35 @@ class MangaTest extends TestCase
         ]);
 
         $response->assertOk();
+    }
+
+    public function testUpdateUnauthorized()
+    {
+        $manga = Manga::factory()->create();
+
+        $response = $this
+            ->patchJson(route('mangas.update', $manga), [
+                'name' => $this->faker->name,
+                'description'  => $this->faker->text,
+                'published_at' => $this->faker->dateTime,
+            ]);
+
+        $response->assertUnauthorized();
+    }
+
+    public function testUpdateForbidden()
+    {
+        $user = User::factory()->create();
+        $manga = Manga::factory()->create();
+
+        $response = $this->actingAs($user)
+            ->patchJson(route('mangas.update', $manga), [
+                'name' => $this->faker->name,
+                'description'  => $this->faker->text,
+                'published_at' => $this->faker->dateTime,
+            ]);
+
+        $response->assertForbidden();
     }
 
     public function testUpdateNotFound()
@@ -121,12 +170,9 @@ class MangaTest extends TestCase
 
     public function testDeleteOk()
     {
-        $user = User::factory()->create()
-            ->assignRole(RolePermissionEnum::OWNER->value);
-
         $manga = Manga::factory()->create();
 
-        $response = $this->actingAs($user)
+        $response = $this->actingAs($this->user)
             ->deleteJson(route('mangas.destroy', $manga));
 
         $response->assertNoContent();
@@ -141,5 +187,27 @@ class MangaTest extends TestCase
             ->deleteJson(route('mangas.destroy', 'n'));
 
         $response->assertNotFound();
+    }
+
+    public function testDeleteUnauthorized()
+    {
+        $manga = Manga::factory()->create();
+
+        $response = $this
+            ->deleteJson(route('mangas.destroy', $manga));
+
+        $response->assertUnauthorized();
+    }
+
+    public function testDeleteForbidden()
+    {
+        $user = User::factory()->create();
+
+        $manga = Manga::factory()->create();
+
+        $response = $this->actingAs($user)
+            ->deleteJson(route('mangas.destroy', $manga));
+
+        $response->assertForbidden();
     }
 }
