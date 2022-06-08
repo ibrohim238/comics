@@ -14,7 +14,6 @@ use App\Versions\V1\Services\CommentService;
 use App\Versions\V1\Traits\IdentifiesModels;
 use Exception;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Spatie\DataTransferObject\Exceptions\UnknownProperties;
 
 class CommentController extends Controller
@@ -23,6 +22,7 @@ class CommentController extends Controller
 
     public function __construct()
     {
+        $this->middleware('auth')->except('index');
         $this->authorizeResource(Comment::class);
     }
 
@@ -34,7 +34,7 @@ class CommentController extends Controller
         $model = $this->identifyModel($model, $id);
 
         /* @var Manga|Chapter $model*/
-        $comments = $model->comments()->with('user', 'likes')
+        $comments = $model->comments()->with('user')
             ->paginate($request->get('count'));
 
         return new CommentCollection($comments);
@@ -44,10 +44,16 @@ class CommentController extends Controller
      * @throws UnknownProperties
      * @throws Exception
      */
-    public function store(CommentRequest $request, string $model, int $id, CommentService $service): CommentResource
-    {
+    public function store(
+        string $model,
+        int $id,
+        CommentRequest $request,
+        CommentService $service
+    ): CommentResource {
         $model = $this->identifyModel($model, $id);
-        $comment = $service->create($model, Auth::user(), CommentDto::fromRequest($request));
+
+        /* @var Manga|Chapter $model*/
+        $comment = $service->create($model, CommentDto::fromRequest($request));
 
         return new CommentResource($comment);
     }
@@ -61,10 +67,14 @@ class CommentController extends Controller
         CommentService $service
     ) {
         $service->update($comment, CommentDto::fromRequest($request));
+
+        return new CommentResource($comment);
     }
 
     public function destroy(Comment $comment, CommentService $service)
     {
         $service->delete($comment);
+
+        return response()->noContent();
     }
 }
