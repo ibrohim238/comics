@@ -3,21 +3,17 @@
 namespace App\Versions\V1\Http\Controllers\Api;
 
 use App\Models\Manga;
-use App\Repository\MangaRepository;
-use App\Versions\V1\Actions\ShowMangaAction;
 use App\Versions\V1\Dto\MangaDto;
 use App\Versions\V1\Http\Controllers\Controller;
 use App\Versions\V1\Http\Requests\Api\MangaRequest;
 use App\Versions\V1\Http\Resources\MangaCollection;
 use App\Versions\V1\Http\Resources\MangaResource;
+use App\Versions\V1\Repository\MangaRepository;
 use App\Versions\V1\Services\MangaService;
-use Illuminate\Contracts\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Spatie\DataTransferObject\Exceptions\UnknownProperties;
 use Spatie\MediaLibrary\MediaCollections\Exceptions\FileDoesNotExist;
 use Spatie\MediaLibrary\MediaCollections\Exceptions\FileIsTooBig;
-use Spatie\QueryBuilder\AllowedFilter;
-use Spatie\QueryBuilder\QueryBuilder;
 
 class MangaController extends Controller
 {

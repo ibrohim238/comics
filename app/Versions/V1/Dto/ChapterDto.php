@@ -10,7 +10,7 @@ class ChapterDto extends DataTransferObject
 {
     public int $volume;
     public int $number;
-    public string $title;
+    public string $name;
     public bool $is_paid;
     public ?array $images;
 

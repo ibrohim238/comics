@@ -4,8 +4,10 @@ namespace App\Providers;
 
 use App\Models\Chapter;
 use App\Models\Manga;
+use App\Models\Team;
 use App\Policies\ChapterPolicy;
 use App\Policies\MangaPolicy;
+use App\Policies\TeamPolicy;
 use Carbon\Carbon;
 use Illuminate\Auth\Notifications\VerifyEmail;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
@@ -24,6 +26,7 @@ class AuthServiceProvider extends ServiceProvider
         // 'App\Models\Model' => 'App\Policies\ModelPolicy',
         Manga::class => MangaPolicy::class,
         Chapter::class => ChapterPolicy::class,
+        Team::class => TeamPolicy::class
     ];
 
     /**
