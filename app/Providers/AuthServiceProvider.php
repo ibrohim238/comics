@@ -3,9 +3,11 @@
 namespace App\Providers;
 
 use App\Models\Chapter;
+use App\Models\Filter;
 use App\Models\Manga;
 use App\Models\Team;
 use App\Policies\ChapterPolicy;
+use App\Policies\FilterPolicy;
 use App\Policies\MangaPolicy;
 use App\Policies\TeamPolicy;
 use Carbon\Carbon;
@@ -26,7 +28,8 @@ class AuthServiceProvider extends ServiceProvider
         // 'App\Models\Model' => 'App\Policies\ModelPolicy',
         Manga::class => MangaPolicy::class,
         Chapter::class => ChapterPolicy::class,
-        Team::class => TeamPolicy::class
+        Team::class => TeamPolicy::class,
+        Filter::class => FilterPolicy::class,
     ];
 
     /**
