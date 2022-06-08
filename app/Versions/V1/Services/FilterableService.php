@@ -15,11 +15,11 @@ class FilterableService
 
     public function attach(): void
     {
-        $this->filterable->filters()->attach($this->filter);
+        $this->filterable->filters()->attach($this->filter->id);
     }
 
     public function detach(): void
     {
-        $this->filterable->filters()->detach($this->filter);
+        $this->filterable->filters()->detach($this->filter->id);
     }
 }

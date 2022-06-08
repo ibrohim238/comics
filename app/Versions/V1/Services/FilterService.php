@@ -40,10 +40,8 @@ class FilterService
         return $this;
     }
 
-    public function delete(): static
+    public function delete(): void
     {
         $this->filter->delete();
-
-        return $this;
     }
 }
