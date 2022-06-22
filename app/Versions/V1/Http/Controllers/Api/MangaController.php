@@ -3,40 +3,29 @@
 namespace App\Versions\V1\Http\Controllers\Api;
 
 use App\Models\Manga;
-use App\Versions\V1\Actions\ShowMangaAction;
 use App\Versions\V1\Dto\MangaDto;
 use App\Versions\V1\Http\Controllers\Controller;
 use App\Versions\V1\Http\Requests\Api\MangaRequest;
 use App\Versions\V1\Http\Resources\MangaCollection;
 use App\Versions\V1\Http\Resources\MangaResource;
+use App\Versions\V1\Repository\MangaRepository;
 use App\Versions\V1\Services\MangaService;
-use Illuminate\Contracts\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Spatie\DataTransferObject\Exceptions\UnknownProperties;
 use Spatie\MediaLibrary\MediaCollections\Exceptions\FileDoesNotExist;
 use Spatie\MediaLibrary\MediaCollections\Exceptions\FileIsTooBig;
-use Spatie\QueryBuilder\AllowedFilter;
-use Spatie\QueryBuilder\QueryBuilder;
 
 class MangaController extends Controller
 {
     public function __construct()
     {
+        $this->middleware('auth')->except('index', 'show');
         $this->authorizeResource(Manga::class);
     }
 
-    public function index(Request $request)
+    public function index(Request $request, MangaRepository $repository)
     {
-        $mangas = QueryBuilder::for(Manga::class)
-            ->with('media')
-            ->allowedFilters(
-                AllowedFilter::exact('genres', 'genres.name'),
-                AllowedFilter::exact('categories', 'categories.name'),
-                AllowedFilter::exact('tags', 'tags.name')
-            )
-            ->paginate($request->get('count'));
-
-        return new MangaCollection($mangas);
+        return new MangaCollection($repository->paginate($request->get('count')));
     }
 
     public function random()
@@ -46,9 +35,9 @@ class MangaController extends Controller
         return response(route('manga.show', $manga));
     }
 
-    public function show(Manga $manga, ShowMangaAction $action): MangaResource
+    public function show(Manga $manga): MangaResource
     {
-        return (new MangaResource($action->execute($manga)));
+        return (new MangaResource($manga->loadAvg('ratings', 'value')));
     }
 
     /**

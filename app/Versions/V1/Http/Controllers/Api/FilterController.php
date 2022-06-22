@@ -14,6 +14,12 @@ use Spatie\QueryBuilder\QueryBuilder;
 
 class FilterController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth')->except('index', 'show');
+        $this->authorizeResource(Filter::class);
+    }
+
     public function index(): FilterCollection
     {
         $filters = QueryBuilder::for(Filter::class)

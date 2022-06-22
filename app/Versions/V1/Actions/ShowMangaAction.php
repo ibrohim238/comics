@@ -10,10 +10,6 @@ class ShowMangaAction
     public function execute(Manga $manga): Manga
     {
         return $manga
-            ->load([
-                'comments' => fn (MorphMany $query) => $query->limit(3),
-                'chapters'
-            ])
-            ->loadAvg('ratings', 'rating');
+            ->loadAvg('ratings', 'value');
     }
 }

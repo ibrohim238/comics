@@ -10,6 +10,7 @@ use App\Versions\V1\Http\Resources\MangaCollection;
 use App\Versions\V1\Services\BookmarkService;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Lang;
+use Symfony\Component\HttpFoundation\Response;
 
 class BookmarksController extends Controller
 {
@@ -30,10 +31,10 @@ class BookmarksController extends Controller
                 'user' => Auth::user()
             ])->add();
         } catch (BookmarksException $exception) {
-            return response($exception->getMessage());
+            return response()->json(['message' => $exception->getMessage()], Response::HTTP_BAD_REQUEST);
         }
 
-        return response(Lang::get('bookmark.created'));
+        return response()->json(['message' => Lang::get('bookmark.created')]);
     }
 
     public function detach(Manga $manga)
@@ -44,9 +45,9 @@ class BookmarksController extends Controller
                 'user' => Auth::user()
             ])->delete();
         } catch (BookmarksException $exception) {
-            return response($exception->getMessage());
+            return response()->json(['message' => $exception->getMessage()], Response::HTTP_BAD_REQUEST);
         }
 
-        return response(Lang::get('bookmark.deleted'));
+        return response()->json(['message' => Lang::get('bookmark.deleted')]);
     }
 }

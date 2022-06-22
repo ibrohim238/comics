@@ -2,9 +2,8 @@
 
 namespace App\Versions\V1\Services;
 
+use App\Interfaces\Filterable;
 use App\Models\Filter;
-use App\Models\Filterable;
-use App\Models\Manga;
 
 class FilterableService
 {
@@ -16,11 +15,11 @@ class FilterableService
 
     public function attach(): void
     {
-        $this->filterable->filters()->attach($this->filter);
+        $this->filterable->filters()->attach($this->filter->id);
     }
 
     public function detach(): void
     {
-        $this->filterable->filters()->detach($this->filter);
+        $this->filterable->filters()->detach($this->filter->id);
     }
 }

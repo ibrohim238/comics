@@ -16,6 +16,12 @@ use Spatie\DataTransferObject\Exceptions\UnknownProperties;
 
 class TeamMangaChapterController extends Controller
 {
+
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
+
     /**
      * @throws AuthorizationException
      */
@@ -60,8 +66,9 @@ class TeamMangaChapterController extends Controller
     {
         $this->authorize('chapterUpdate', $team);
 
-        app(ChapterService::class, [$chapter])
-            ->update(ChapterDto::fromRequest($request));
+        app(ChapterService::class, [
+            'chapter' => $chapter
+        ])->update(ChapterDto::fromRequest($request));
 
         return new ChapterResource($chapter);
     }
@@ -73,7 +80,9 @@ class TeamMangaChapterController extends Controller
     {
         $this->authorize('chapterDelete', $team);
 
-        app(ChapterService::class, [$chapter])->delete();
+        app(ChapterService::class, [
+            'chapter' => $chapter
+        ])->delete();
 
         return response()->noContent();
     }

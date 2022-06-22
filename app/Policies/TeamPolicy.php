@@ -4,15 +4,20 @@ namespace App\Policies;
 
 use App\Enums\PermissionEnum;
 use App\Enums\TeamPermissionEnum;
-use App\Models\Manga;
 use App\Models\Team;
 use App\Models\TeamInvitation;
 use App\Models\User;
+use App\Policies\Traits\ChapterTeamTrait;
+use App\Policies\Traits\MangaTeamTrait;
+use App\Policies\Traits\TeamableTrait;
 use Illuminate\Auth\Access\HandlesAuthorization;
 
 class TeamPolicy
 {
     use HandlesAuthorization;
+    use ChapterTeamTrait;
+    use MangaTeamTrait;
+    use TeamableTrait;
 
     public function viewAny(?User $user): bool
     {
@@ -59,41 +64,6 @@ class TeamPolicy
     {
         return $user->id == $invitation->user_id
             || $user->hasTeamPermission($invitation->team, TeamPermissionEnum::MANAGE_TEAM);
-    }
-
-    public function attachTeamable(User $user): bool
-    {
-        return $user->hasPermissionTo(PermissionEnum::MANAGE_MANGA->value);
-    }
-
-    public function detachTeamable(User $user): bool
-    {
-        return $user->hasPermissionTo(PermissionEnum::MANAGE_MANGA->value);
-    }
-
-    public function chapterViewAny(User $user, Team $team): bool
-    {
-        return $user->hasTeamPermission($team, TeamPermissionEnum::MANAGE_MANGA);
-    }
-
-    public function chapterView(User $user, Team $team): bool
-    {
-        return $user->hasTeamPermission($team, TeamPermissionEnum::MANAGE_MANGA);
-    }
-
-    public function chapterCreate(User $user, Team $team): bool
-    {
-        return $user->hasTeamPermission($team, TeamPermissionEnum::MANAGE_MANGA);
-    }
-
-    public function chapterUpdate(User $user, Team $team): bool
-    {
-        return $user->hasTeamPermission($team, TeamPermissionEnum::MANAGE_MANGA);
-    }
-
-    public function chapterDelete(User $user, Team $team): bool
-    {
-        return $user->hasTeamPermission($team, TeamPermissionEnum::MANAGE_MANGA);
     }
 
     public function delete(User $user, Team $team): bool

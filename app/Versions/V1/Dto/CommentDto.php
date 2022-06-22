@@ -8,14 +8,17 @@ use Spatie\DataTransferObject\Exceptions\UnknownProperties;
 
 class CommentDto extends DataTransferObject
 {
+    public string $content;
+    public int $user_id;
     public ?int $parentId;
-    public string $body;
 
     /**
      * @throws UnknownProperties
      */
     public static function fromRequest(CommentRequest $request): self
     {
-        return new self($request->validated());
+        return new self(array_merge($request->validated(), [
+            'user_id' => $request->user()->id
+        ]));
     }
 }
