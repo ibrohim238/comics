@@ -17,9 +17,10 @@ class TeamInvitationController extends Controller
     {
         $this->authorize('addTeamMember', $invitation);
 
-        app(TeamMemberService::class)->add(
+        app(TeamMemberService::class, [
             $invitation->team,
             $invitation->user,
+        ])->add(
             $invitation->role,
         );
     }

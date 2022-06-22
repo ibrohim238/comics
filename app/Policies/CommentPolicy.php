@@ -47,6 +47,6 @@ class CommentPolicy
 
     public function forceDelete(User $user): bool
     {
-        //
+        return $user->hasPermissionTo(PermissionEnum::MANAGE_COMMENT->value);
     }
 }

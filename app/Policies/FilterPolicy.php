@@ -16,7 +16,7 @@ class FilterPolicy
         return true;
     }
 
-    public function view(User $user): bool
+    public function view(?User $user): bool
     {
         return true;
     }

@@ -14,6 +14,12 @@ use Spatie\QueryBuilder\QueryBuilder;
 
 class FilterController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth')->except('index', 'show');
+        $this->authorizeResource(Filter::class);
+    }
+
     public function index(): FilterCollection
     {
         $filters = QueryBuilder::for(Filter::class)
@@ -43,14 +49,18 @@ class FilterController extends Controller
      */
     public function update(Filter $filter, FilterRequest $request): FilterResource
     {
-        app(FilterService::class, [$filter])->update(FilterDto::fromRequest($request));
+        app(FilterService::class, [
+            'filter' => $filter
+        ])->update(FilterDto::fromRequest($request));
 
         return new FilterResource($filter);
     }
 
     public function destroy(Filter $filter)
     {
-        app(FilterService::class, [$filter])->delete();
+        app(FilterService::class, [
+            'filter' => $filter
+        ])->delete();
 
         return response()->noContent();
     }

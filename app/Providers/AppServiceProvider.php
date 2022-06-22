@@ -3,6 +3,8 @@
 namespace App\Providers;
 
 use App\Models\Chapter;
+use App\Models\Comment;
+use App\Models\Coupon;
 use App\Models\Filter;
 use App\Models\Manga;
 use App\Models\Team;
@@ -40,6 +42,8 @@ class AppServiceProvider extends ServiceProvider
             'chapter' => Chapter::class,
             'team' => Team::class,
             'filter' => Filter::class,
+            'coupon' => Coupon::class,
+            'comment' => Comment::class,
         ]);
     }
 }

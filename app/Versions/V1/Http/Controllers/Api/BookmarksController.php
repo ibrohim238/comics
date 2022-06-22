@@ -10,6 +10,7 @@ use App\Versions\V1\Http\Resources\MangaCollection;
 use App\Versions\V1\Services\BookmarkService;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Lang;
+use Symfony\Component\HttpFoundation\Response;
 
 class BookmarksController extends Controller
 {
@@ -25,22 +26,28 @@ class BookmarksController extends Controller
     public function attach(Manga $manga)
     {
         try {
-            app(BookmarkService::class, [$manga, Auth::user()])->add();
+            app(BookmarkService::class, [
+                'manga' => $manga,
+                'user' => Auth::user()
+            ])->add();
         } catch (BookmarksException $exception) {
-            return response($exception->getMessage());
+            return response()->json(['message' => $exception->getMessage()], Response::HTTP_BAD_REQUEST);
         }
 
-        return response(Lang::get('bookmark.created'));
+        return response()->json(['message' => Lang::get('bookmark.created')]);
     }
 
     public function detach(Manga $manga)
     {
         try {
-            app(BookmarkService::class, [$manga, Auth::user()])->delete();
+            app(BookmarkService::class, [
+                'manga' => $manga,
+                'user' => Auth::user()
+            ])->delete();
         } catch (BookmarksException $exception) {
-            return response($exception->getMessage());
+            return response()->json(['message' => $exception->getMessage()], Response::HTTP_BAD_REQUEST);
         }
 
-        return response(Lang::get('bookmark.deleted'));
+        return response()->json(['message' => Lang::get('bookmark.deleted')]);
     }
 }

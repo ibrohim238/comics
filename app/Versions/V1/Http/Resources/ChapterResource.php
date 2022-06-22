@@ -13,11 +13,12 @@ class ChapterResource extends JsonResource
     public function toArray($request): array
     {
         return [
+            'id' => $this->id,
             'volume' => $this->volume,
             'number' => $this->number,
-            'title' => $this->title,
-            'order_column' => $this->order_column,
-            'likes' => $this->likes()->count(),
+            'title' => $this->name,
+            'order' => $this->order,
+            'votes' => $this->votes()->count(),
             'manga' => new MangaResource($this->whenLoaded('manga')),
             'media' => new MediaCollection($this->whenLoaded('media')),
         ];

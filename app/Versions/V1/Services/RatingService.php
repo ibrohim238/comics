@@ -2,32 +2,61 @@
 
 namespace App\Versions\V1\Services;
 
-use App\Models\Rateable;
-use App\Models\Rating;
+use App\Enums\RatesTypeEnum;
+use App\Exceptions\RatingsException;
+use App\Interfaces\Rateable;
+use App\Models\Rate;
 use App\Models\User;
-use App\Versions\V1\Dto\RatingDto;
+use App\Versions\V1\Dto\RateDto;
+use App\Versions\V1\Reporters\RateReporter;
+use Illuminate\Database\Eloquent\Relations\MorphMany;
+use Illuminate\Support\Facades\Lang;
 
 class RatingService
 {
     public function __construct(
-        public Rateable $rateable,
-        public User $user,
+        private Rateable     $rateable,
+        private User         $user,
+        private RateReporter $reporter,
     ) {
     }
 
-    public function add(RatingDto $dto)
+    public function rate(RateDto $dto)
     {
-        /* @var Rating $rating*/
-        $this->rateable->ratings()
+        $this->getRatesWithType($dto->type)
             ->updateOrCreate([
                 'user_id' => $this->user->id,
-            ], $dto->toArray());
+                'type' => $dto->type,
+                ], $dto
+                    ->except('type')
+                    ->toArray()
+            );
+
+        return Lang::get('rateable.create');
     }
 
-    public function delete(): void
+    public function unRate(string $type): int
     {
-        $this->rateable->ratings()
-            ->where('user_id', $this->user->id)
+        if (!$this->exists($type)) {
+            throw RatingsException::notFound();
+        }
+
+        return $this->getRatesWithType($type)
             ->delete();
+    }
+
+    public function exists(string $type): bool
+    {
+        return $this->getRatesWithType($type)
+            ->exists();
+    }
+
+    public function getRatesWithType(string $type): MorphMany
+    {
+        return $this->reporter
+            ->userId($this->user->id)
+            ->type($type)
+            ->rateable($this->rateable)
+            ->relation();
     }
 }

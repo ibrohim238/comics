@@ -22,7 +22,7 @@ class TeamMemberController extends Controller
         app(InviteTeamMemberService::class)->invite(
             $team,
             $user,
-            $request->validated()
+            $request->validated('role')
         );
     }
 
@@ -33,11 +33,10 @@ class TeamMemberController extends Controller
     {
         $this->authorize('updateTeamMember', [$user, $team]);
 
-        app(TeamMemberService::class)->update(
+        app(TeamMemberService::class, [
             $team,
             $user,
-            $request->validated()
-        );
+        ])->update($request->validated('role'));
     }
 
     /**
@@ -47,7 +46,9 @@ class TeamMemberController extends Controller
     {
         $this->authorize('removeTeamMember', $team);
 
-        app(TeamMemberService::class)
-            ->remove($team, $user);
+        app(TeamMemberService::class, [
+            'team' => $team,
+            'user' => $user,
+        ])->remove();
     }
 }
