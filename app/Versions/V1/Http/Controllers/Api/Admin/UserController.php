@@ -13,6 +13,11 @@ use Illuminate\Http\Request;
 
 class UserController extends Controller
 {
+    public function __construct()
+    {
+        $this->authorizeResource(User::class);
+    }
+
     public function index(Request $request)
     {
         $users = User::query()->paginate($request->get('count'));

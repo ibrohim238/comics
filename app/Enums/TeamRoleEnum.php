@@ -5,17 +5,17 @@ namespace App\Enums;
 enum TeamRoleEnum: string
 {
     case owner = 'owner';
-    case moderator = 'moderator';
+    case editor = 'editor';
 
     /**
-     * @return array<int, TeamPermissionEnum>
+     * @return array<TeamPermissionEnum>
      */
     public function permissions(): array
     {
         return match ($this) {
-            self::owner => TeamPermissionEnum::cases(),
-            self::moderator => [
-                TeamPermissionEnum::MANAGE_MANGA,
+            self::owner => TeamPermissionEnum::values(),
+            self::editor => [
+                TeamPermissionEnum::MANAGE_MANGA->value,
             ],
         };
     }

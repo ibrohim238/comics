@@ -2,36 +2,64 @@
 
 namespace App\Versions\V1\Http\Controllers\Api;
 
-use App\Models\TeamInvitation;
+use App\Models\Invitation;
+use App\Models\Team;
+use App\Versions\V1\Dto\InvitationDto;
 use App\Versions\V1\Http\Controllers\Controller;
-use App\Versions\V1\Services\InviteTeamMemberService;
-use App\Versions\V1\Services\TeamMemberService;
-use Illuminate\Auth\Access\AuthorizationException;
+use App\Versions\V1\Http\Requests\Api\InvitationRequest;
+use App\Versions\V1\Http\Resources\InvitationCollection;
+use App\Versions\V1\Http\Resources\InvitationResource;
+use App\Versions\V1\Services\InvitationService;
+use Illuminate\Http\Request;
 
 class TeamInvitationController extends Controller
 {
-    /**
-     * @throws AuthorizationException
-     */
-    public function accept(TeamInvitation $invitation)
+    public function index(Team $team, Request $request)
     {
-        $this->authorize('addTeamMember', $invitation);
+        $this->authorize('teamInvitation', $team);
 
-        app(TeamMemberService::class, [
-            $invitation->team,
-            $invitation->user,
-        ])->add(
-            $invitation->role,
-        );
+        $invitations = $team->invitations()->paginate($request->get('count'));
+
+        return new InvitationCollection($invitations);
     }
 
-    /**
-     * @throws AuthorizationException
-     */
-    public function destroy(TeamInvitation $invitation)
+    public function show(Team $team, Invitation $invitation)
     {
-        $this->authorize('deleteTeamInvite', $invitation);
+        $this->authorize('teamInvitation', $team);
 
-        app(InviteTeamMemberService::class)->delete($invitation);
+        return new InvitationResource($invitation);
+    }
+
+    public function store(Team $team, InvitationRequest $request)
+    {
+        $this->authorize('teamInvitation', $team);
+
+        $invitation = app(InvitationService::class)->store(
+            $team, InvitationDto::fromRequest($request)
+        );
+
+        return new InvitationResource($invitation);
+    }
+
+    public function update(Team $team, Invitation $invitation, InvitationRequest $request)
+    {
+        $this->authorize('teamInvitation', $team);
+
+        app(InvitationService::class, [
+            'invitation' => $invitation
+        ])->update(InvitationDto::fromRequest($request));
+
+        return new InvitationResource($invitation);
+    }
+
+    public function destroy(Team $team, Invitation $invitation)
+    {
+        $this->authorize('teamInvitation', $team);
+
+        app(InvitationService::class, [
+            'invitation' => $invitation
+        ])->delete();
+
+        return response()->noContent();
     }
 }

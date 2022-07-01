@@ -4,81 +4,44 @@ namespace App\Versions\V1\Services;
 
 use App\Models\Chapter;
 use App\Models\Manga;
-use App\Models\Team;
 use App\Versions\V1\Dto\ChapterDto;
+use App\Versions\V1\Repository\ChapterRepository;
 
 class ChapterService
 {
+    public ChapterRepository $repository;
+
     public function __construct(
-        public Chapter $chapter,
+        private Chapter $chapter,
     ) {
+        $this->repository = app(ChapterRepository::class, [
+           'chapter' => $this->chapter
+        ]);
     }
 
-    public function create(ChapterDto $dto, Team $team, Manga $manga): Chapter
+    public function store(ChapterDto $dto, Manga $manga): Chapter
     {
-        $this
+        $this->repository
             ->fill($dto)
-            ->associateTeam($team)
             ->associateManga($manga)
-            ->save()
-            ->addImages($dto->images);
+            ->save();
 
         return $this->chapter;
     }
 
     public function update(ChapterDto $dto): Chapter
     {
-        $this
+        $this->repository
             ->fill($dto)
-            ->save()
-            ->addImages($dto->images);
+            ->save();
 
         return $this->chapter;
     }
 
-    public function fill(ChapterDto $dto): static
+    public function delete(): void
     {
-        $this->chapter->fill($dto->toArray());
-
-        return $this;
-    }
-
-    public function save(): static
-    {
-        $this->chapter->save();
-
-        return $this;
-    }
-
-    public function associateTeam(Team $team): static
-    {
-        $this->chapter->team()->associate($team);
-
-        return $this;
-    }
-
-    public function associateManga(Manga $manga): static
-    {
-        $this->chapter->manga()->associate($manga);
-
-        return $this;
-    }
-
-    public function addImages(?array $images): static
-    {
-        if ($images) {
-            $this->chapter->addMultipleMediaFromRequest(['images'])
-                ->each(function ($fileAdder) {
-                    $fileAdder->toMediaCollection();
-                });
-        }
-
-        return $this;
-    }
-
-    public function delete()
-    {
-        $this->chapter->clearMediaCollection();
-        $this->chapter->delete();
+        $this->repository
+            ->deleteTeams()
+            ->delete();
     }
 }

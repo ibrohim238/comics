@@ -68,6 +68,6 @@ class RegisterController extends Controller
      */
     protected function create(array $data)
     {
-        return app(UserService::class)->create(UserDto::fromArray($data));
+        return app(UserService::class)->store(UserDto::fromArray($data));
     }
 }

@@ -3,13 +3,14 @@
 namespace App\Versions\V1\Services;
 
 use App\Exceptions\BookmarksException;
+use App\Interfaces\Bookmarkable;
 use App\Models\Manga;
 use App\Models\User;
 
 class BookmarkService
 {
     public function __construct(
-        public Manga $manga,
+        public Bookmarkable $bookmarkable,
         public User $user,
     ) {
     }
@@ -20,7 +21,7 @@ class BookmarkService
             throw BookmarksException::exists();
         }
 
-        $this->user->bookmarks()->attach([$this->manga->id]);
+        $this->bookmarkable->bookmarkUsers()->attach($this->user->id);
     }
 
     public function delete(): void
@@ -29,14 +30,14 @@ class BookmarkService
             throw BookmarksException::notFound();
         }
 
-        $this->user->bookmarks()->detach([$this->manga->id]);
+        $this->bookmarkable->bookmarkUsers()->detach([$this->user->id]);
     }
 
     private function exists(): bool
     {
-        return $this->user
-            ->bookmarks()
-            ->where('id', $this->manga->id)
+        return $this->bookmarkable
+            ->bookmarkUsers()
+            ->where('id', $this->user->id)
             ->exists();
     }
 }

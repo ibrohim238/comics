@@ -10,6 +10,8 @@ use App\Versions\V1\Services\NotificationService;
 use App\Versions\V1\Transformers\NotificationTransformer;
 use Illuminate\Http\Request;
 use Illuminate\Notifications\DatabaseNotification;
+use Illuminate\Pagination\LengthAwarePaginator;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
 
 class NotificationController extends Controller
@@ -21,6 +23,7 @@ class NotificationController extends Controller
             ->lastPerGroup('data->group_id', 'baseId')
             ->paginate($request->get('count'));
 
+        /* @var LengthAwarePaginator $notifications*/
         $notifications
             ->transform(
                 fn(DatabaseNotification $notification): NotificationDto => app(NotificationTransformer::class)
@@ -37,6 +40,7 @@ class NotificationController extends Controller
             ->where('data->group_id', $groupId)
             ->paginate($request->get('count'));
 
+        /* @var LengthAwarePaginator $notifications*/
         $notifications
             ->transform(
                 fn(DatabaseNotification $notification): NotificationDto => app(NotificationTransformer::class)
@@ -48,26 +52,36 @@ class NotificationController extends Controller
 
     public function read(Notification $notification)
     {
-        app(NotificationService::class, [Auth::user()])->read($notification);
+        app(NotificationService::class, [
+            'user' => Auth::user()
+        ])->read($notification);
     }
 
     public function unread(Notification $notification)
     {
-        app(NotificationService::class, [Auth::user()])->unRead($notification);
+        app(NotificationService::class, [
+            'user' => Auth::user()
+        ])->unRead($notification);
     }
 
     public function readSet(array $ids)
     {
-        app(NotificationService::class, [Auth::user()])->readSet($ids);
+        app(NotificationService::class, [
+            'user' => Auth::user()
+        ])->readSet($ids);
     }
 
     public function unReadSet(array $ids)
     {
-        app(NotificationService::class, [Auth::user()])->unReadSet($ids);
+        app(NotificationService::class, [
+            'user' => Auth::user()
+        ])->unReadSet($ids);
     }
 
     public function readAll()
     {
-        app(NotificationService::class, [Auth::user()])->readAll();
+        app(NotificationService::class, [
+            'user' => Auth::user()
+        ])->readAll();
     }
 }

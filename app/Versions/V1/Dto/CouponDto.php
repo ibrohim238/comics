@@ -9,11 +9,11 @@ use Spatie\DataTransferObject\DataTransferObject;
 class CouponDto extends DataTransferObject
 {
     public string $code;
-    public string $data;
-    public int $limit;
-    public Carbon $created_at;
+    public ?string $data;
+    public ?int $limit;
+    public ?Carbon $ends_at;
 
-    public static function fromRequest(CouponRequest $request)
+    public static function fromRequest(CouponRequest $request): CouponDto
     {
         return new self($request->validated());
     }

@@ -2,41 +2,39 @@
 
 namespace App\Versions\V1\Services;
 
+use App\Enums\TeamRoleEnum;
 use App\Models\Team;
 use App\Models\User;
+use App\Versions\V1\Dto\TeamMemberDto;
+use App\Versions\V1\Repository\TeamMemberRepository;
 
 class TeamMemberService
 {
+    private TeamMemberRepository $repository;
+
     public function __construct(
-        public Team $team,
-        public User $user,
-    ) {
+        private Team $team,
+        private User $user,
+    )
+    {
+        $this->repository = app(TeamMemberRepository::class, [
+            'team' => $this->team,
+            'user' => $this->user,
+        ]);
     }
 
-    public function add(string $role): void
+    public function add(TeamRoleEnum $enum)
     {
-        $this->team
-            ->users()
-            ->attach(
-                $this->user->id,
-                ['role' => $role]
-            );
+        $this->repository->add($enum);
     }
 
-    public function update(string $role): void
+    public function update(TeamMemberDto $dto): void
     {
-        $this->team
-            ->users()
-            ->updateExistingPivot(
-                $this->user->id,
-                ['role' => $role]
-            );
+        $this->repository->update($dto->role);
     }
 
-    public function  remove(): void
+    public function remove(): void
     {
-        $this->team
-            ->users()
-            ->detach($this->user);
+        $this->repository->remove();
     }
 }

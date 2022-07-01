@@ -14,11 +14,10 @@ class ChapterFactory extends Factory
     public function definition(): array
     {
         return [
-            'volume' => 1,
+            'volume' => $this->faker->numberBetween(1,5),
             'number' => $this->faker->numberBetween(0, 100),
             'name' => $this->faker->title,
             'manga_id' => Manga::factory(),
-            'team_id' => Team::factory()
         ];
     }
 }

@@ -5,6 +5,7 @@ namespace App\Versions\V1\Dto;
 use App\Versions\V1\Http\Requests\Api\MangaRequest;
 use Carbon\Carbon;
 use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Collection;
 use Spatie\DataTransferObject\DataTransferObject;
 use Spatie\DataTransferObject\Exceptions\UnknownProperties;
 
@@ -13,6 +14,7 @@ class MangaDto extends DataTransferObject
     public string $name;
     public string $description;
     public ?Carbon $published_at;
+    public array $filters;
     public ?UploadedFile $image;
 
     /**

@@ -20,6 +20,7 @@ class Coupon extends Model implements Eventable
     ];
 
     protected $casts = [
+        'data' => 'json',
         'ends_at' => 'datetime',
     ];
 
