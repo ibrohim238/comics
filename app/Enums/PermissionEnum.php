@@ -6,8 +6,10 @@ enum PermissionEnum: string
 {
     use EnumTrait;
 
+    case MANAGE_TEAMABLE = 'manage teamable';
     case MANAGE_MANGA = 'manage manga';
     case MANAGE_COMMENT = 'manage comment';
+    case MANAGE_COUPON = 'manage coupon';
     case MANAGE_USER = 'manage user';
     case MANAGE_TEAM = 'manage team';
     case MANAGE_FILTER = 'manage filter';

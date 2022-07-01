@@ -8,6 +8,7 @@ use App\Models\Coupon;
 use App\Models\Filter;
 use App\Models\Manga;
 use App\Models\Team;
+use App\Models\ChapterTeam;
 use App\Models\User;
 use Illuminate\Auth\Notifications\ResetPassword;
 use Illuminate\Database\Eloquent\Relations\Relation;
@@ -22,7 +23,6 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        //
     }
 
     /**
@@ -44,6 +44,7 @@ class AppServiceProvider extends ServiceProvider
             'filter' => Filter::class,
             'coupon' => Coupon::class,
             'comment' => Comment::class,
+            'chapterTeam' => ChapterTeam::class,
         ]);
     }
 }

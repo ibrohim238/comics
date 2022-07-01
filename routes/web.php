@@ -1,5 +1,7 @@
 <?php
 
+use App\Versions\V1\Repository\InvitationRepository;
+use Illuminate\Contracts\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Route;
 
 /*

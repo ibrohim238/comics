@@ -4,44 +4,41 @@ namespace App\Versions\V1\Services;
 
 use App\Models\Filter;
 use App\Versions\V1\Dto\FilterDto;
+use App\Versions\V1\Repository\FilterRepository;
 
 class FilterService
 {
+    public FilterRepository $repository;
+
     public function __construct(
         public Filter $filter
     ) {
+        $this->repository = app(FilterRepository::class, [
+           'filter' => $this->filter
+        ]);
     }
 
-    public function create(FilterDto $dto): Filter
+    public function store(FilterDto $dto): Filter
     {
-        $this->fill($dto)->save();
+        $this->repository
+            ->fill($dto)
+            ->save();
 
         return $this->filter;
     }
 
     public function update(FilterDto $dto): Filter
     {
-        $this->fill($dto)->save();
+        $this->repository
+            ->fill($dto)
+            ->save();
 
         return $this->filter;
     }
 
-    public function fill(FilterDto $dto): static
-    {
-        $this->filter->fill($dto->toArray());
-
-        return $this;
-    }
-
-    public function save(): static
-    {
-        $this->filter->save();
-
-        return $this;
-    }
-
     public function delete(): void
     {
-        $this->filter->delete();
+        $this->repository
+            ->delete();
     }
 }

@@ -25,7 +25,9 @@ class MangaController extends Controller
 
     public function index(Request $request, MangaRepository $repository)
     {
-        return new MangaCollection($repository->paginate($request->get('count')));
+        return new MangaCollection(
+            $repository->paginate($request->get('count'))
+        );
     }
 
     public function random()
@@ -37,31 +39,33 @@ class MangaController extends Controller
 
     public function show(Manga $manga): MangaResource
     {
-        return (new MangaResource($manga->loadAvg('ratings', 'value')));
+        return new MangaResource(
+            app(MangaRepository::class, [
+                'manga' => $manga
+            ])->load()
+        );
     }
+
 
     /**
      * @throws UnknownProperties
-     * @throws FileDoesNotExist
-     * @throws FileIsTooBig
      */
     public function store(MangaRequest $request)
     {
-        $manga = app(MangaService::class)->save(MangaDto::fromRequest($request));
+        $manga = app(MangaService::class)
+            ->store(MangaDto::fromRequest($request));
 
         return new MangaResource($manga);
     }
 
     /**
      * @throws UnknownProperties
-     * @throws FileDoesNotExist
-     * @throws FileIsTooBig
      */
     public function update(MangaRequest $request, Manga $manga)
     {
         app(MangaService::class, [
             'manga' => $manga
-        ])->save(MangaDto::fromRequest($request));
+        ])->update(MangaDto::fromRequest($request));
 
         return new MangaResource($manga);
     }

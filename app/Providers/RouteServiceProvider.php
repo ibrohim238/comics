@@ -2,7 +2,10 @@
 
 namespace App\Providers;
 
+use App\Models\Chapter;
 use Illuminate\Cache\RateLimiting\Limit;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Foundation\Support\Providers\RouteServiceProvider as ServiceProvider;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\RateLimiter;
@@ -26,6 +29,24 @@ class RouteServiceProvider extends ServiceProvider
      */
     public function boot()
     {
+
+        Route::bind('chapter', function (string $chapter) {
+            [$volume, $number] = explode('-', $chapter);
+            return Chapter::query()
+                ->where('number', $number)
+                ->where('volume', $volume)
+                ->firstOrFail();
+        });
+
+        Route::bind('identifyModel', function (string $identifyModel) {
+            [$type, $id] = explode(':', $identifyModel);
+
+            $model = Relation::getMorphedModel($type);
+
+            /* @var Model $model*/
+            return $model::findOrFail($id);
+        });
+
         $this->configureRateLimiting();
 
         $this->routes(function () {

@@ -1,23 +1,22 @@
 <?php
 
+use App\Enums\BookmarkableTypeEnum;
 use App\Enums\CommentableTypeEnum;
-use App\Enums\LikeableTypeEnum;
 use App\Enums\RatesTypeEnum;
-use App\Enums\RatingableTypeEnum;
+use App\Enums\TeamableTypeEnum;
 use App\Versions\V1\Http\Controllers\Api\BookmarksController;
 use App\Versions\V1\Http\Controllers\Api\ChapterController;
+use App\Versions\V1\Http\Controllers\Api\ChapterTeamController;
 use App\Versions\V1\Http\Controllers\Api\CommentController;
-use App\Versions\V1\Http\Controllers\Api\HistoryController;
-use App\Versions\V1\Http\Controllers\Api\FilterableController;
 use App\Versions\V1\Http\Controllers\Api\FilterController;
+use App\Versions\V1\Http\Controllers\Api\HistoryController;
+use App\Versions\V1\Http\Controllers\Api\InvitationController;
 use App\Versions\V1\Http\Controllers\Api\MangaController;
 use App\Versions\V1\Http\Controllers\Api\NotificationController;
 use App\Versions\V1\Http\Controllers\Api\RateableController;
 use App\Versions\V1\Http\Controllers\Api\TeamableController;
 use App\Versions\V1\Http\Controllers\Api\TeamController;
 use App\Versions\V1\Http\Controllers\Api\TeamInvitationController;
-use App\Versions\V1\Http\Controllers\Api\TeamMangaChapterController;
-use App\Versions\V1\Http\Controllers\Api\TeamMangaController;
 use App\Versions\V1\Http\Controllers\Api\TeamMemberController;
 use App\Versions\V1\Http\Controllers\Api\UserController;
 use Illuminate\Support\Facades\Route;
@@ -35,12 +34,12 @@ use Illuminate\Support\Facades\Route;
 
 Route::prefix('v1')->group(function () {
     /* Admin */
-    Route::prefix('panel')->middleware('permission:view admin panel')->group(function () {
+    Route::prefix('panel')->middleware(['auth', 'permission:view admin panel'])->group(function () {
         require('admin.php');
     });
 
     /* Auth */
-    require ('auth.php');
+    require('auth.php');
 
     /* User */
     Route::get('user', [UserController::class, 'show']);
@@ -49,25 +48,35 @@ Route::prefix('v1')->group(function () {
 
     Route::delete('user', [UserController::class, 'destroy']);
 
-
     /* Teams */
-    Route::apiResource('teams', TeamController::class);
-    Route::post('/teams/{team}/members/{user}', [TeamMemberController::class, 'store'])->name('team-member.store');
-    Route::put('/teams/{team}/members/{user}', [TeamMemberController::class, 'update'])->name('team-member.update');
-    Route::delete('/teams/{team}/members/{user}', [TeamMemberController::class, 'destroy'])->name('team-member.destroy');
+    Route::apiResource('team', TeamController::class);
+    Route::apiResource('team.members', TeamMemberController::class)->parameter('members', 'user');
+    Route::apiResource('team.invitation', TeamInvitationController::class);
 
-    Route::get('/team-invitations/{invitation}', [TeamInvitationController::class, 'accept'])->name('team-invitation.accept');
+    Route::get('user/{user}/invitations', [InvitationController::class, 'index'])->name('invitation');
+    Route::get('user/{user}/invitations/{invitation}', [InvitationController::class, 'accept'])->name('invitation.accept');
+    Route::delete('user/{user}/invitations/{invitation}', [InvitationController::class, 'reject'])->name('invitation.reject');
 
-    Route::delete('/team-invitations/{invitation}', [TeamInvitationController::class, 'destroy'])->name('team-invitation.destroy');
-
-    Route::post('/teams/{team}/attach/{model}/{id}', [TeamableController::class, 'attach'])->name('teamable.attach');
-    Route::post('/teams/{team}/detach/{model}/{id}', [TeamableController::class, 'detach'])->name('teamable.detach');
+    Route::post('/team/{team}/{model}/{id}', [TeamableController::class, 'attach'])
+        ->name('team.manga.attach')
+        ->whereIn('model', TeamableTypeEnum::values())
+        ->whereNumber('id');
+    Route::delete('/team/{team}/{model}/{id}', [TeamableController::class, 'detach'])
+        ->name('team.manga.detach')
+        ->whereIn('model', TeamableTypeEnum::values())
+        ->whereNumber('id');
 
     /* Manga */
-    Route::get('/mangas/random', [MangaController::class, 'random'])->name('manga.random');
-    Route::apiResource('mangas', MangaController::class)->parameter('mangas', 'manga:slug');
+    Route::get('/manga/random', [MangaController::class, 'random'])->name('manga.random');
+    Route::apiResource('manga', MangaController::class);
 
-    Route::apiResource('filters', FilterController::class);
+    Route::where(['chapter' => '(\d+)-(\d+)'])->scopeBindings()->group(function () {
+        Route::apiResource('manga.chapter', ChapterController::class);
+        Route::apiResource('manga.chapter.chapter-team', ChapterTeamController::class)->except('store');
+        Route::post('/manga/{manga}/chapter/{chapter}/chapter-team/{team_id}', [ChapterTeamController::class, 'store'])->name('manga.chapter.chapter-team.store');
+    });
+
+    Route::apiResource('filter', FilterController::class);
 
     Route::group(['middleware' => 'auth'], function () {
         foreach (RatesTypeEnum::values() as $type) {
@@ -81,12 +90,18 @@ Route::prefix('v1')->group(function () {
                 ->whereNumber('id');
         }
 
-        /*
-         * Bookmarks
-         */
-        Route::get('/bookmarks', [BookmarksController::class, 'index'])->name('bookmarks.index');
-        Route::post('/bookmarks/{manga}', [BookmarksController::class, 'attach'])->name('bookmarks.attach');
-        Route::delete('/bookmarks/{manga}', [BookmarksController::class, 'detach'])->name('bookmarks.detach');
+        /*Bookmarks*/
+        Route::get('/bookmarks/{model}', [BookmarksController::class, 'index'])
+            ->name('bookmarks.index')
+            ->whereIn('model', BookmarkableTypeEnum::values());
+        Route::post('/bookmarks/{model}/{id}', [BookmarksController::class, 'attach'])
+            ->name('bookmarks.attach')
+            ->whereIn('model', BookmarkableTypeEnum::values())
+            ->whereNumber('id');
+        Route::delete('/bookmarks/{model}/{id}', [BookmarksController::class, 'detach'])
+            ->name('bookmarks.detach')
+            ->whereIn('model', BookmarkableTypeEnum::values())
+            ->whereNumber('id');
         /*
          * Notifications
          */
@@ -100,19 +115,6 @@ Route::prefix('v1')->group(function () {
     });
 
     Route::get('history', HistoryController::class);
-
-    Route::scopeBindings()->group( function () {
-        /*
-         * Chapter
-         */
-        Route::get('/mangas/{manga:slug}/chapter', [ChapterController::class, 'index'])->name('chapter.index');
-        Route::get('/mangas/{manga:slug}/chapter/{chapter:order}', [ChapterController::class, 'show'])->name('chapter.show');
-
-        Route::get('/teams/{team}/manga/', [TeamMangaController::class, 'index'])->name('teams.manga.index');
-        Route::get('/teams/{team}/manga/{manga}', [TeamMangaController::class, 'show'])->name('teams.manga.show');
-
-        Route::apiResource('teams.manga.chapter', TeamMangaChapterController::class);
-    });
 
     /* Comments */
     Route::get('/comment/{model}/{id}', [CommentController::class, 'index'])

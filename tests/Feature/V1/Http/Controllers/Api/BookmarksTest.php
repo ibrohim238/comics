@@ -15,21 +15,22 @@ class BookmarksTest extends TestCase
 {
     use WithFaker;
 
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        $this->user = User::factory()->create();
+    }
+
     public function testIndexOk()
     {
-        $user = User::factory()->create();
-
         $mangas = Manga::factory()->count(3)->create();
 
-        foreach ($mangas as $manga) {
-            $user
-                ->bookmarks()
-                ->attach(['manga_id' => $manga->id]);
-        }
+        $this->user->bookmarks()->sync($mangas->pluck('id'));
 
         $response = $this
-            ->actingAs($user)
-            ->getJson(route('bookmarks.index'));
+            ->actingAs($this->user)
+            ->getJson(route('bookmarks.index', 'manga'));
 
         $response
             ->assertOk()
@@ -41,20 +42,18 @@ class BookmarksTest extends TestCase
     public function testIndexUnauthorized()
     {
         $response = $this
-            ->getJson(route('bookmarks.index'));
+            ->getJson(route('bookmarks.index', 'manga'));
 
         $response->assertUnauthorized();
     }
 
     public function testAttachOk()
     {
-        $user = User::factory()->create();
-
         $manga = Manga::factory()->create();
 
         $response = $this
-            ->actingAs($user)
-            ->postJson(route('bookmarks.attach', $manga));
+            ->actingAs($this->user)
+            ->postJson(route('bookmarks.attach', [getMorphedType($manga::class), $manga->id]));
 
         $response->assertOk()
             ->assertJsonFragment([
@@ -64,17 +63,15 @@ class BookmarksTest extends TestCase
 
     public function testAttachBusy()
     {
-        $user = User::factory()->create();
-
         $manga = Manga::factory()->create();
 
         $this
-            ->actingAs($user)
-            ->postJson(route('bookmarks.attach', $manga));
+            ->actingAs($this->user)
+            ->postJson(route('bookmarks.attach', [getMorphedType($manga::class), $manga->id]));
 
         $response = $this
-            ->actingAs($user)
-            ->postJson(route('bookmarks.attach', $manga));
+            ->actingAs($this->user)
+            ->postJson(route('bookmarks.attach', [getMorphedType($manga::class), $manga->id]));
 
         $response
             ->assertStatus(Response::HTTP_BAD_REQUEST)
@@ -88,7 +85,7 @@ class BookmarksTest extends TestCase
         $manga = Manga::factory()->create();
 
         $response = $this
-            ->postJson(route('bookmarks.attach', $manga));
+            ->postJson(route('bookmarks.attach', [getMorphedType($manga::class), $manga->id]));
 
         $response
             ->assertUnauthorized();
@@ -96,17 +93,15 @@ class BookmarksTest extends TestCase
 
     public function testDetachOk()
     {
-        $user = User::factory()->create();
-
         $manga = Manga::factory()->create();
 
         $this
-            ->actingAs($user)
-            ->postJson(route('bookmarks.attach', $manga));
+            ->actingAs($this->user)
+            ->postJson(route('bookmarks.attach', [getMorphedType($manga::class), $manga->id]));
 
         $response = $this
-            ->actingAs($user)
-            ->deleteJson(route('bookmarks.detach', $manga));
+            ->actingAs($this->user)
+            ->deleteJson(route('bookmarks.detach', [getMorphedType($manga::class), $manga->id]));
 
         $response->assertOk()
             ->assertJsonFragment([
@@ -116,12 +111,10 @@ class BookmarksTest extends TestCase
 
     public function testDetachBusy()
     {
-        $user = User::factory()->create();
-
         $manga = Manga::factory()->create();
 
-        $response = $this->actingAs($user)
-            ->deleteJson(route('bookmarks.detach', $manga));
+        $response = $this->actingAs($this->user)
+            ->deleteJson(route('bookmarks.detach', [getMorphedType($manga::class), $manga->id]));
 
         $response
             ->assertStatus(Response::HTTP_BAD_REQUEST)
@@ -134,7 +127,7 @@ class BookmarksTest extends TestCase
     {
         $manga = Manga::factory()->create();
 
-        $response = $this->deleteJson(route('bookmarks.detach', $manga));
+        $response = $this->deleteJson(route('bookmarks.detach', [getMorphedType($manga::class), $manga->id]));
 
         $response->assertUnauthorized();
     }

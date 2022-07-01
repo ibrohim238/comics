@@ -3,6 +3,7 @@
 namespace Tests\Feature\V1\Http\Controllers\Api;
 
 use App\Enums\RolePermissionEnum;
+use App\Models\Filter;
 use App\Models\Manga;
 use App\Models\User;
 use App\Versions\V1\Http\Resources\MangaCollection;
@@ -21,6 +22,7 @@ class MangaTest extends TestCase
 
         $this->seed();
         $this->user = User::factory()->create();
+        $this->filters = Filter::factory()->count(10)->create()->pluck('id');
 
         $this->user->assignRole('owner');
     }
@@ -29,7 +31,7 @@ class MangaTest extends TestCase
     {
         $mangas = Manga::factory()->count('3')->create();
 
-        $response = $this->getJson(route('mangas.index'));
+        $response = $this->getJson(route('manga.index'));
 
         $response
             ->assertOk()
@@ -42,18 +44,18 @@ class MangaTest extends TestCase
     {
         $manga = Manga::factory()->create();
 
-        $response = $this->getJson(route('mangas.show', $manga));
+            $response = $this->getJson(route('manga.show', $manga));
 
         $response
             ->assertOk()
             ->assertJsonFragment(
-                (new MangaResource($manga))->response()->getData(true)
+                (new MangaResource($manga->load('categories', 'genres', 'tags')))->response()->getData(true)
             );
     }
 
     public function testShowNotFound()
     {
-        $response = $this->getJson(route('mangas.show', 'n'));
+        $response = $this->getJson(route('manga.show', 'n'));
 
         $response->assertNotFound();
     }
@@ -61,11 +63,12 @@ class MangaTest extends TestCase
     public function testStoreOk()
     {
         $response = $this->actingAs($this->user)
-            ->postJson(route('mangas.store'), [
-            'name' => $this->faker->name,
-            'description' => $this->faker->text,
-            'published_at' => $this->faker->dateTime
-        ]);
+            ->postJson(route('manga.store'), [
+                'name' => $this->faker->name,
+                'description' => $this->faker->text,
+                'is_published' => $this->faker->boolean,
+                'filters' => $this->filters
+            ]);
 
         $response->assertCreated();
     }
@@ -73,11 +76,12 @@ class MangaTest extends TestCase
     public function testStoreErrorValidateName()
     {
         $response = $this->actingAs($this->user)
-            ->postJson(route('mangas.store'), [
-            'name' => 'err',
-            'description' => $this->faker->text,
-            'published_at' => $this->faker->dateTime,
-        ]);
+            ->postJson(route('manga.store'), [
+                'name' => 'err',
+                'description' => $this->faker->text,
+                'is_published' => $this->faker->boolean,
+                'filters' => $this->filters
+            ]);
 
         $response
             ->assertJsonValidationErrors(['name'])
@@ -87,10 +91,11 @@ class MangaTest extends TestCase
     public function testStoreUnauthorized()
     {
         $response = $this
-            ->postJson(route('mangas.store'), [
+            ->postJson(route('manga.store'), [
                 'name' => 'err',
                 'description' => $this->faker->text,
-                'published_at' => $this->faker->dateTime,
+                'is_published' => $this->faker->boolean,
+                'filters' => $this->filters
             ]);
 
         $response->assertUnauthorized();
@@ -101,10 +106,11 @@ class MangaTest extends TestCase
         $user = User::factory()->create();
 
         $response = $this->actingAs($user)
-            ->postJson(route('mangas.store'), [
+            ->postJson(route('manga.store'), [
                 'name' => 'err',
                 'description' => $this->faker->text,
-                'published_at' => $this->faker->dateTime,
+                'is_published' => $this->faker->boolean,
+                'filters' => $this->filters
             ]);
 
         $response->assertForbidden();
@@ -115,11 +121,12 @@ class MangaTest extends TestCase
         $manga = Manga::factory()->create();
 
         $response = $this->actingAs($this->user)
-            ->patchJson(route('mangas.update', $manga), [
-           'name' => $this->faker->name,
-           'description'  => $this->faker->text,
-           'published_at' => $this->faker->dateTime,
-        ]);
+            ->patchJson(route('manga.update', $manga), [
+                'name' => $this->faker->name,
+                'description' => $this->faker->text,
+                'is_published' => $this->faker->boolean,
+                'filters' => $this->filters
+            ]);
 
         $response->assertOk();
     }
@@ -129,10 +136,11 @@ class MangaTest extends TestCase
         $manga = Manga::factory()->create();
 
         $response = $this
-            ->patchJson(route('mangas.update', $manga), [
+            ->patchJson(route('manga.update', $manga), [
                 'name' => $this->faker->name,
-                'description'  => $this->faker->text,
-                'published_at' => $this->faker->dateTime,
+                'description' => $this->faker->text,
+                'is_published' => $this->faker->boolean,
+                'filters' => $this->filters
             ]);
 
         $response->assertUnauthorized();
@@ -144,10 +152,11 @@ class MangaTest extends TestCase
         $manga = Manga::factory()->create();
 
         $response = $this->actingAs($user)
-            ->patchJson(route('mangas.update', $manga), [
+            ->patchJson(route('manga.update', $manga), [
                 'name' => $this->faker->name,
-                'description'  => $this->faker->text,
-                'published_at' => $this->faker->dateTime,
+                'description' => $this->faker->text,
+                'is_published' => $this->faker->boolean,
+                'filters' => $this->filters
             ]);
 
         $response->assertForbidden();
@@ -159,11 +168,12 @@ class MangaTest extends TestCase
             ->assignRole(RolePermissionEnum::OWNER->value);
 
         $response = $this->actingAs($user)
-            ->patchJson(route('mangas.update', 'n'), [
-            'name' => $this->faker->name,
-            'description'  => $this->faker->text,
-            'published_at' => $this->faker->dateTime,
-        ]);
+            ->patchJson(route('manga.update', 'n'), [
+                'name' => $this->faker->name,
+                'description' => $this->faker->text,
+                'is_published' => $this->faker->boolean,
+                'filters' => $this->filters
+            ]);
 
         $response->assertNotFound();
     }
@@ -173,7 +183,7 @@ class MangaTest extends TestCase
         $manga = Manga::factory()->create();
 
         $response = $this->actingAs($this->user)
-            ->deleteJson(route('mangas.destroy', $manga));
+            ->deleteJson(route('manga.destroy', $manga));
 
         $response->assertNoContent();
     }
@@ -184,7 +194,7 @@ class MangaTest extends TestCase
             ->assignRole(RolePermissionEnum::OWNER->value);
 
         $response = $this->actingAs($user)
-            ->deleteJson(route('mangas.destroy', 'n'));
+            ->deleteJson(route('manga.destroy', 'n'));
 
         $response->assertNotFound();
     }
@@ -194,7 +204,7 @@ class MangaTest extends TestCase
         $manga = Manga::factory()->create();
 
         $response = $this
-            ->deleteJson(route('mangas.destroy', $manga));
+            ->deleteJson(route('manga.destroy', $manga));
 
         $response->assertUnauthorized();
     }
@@ -206,7 +216,7 @@ class MangaTest extends TestCase
         $manga = Manga::factory()->create();
 
         $response = $this->actingAs($user)
-            ->deleteJson(route('mangas.destroy', $manga));
+            ->deleteJson(route('manga.destroy', $manga));
 
         $response->assertForbidden();
     }

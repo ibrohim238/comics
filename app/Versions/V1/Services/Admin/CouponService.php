@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Versions\V1\Services;
+namespace App\Versions\V1\Services\Admin;
 
 use App\Models\Coupon;
 use App\Versions\V1\Dto\CouponDto;

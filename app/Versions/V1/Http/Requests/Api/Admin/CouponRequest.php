@@ -15,11 +15,10 @@ class CouponRequest extends FormRequest
     public function rules()
     {
         return [
-            'volume' => ['required', 'int'],
-            'number' => ['required', 'int'],
-            'name' => ['required', 'string'],
-            'is_paid' => ['required', 'boolean'],
-            'images.*' => ['required', 'image'],
+            'code' => ['required', 'string'],
+            'data' => ['nullable', 'json'],
+            'limit' => ['nullable', 'int'],
+            'ends_at' => ['nullable', 'date'],
         ];
     }
 }

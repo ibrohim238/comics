@@ -19,6 +19,7 @@ class TeamController extends Controller
 {
     public function __construct()
     {
+        $this->middleware('auth')->except('index', 'show');
         $this->authorizeResource(Team::class);
     }
 
@@ -39,7 +40,7 @@ class TeamController extends Controller
      */
     public function store(TeamRequest $request)
     {
-        $team = app(TeamService::class)->create(TeamDto::fromRequest($request), Auth::user());
+        $team = app(TeamService::class)->store(TeamDto::fromRequest($request), Auth::user());
 
         return new TeamResource($team);
     }

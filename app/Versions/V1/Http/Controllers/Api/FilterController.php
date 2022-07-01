@@ -39,7 +39,7 @@ class FilterController extends Controller
      */
     public function store(FilterRequest $request): FilterResource
     {
-        $filter = app(FilterService::class)->create(FilterDto::fromRequest($request));
+        $filter = app(FilterService::class)->store(FilterDto::fromRequest($request));
 
         return new FilterResource($filter);
     }

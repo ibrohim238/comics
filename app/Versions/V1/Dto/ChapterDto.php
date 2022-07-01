@@ -11,14 +11,16 @@ class ChapterDto extends DataTransferObject
     public int $volume;
     public int $number;
     public string $name;
-    public bool $is_paid;
-    public ?array $images;
 
     /**
      * @throws UnknownProperties
      */
     public static function fromRequest(ChapterRequest $request): ChapterDto
     {
-        return new self($request->validated());
+        return new self([
+            'volume' => $request->volume,
+            'number' => $request->number,
+            'name' => $request->number,
+        ]);
     }
 }

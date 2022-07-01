@@ -10,7 +10,8 @@ use Illuminate\Http\UploadedFile;
  * @property-read string $name
  * @property-read string $description
  * @property-read Carbon $published_at
- * @property-read bool is_published
+ * @property-read bool $is_published
+ * @property-read array $filters
  * @property-read UploadedFile $image
 */
 class MangaRequest extends FormRequest
@@ -18,7 +19,7 @@ class MangaRequest extends FormRequest
     protected function prepareForValidation()
     {
         $this->merge([
-            'published_at' => $this->is_published ? Carbon::now() : null
+            'published_at' => $this->is_published ? Carbon::now() : null,
         ]);
     }
 
@@ -33,7 +34,8 @@ class MangaRequest extends FormRequest
             'name' => ['required', 'string', 'min:4', 'max:255'],
             'description' => ['required', 'string', 'min:4', 'max:625'],
             'published_at' => ['nullable', 'date'],
-            'image' => ['nullable', 'image']
+            'filters' => ['required', 'array', 'exists:filters,id'],
+            'image' => ['nullable', 'image'],
         ];
     }
 }

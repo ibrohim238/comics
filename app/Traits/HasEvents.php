@@ -15,7 +15,7 @@ trait HasEvents
         return $this->morphMany(Event::class, 'eventable');
     }
 
-    public function users(): HasManyThrough
+    public function eventUsers(): HasManyThrough
     {
         return $this->hasManyThrough(User::class, Event::class, 'events.user_id', 'id', 'id', 'events.eventable_id')
             ->where('eventable_type', array_search(static::class, Relation::morphMap()) ?: static::class);

@@ -16,7 +16,7 @@ return new class extends Migration
         Schema::create('coupons', function (Blueprint $table) {
             $table->id();
             $table->string('code');
-            $table->text('data');
+            $table->text('data')->nullable();
             $table->integer('limit')->nullable();
             $table->timestamp('ends_at')->nullable();
             $table->timestamps();
