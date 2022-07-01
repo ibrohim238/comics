@@ -3,18 +3,23 @@
 namespace App\Models;
 
 use App\Enums\TeamPermissionEnum;
+use App\Interfaces\Invited;
+use App\Interfaces\Teamable;
+use App\Traits\HasInvitations;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\Eloquent\Relations\MorphToMany;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
 
-class Team extends Model implements HasMedia
+class Team extends Model implements HasMedia, Invited
 {
     use HasFactory;
     use InteractsWithMedia;
+    use HasInvitations;
 
     protected $fillable = [
         'name',
@@ -28,14 +33,9 @@ class Team extends Model implements HasMedia
             ->as('membership');
     }
 
-    public function hasTeamPermission(User $user, TeamPermissionEnum $permission): bool
+    public function hasPermission(User $user, TeamPermissionEnum $permission): bool
     {
         return $user->hasTeamPermission($this, $permission);
-    }
-
-    public function teamInvitations(): HasMany
-    {
-        return $this->hasMany(TeamInvitation::class);
     }
 
     public function mangas(): MorphToMany
@@ -43,8 +43,9 @@ class Team extends Model implements HasMedia
         return $this->morphedByMany(Manga::class, 'teamable');
     }
 
-    public function chapters(): HasMany
+    public function chapters(): BelongsToMany
     {
-        return $this->hasMany(Chapter::class);
+        return $this->belongsToMany(Chapter::class, ChapterTeam::class)
+            ->withPivot('free_at');
     }
 }

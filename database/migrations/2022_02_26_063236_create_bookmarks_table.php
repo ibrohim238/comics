@@ -15,8 +15,13 @@ return new class extends Migration
     {
         Schema::create('bookmarks', function (Blueprint $table) {
             $table->foreignId('user_id')->constrained();
-            $table->foreignId('manga_id')->constrained();
-            $table->unique(['manga_id', 'user_id']);
+            $table->morphs('bookmarkable');
+
+            $table->unique([
+                'user_id',
+                'bookmarkable_id',
+                'bookmarkable_type',
+            ]);
         });
     }
 

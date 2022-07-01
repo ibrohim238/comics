@@ -25,7 +25,8 @@ enum RolePermissionEnum: string
                 PermissionEnum::MANAGE_COMMENT->value,
                 PermissionEnum::ASSIGN_MODERATOR->value,
                 PermissionEnum::MANAGE_TEAM->value,
-                PermissionEnum::CREATE_TEAM->value
+                PermissionEnum::CREATE_TEAM->value,
+                PermissionEnum::MANAGE_COUPON->value
             ],
             self::MODERATOR => [
                 PermissionEnum::VIEW_ADMIN_PANEL->value,

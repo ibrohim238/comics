@@ -6,62 +6,45 @@ use App\Enums\TeamRoleEnum;
 use App\Models\Team;
 use App\Models\User;
 use App\Versions\V1\Dto\TeamDto;
+use App\Versions\V1\Repository\TeamRepository;
 use Spatie\MediaLibrary\MediaCollections\Exceptions\FileDoesNotExist;
 use Spatie\MediaLibrary\MediaCollections\Exceptions\FileIsTooBig;
 
 class TeamService
 {
+    public TeamRepository $repository;
+
     public function __construct(
-        public Team $team
+        private Team $team
     ) {
+        $this->repository = app(TeamRepository::class, [
+           'team' => $this->team
+        ]);
     }
 
-    public function create(TeamDto $dto, User $user): Team
+    public function store(TeamDto $dto, User $user): Team
     {
-        $this->fill($dto)->save();
-        app(TeamMemberService::class)
-            ->add($this->team, $user, TeamRoleEnum::owner->value);
+        $this->repository
+            ->fill($dto)
+            ->save()
+            ->addMemberOwner($user);
 
         return $this->team;
     }
 
     public function update(TeamDto $dto): Team
     {
-        $this->fill($dto)->save();
+        $this->repository
+            ->fill($dto)
+            ->save();
 
         return $this->team;
     }
 
-    public function fill(TeamDto $dto): static
+    public function delete(): void
     {
-        $this->team->fill($dto->toArray());
-
-        return $this;
-    }
-
-    public function save(): static
-    {
-        $this->team->save();
-
-        return $this;
-    }
-
-    /**
-     * @throws FileDoesNotExist
-     * @throws FileIsTooBig
-     */
-    public function addImage(): static
-    {
-        $this->team->addMediaFromRequest('image')->toMediaCollection();
-
-        return $this;
-    }
-
-    public function delete(): static
-    {
-        $this->team->clearMediaCollection();
-        $this->team->delete();
-
-        return $this;
+        $this->repository
+            ->deleteMedia()
+            ->delete();
     }
 }

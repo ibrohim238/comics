@@ -28,21 +28,6 @@ return new class extends Migration
 
             $table->unique(['team_id', 'user_id']);
         });
-
-        Schema::create('team_invitations', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('team_id')->constrained();
-            $table->foreignId('user_id')->constrained();
-            $table->string('role')->nullable();
-            $table->timestamps();
-
-            $table->unique(['team_id', 'user_id']);
-        });
-
-        Schema::create('teamables', function (Blueprint $table) {
-            $table->foreignId('team_id')->constrained();
-            $table->morphs('teamable');
-        });
     }
 
     /**
@@ -53,8 +38,6 @@ return new class extends Migration
     public function down()
     {
         Schema::dropIfExists('team_user');
-        Schema::dropIfExists('team_invitations');
-        Schema::dropIfExists('teamables');
         Schema::dropIfExists('teams');
     }
 };

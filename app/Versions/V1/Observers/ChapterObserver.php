@@ -20,7 +20,6 @@ class ChapterObserver
     public function created(Chapter $chapter)
     {
         app(EventService::class)->create($chapter, Auth::user(), EventTypeEnum::CREATE_TYPE);
-        app(ChapterNotificationService::class)->create($chapter);
     }
 
     /**
@@ -32,7 +31,6 @@ class ChapterObserver
     public function updated(Chapter $chapter)
     {
         app(EventService::class)->create($chapter, Auth::user(), EventTypeEnum::UPDATE_TYPE);
-        app(ChapterNotificationService::class)->create($chapter);
     }
 
     /**

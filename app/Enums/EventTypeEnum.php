@@ -9,5 +9,4 @@ enum EventTypeEnum: string
     case CREATE_TYPE = 'created';
     case UPDATE_TYPE = 'updated';
     case DELETE_TYPE = 'deleted';
-    case ACTIVATE_TYPE = 'activated';
 }

@@ -13,8 +13,14 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::table('chapters', function (Blueprint $table) {
-            $table->foreignId('team_id')->after('manga_id')->constrained();
+        Schema::create('chapter_teams', function (Blueprint $table) {
+            $table->id();
+            $table->foreignId('team_id')->constrained();
+            $table->foreignId('chapter_id')->constrained();
+            $table->timestamp('free_at')->nullable();
+            $table->timestamps();
+
+            $table->unique(['team_id', 'chapter_id']);
         });
     }
 
@@ -25,9 +31,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::table('chapters', function (Blueprint $table) {
-            $table->dropForeign(['team_id']);
-            $table->dropColumn('team_id');
-        });
+        Schema::dropIfExists('chapter_teams');
     }
 };
