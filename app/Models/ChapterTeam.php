@@ -23,17 +23,14 @@ class ChapterTeam extends Model implements HasMedia, Eventable,Rateable, Votable
     use HasVotes;
 
     protected $fillable = [
-        'free_at'
+        'free_at',
+        'team_id',
+        'chapter_id',
     ];
 
     protected $casts = [
         'free_at' => 'datetime'
     ];
-
-    public function getRouteKeyName(): string
-    {
-        return 'team_id';
-    }
 
     public function chapter(): BelongsTo
     {

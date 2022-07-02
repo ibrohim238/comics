@@ -2,6 +2,8 @@
 
 namespace App\Enums;
 
+use Illuminate\Database\Eloquent\Model;
+
 enum CommentableTypeEnum: string
 {
     use EnumTrait;

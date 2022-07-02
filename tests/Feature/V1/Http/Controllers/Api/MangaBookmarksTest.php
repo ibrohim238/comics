@@ -11,7 +11,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Tests\TestCase;
 use function route;
 
-class BookmarksTest extends TestCase
+class MangaBookmarksTest extends TestCase
 {
     use WithFaker;
 
@@ -26,11 +26,11 @@ class BookmarksTest extends TestCase
     {
         $mangas = Manga::factory()->count(3)->create();
 
-        $this->user->bookmarks()->sync($mangas->pluck('id'));
+        $this->user->mangas()->sync($mangas->pluck('id'));
 
         $response = $this
             ->actingAs($this->user)
-            ->getJson(route('bookmarks.index', 'manga'));
+            ->getJson(route('bookmarks.index-manga', 'manga'));
 
         $response
             ->assertOk()
@@ -42,7 +42,7 @@ class BookmarksTest extends TestCase
     public function testIndexUnauthorized()
     {
         $response = $this
-            ->getJson(route('bookmarks.index', 'manga'));
+            ->getJson(route('bookmarks.index-manga', 'manga'));
 
         $response->assertUnauthorized();
     }

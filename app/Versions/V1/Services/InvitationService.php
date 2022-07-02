@@ -24,7 +24,7 @@ class InvitationService
     {
         $this->repository
             ->fill($dto)
-            ->associateUser($dto->userId)
+            ->associateUser($dto->user_id)
             ->associateInvited($invited)
             ->save();
 

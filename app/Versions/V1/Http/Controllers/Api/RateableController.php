@@ -30,13 +30,11 @@ class RateableController extends Controller
 
     public function unRate(string $model, int $id, Request $request)
     {
-        $type = $request->segment(3);
-
         try {
             app(RatingService::class, [
                 'rateable' => identifyModel($model, $id),
                 'user' => Auth::user()
-            ])->unRate($type);
+            ])->unRate($request->segment(3));
         } catch (RatingsException $exception) {
             return response(['message' => $exception->getMessage()], Response::HTTP_BAD_REQUEST);
         }

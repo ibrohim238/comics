@@ -6,5 +6,5 @@ enum VotableTypeEnum: string
 {
     use EnumTrait;
 
-    case chapter = 'chapter';
+    case chapterTeam = 'chapterTeam';
 }

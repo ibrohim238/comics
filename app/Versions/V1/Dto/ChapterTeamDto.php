@@ -8,6 +8,7 @@ use Carbon\Carbon;
 class ChapterTeamDto extends BaseDto
 {
     public ?Carbon $free_at;
+    public int $teamId;
     public ?array $images;
 
     public static function fromRequest(ChapterTeamRequest $request): ChapterTeamDto

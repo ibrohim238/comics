@@ -10,10 +10,14 @@ use App\Versions\V1\Http\Requests\Api\InvitationRequest;
 use App\Versions\V1\Http\Resources\InvitationCollection;
 use App\Versions\V1\Http\Resources\InvitationResource;
 use App\Versions\V1\Services\InvitationService;
+use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Http\Request;
 
 class TeamInvitationController extends Controller
 {
+    /**
+     * @throws AuthorizationException
+     */
     public function index(Team $team, Request $request)
     {
         $this->authorize('teamInvitation', $team);
@@ -23,6 +27,9 @@ class TeamInvitationController extends Controller
         return new InvitationCollection($invitations);
     }
 
+    /**
+     * @throws AuthorizationException
+     */
     public function show(Team $team, Invitation $invitation)
     {
         $this->authorize('teamInvitation', $team);
@@ -30,6 +37,9 @@ class TeamInvitationController extends Controller
         return new InvitationResource($invitation);
     }
 
+    /**
+     * @throws AuthorizationException
+     */
     public function store(Team $team, InvitationRequest $request)
     {
         $this->authorize('teamInvitation', $team);
@@ -41,6 +51,9 @@ class TeamInvitationController extends Controller
         return new InvitationResource($invitation);
     }
 
+    /**
+     * @throws AuthorizationException
+     */
     public function update(Team $team, Invitation $invitation, InvitationRequest $request)
     {
         $this->authorize('teamInvitation', $team);
@@ -52,6 +65,9 @@ class TeamInvitationController extends Controller
         return new InvitationResource($invitation);
     }
 
+    /**
+     * @throws AuthorizationException
+     */
     public function destroy(Team $team, Invitation $invitation)
     {
         $this->authorize('teamInvitation', $team);

@@ -61,13 +61,13 @@ class AuthServiceProvider extends ServiceProvider
            return $user->hasPermissionTo(PermissionEnum::MANAGE_TEAMABLE->value);
         });
         Gate::define('updateTeamMember', function (User $user, Team $team) {
-            $user->hasTeamPermission($team, TeamPermissionEnum::MANAGE_USER);
+            return $user->hasTeamPermission($team, TeamPermissionEnum::MANAGE_USER);
         });
         Gate::define('removeTeamMember', function (User $user, Team $team) {
-            $user->hasTeamPermission($team, TeamPermissionEnum::MANAGE_USER);
+            return $user->hasTeamPermission($team, TeamPermissionEnum::MANAGE_USER);
         });
         Gate::define('teamInvitation', function (User $user, Team $team) {
-            $user->hasTeamPermission($team, TeamPermissionEnum::MANAGE_INVITATION);
+            return $user->hasTeamPermission($team, TeamPermissionEnum::MANAGE_INVITATION);
         });
 
         $this->registerPolicies();
