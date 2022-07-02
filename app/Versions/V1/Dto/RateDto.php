@@ -16,8 +16,8 @@ class RateDto extends DataTransferObject
      */
     public static function fromRequest(RateRequest $request): RateDto
     {
-        return new self(array_merge($request->validated(), [
+        return new self([
             'type' => $request->segment(3),
-        ]));
+        ] + $request->validated());
     }
 }

@@ -2,6 +2,7 @@
 
 namespace Tests\Feature\V1\Http\Controllers\Api;
 
+use App\Enums\TeamRoleEnum;
 use App\Models\Chapter;
 use App\Models\Manga;
 use App\Models\Team;
@@ -28,12 +29,13 @@ class ChapterTeamTest extends TestCase
 
         $this->user = User::factory()->create();
         $this->team = Team::factory()->create();
-        $this->user->teams()->attach($this->team->id, ['role' => 'owner']);
         $this->manga = Manga::factory()->create();
-        $this->manga->teams()->attach($this->team->id);
         $this->chapter = Chapter::factory()->create();
 
         $this->forbidden = User::factory()->create();
+
+        $this->user->teams()->attach($this->team->id, ['role' => TeamRoleEnum::owner->value]);
+        $this->manga->teams()->attach($this->team->id);
     }
 
     public function testIndexOk()
@@ -51,7 +53,9 @@ class ChapterTeamTest extends TestCase
 
     public function testShowOk()
     {
-        $chapterTeam = ChapterTeam::factory()->for($this->chapter)->create();
+        $chapterTeam = ChapterTeam::factory()->for($this->chapter)->create([
+            'free_at' => null
+        ]);
 
         $response = $this->actingAs($this->user)
             ->getJson(route('manga.chapter.chapter-team.show', [$this->manga, $this->chapter, $chapterTeam]));
@@ -64,7 +68,9 @@ class ChapterTeamTest extends TestCase
 
     public function testShowForbidden()
     {
-        $chapterTeam = ChapterTeam::factory()->for($this->chapter)->create();
+        $chapterTeam = ChapterTeam::factory()->for($this->chapter)->create([
+            'free_at' => $this->faker->dateTimeBetween('+1 days', '+30 days')->format('Y-m-d')
+        ]);
 
         $response = $this->actingAs($this->forbidden)
             ->getJson(route('manga.chapter.chapter-team.show', [$this->manga, $this->chapter, $chapterTeam]));
@@ -75,11 +81,9 @@ class ChapterTeamTest extends TestCase
     public function testStoreOk()
     {
         $response = $this->actingAs($this->user)
-            ->postJson(route('manga.chapter.chapter-team.store', [$this->manga, $this->chapter, $this->team]), [
-                'free_at' => $this->faker->randomElement([
-                    $this->faker->dateTimeBetween('-30 days', '+30 days'),
-                    null
-                ])
+            ->postJson(route('manga.chapter.chapter-team.store', [$this->manga, $this->chapter]), [
+                'teamId' => $this->team->id,
+                'free_at' => $this->freeAt()
         ]);
 
         $response->assertCreated();
@@ -89,10 +93,8 @@ class ChapterTeamTest extends TestCase
     {
         $response = $this->actingAs($this->forbidden)
             ->postJson(route('manga.chapter.chapter-team.store', [$this->manga, $this->chapter, $this->team]), [
-                'free_at' => $this->faker->randomElement([
-                    $this->faker->dateTimeBetween('-30 days', '+30 days'),
-                    null
-                ])
+                'teamId' => $this->team->id,
+                'free_at' => $this->freeAt()
             ]);
 
         $response->assertForbidden();
@@ -101,11 +103,9 @@ class ChapterTeamTest extends TestCase
     public function testStoreUnauthorized()
     {
         $response = $this
-            ->postJson(route('manga.chapter.chapter-team.store', [$this->manga, $this->chapter, $this->team]), [
-                'free_at' => $this->faker->randomElement([
-                    $this->faker->dateTimeBetween('-30 days', '+30 days'),
-                    null
-                ])
+            ->postJson(route('manga.chapter.chapter-team.store', [$this->manga, $this->chapter]), [
+                'teamId' => $this->team->id,
+                'free_at' => $this->freeAt()
             ]);
 
         $response->assertUnauthorized();
@@ -113,52 +113,20 @@ class ChapterTeamTest extends TestCase
 
     public function testUpdateOk()
     {
-        $chapterTeam = ChapterTeam::factory()->for($this->chapter)->create();
+        ChapterTeam::factory()->for($this->chapter)->for($this->team)->create();
 
         $response = $this->actingAs($this->user)
-            ->patchJson(route('manga.chapter.chapter-team.update', [$this->manga, $this->chapter, $chapterTeam]), [
-                'free_at' => $this->faker->randomElement([
-                    $this->faker->dateTimeBetween('-30 days', '+30 days'),
-                    null
-                ])
+            ->postJson(route('manga.chapter.chapter-team.store', [$this->manga, $this->chapter]), [
+                'teamId' => $this->team->id,
+                'free_at' => $this->freeAt()
             ]);
 
         $response->assertOk();
     }
 
-    public function testUpdateUnauthorized()
-    {
-        $chapterTeam = ChapterTeam::factory()->for($this->chapter)->create();
-
-        $response = $this
-            ->patchJson(route('manga.chapter.chapter-team.update', [$this->manga, $this->chapter, $chapterTeam]), [
-                'free_at' => $this->faker->randomElement([
-                    $this->faker->dateTimeBetween('-30 days', '+30 days'),
-                    null
-                ])
-            ]);
-
-        $response->assertUnauthorized();
-    }
-
-    public function testUpdateForbidden()
-    {
-        $chapterTeam = ChapterTeam::factory()->for($this->chapter)->create();
-
-        $response = $this->actingAs($this->forbidden)
-            ->patchJson(route('manga.chapter.chapter-team.update', [$this->manga, $this->chapter, $chapterTeam]), [
-                'free_at' => $this->faker->randomElement([
-                    $this->faker->dateTimeBetween('-30 days', '+30 days'),
-                    null
-                ])
-            ]);
-
-        $response->assertForbidden();
-    }
-
     public function testDeleteOk()
     {
-        $chapterTeam = ChapterTeam::factory()->for($this->chapter)->create();
+        $chapterTeam = ChapterTeam::factory()->for($this->chapter)->for($this->team)->create();
 
         $response = $this->actingAs($this->user)
             ->deleteJson(route('manga.chapter.chapter-team.destroy', [$this->manga, $this->chapter, $chapterTeam]));
@@ -168,7 +136,7 @@ class ChapterTeamTest extends TestCase
 
     public function testDeleteUnauthorized()
     {
-        $chapterTeam = ChapterTeam::factory()->for($this->chapter)->create();
+        $chapterTeam = ChapterTeam::factory()->for($this->chapter)->for($this->team)->create();
 
         $response = $this
             ->deleteJson(route('manga.chapter.chapter-team.destroy', [$this->manga, $this->chapter, $chapterTeam]));
@@ -178,11 +146,19 @@ class ChapterTeamTest extends TestCase
 
     public function testDeleteForbidden()
     {
-        $chapterTeam = ChapterTeam::factory()->for($this->chapter)->create();
+        $chapterTeam = ChapterTeam::factory()->for($this->chapter)->for($this->team)->create();
 
         $response = $this->actingAs($this->forbidden)
             ->deleteJson(route('manga.chapter.chapter-team.destroy', [$this->manga, $this->chapter, $chapterTeam]));
 
         $response->assertForbidden();
+    }
+
+    public function freeAt()
+    {
+        return $this->faker->randomElement([
+            $this->faker->dateTimeBetween('-30 days', '+30 days')->format('Y-m-d'),
+            null
+        ]);
     }
 }

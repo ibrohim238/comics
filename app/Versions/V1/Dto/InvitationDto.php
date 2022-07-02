@@ -7,7 +7,7 @@ use Carbon\Carbon;
 
 class InvitationDto extends BaseDto
 {
-    public int $userId;
+    public int $user_id;
     public ?Carbon $ends_at;
     public string $data;
 

@@ -2,6 +2,7 @@
 
 namespace App\Versions\V1\Http\Controllers\Api;
 
+use App\Enums\TeamableTypeEnum;
 use App\Models\Team;
 use App\Versions\V1\Http\Controllers\Controller;
 use App\Versions\V1\Services\TeamableService;
@@ -21,11 +22,11 @@ class TeamableController extends Controller
     /**
      * @throws AuthorizationException
      */
-    public function attach(Team $team, string $model, int $id)
+    public function attach(Team $team, TeamableTypeEnum $model, int $id)
     {
         $this->authorize('attach_teamable');
 
-        $model = $this->identifyModel($model, $id);
+        $model = $this->identifyModel($model->value, $id);
 
         app(TeamableService::class, [
             'team' => $team,
@@ -38,11 +39,11 @@ class TeamableController extends Controller
     /**
      * @throws AuthorizationException
      */
-    public function detach(Team $team, string $model, int $id)
+    public function detach(Team $team, TeamableTypeEnum $model, int $id)
     {
         $this->authorize('detach_teamable');
 
-        $model = $this->identifyModel($model, $id);
+        $model = $this->identifyModel($model->value, $id);
 
         app(TeamableService::class, [
             'team' => $team,

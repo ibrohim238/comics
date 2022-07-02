@@ -8,6 +8,9 @@ use App\Models\Manga;
 use App\Models\Team;
 use App\Versions\V1\Dto\ChapterDto;
 use App\Versions\V1\Services\ChapterTeamService;
+use Illuminate\Contracts\Pagination\LengthAwarePaginator;
+use Spatie\QueryBuilder\AllowedFilter;
+use Spatie\QueryBuilder\QueryBuilder;
 
 class ChapterRepository
 {
@@ -16,9 +19,14 @@ class ChapterRepository
     ) {
     }
 
-    public function team()
+    public function paginateChapterTeam(?int $perPage): LengthAwarePaginator
     {
-
+        return QueryBuilder::for($this->chapter->chapterTeams())
+            ->with('chapter')
+            ->allowedFilters(
+                AllowedFilter::exact('volume', 'chapter.volume'),
+                AllowedFilter::exact('number', 'chapter.number'),
+            )->paginate($perPage);
     }
 
     public function fill(ChapterDto $dto): static

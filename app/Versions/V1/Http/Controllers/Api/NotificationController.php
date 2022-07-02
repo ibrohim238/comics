@@ -11,7 +11,6 @@ use App\Versions\V1\Transformers\NotificationTransformer;
 use Illuminate\Http\Request;
 use Illuminate\Notifications\DatabaseNotification;
 use Illuminate\Pagination\LengthAwarePaginator;
-use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
 
 class NotificationController extends Controller

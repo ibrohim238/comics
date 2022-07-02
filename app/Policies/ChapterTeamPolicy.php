@@ -3,9 +3,7 @@
 namespace App\Policies;
 
 use App\Enums\TeamPermissionEnum;
-use App\Models\Chapter;
 use App\Models\ChapterTeam;
-use App\Models\Manga;
 use App\Models\Team;
 use App\Models\User;
 use Carbon\Carbon;
@@ -28,27 +26,27 @@ class ChapterTeamPolicy
         return true;
     }
 
-    public function create(User $user, Team $team): bool
+    public function create(User $user, int $teamId): bool
     {
-        return $user->hasTeamPermission($team, TeamPermissionEnum::MANAGE_MANGA);
+        return $user->hasTeamPermission(Team::find($teamId), TeamPermissionEnum::MANAGE_MANGA);
     }
 
-    public function update(User $user, Manga $manga, Chapter $chapter, ChapterTeam $chapterTeam): bool
-    {
-        return $user->hasTeamPermission($chapterTeam->team, TeamPermissionEnum::MANAGE_MANGA);
-    }
-
-    public function delete(User $user, Manga $manga, Chapter $chapter, ChapterTeam $chapterTeam): bool
+    public function update(User $user, ChapterTeam $chapterTeam): bool
     {
         return $user->hasTeamPermission($chapterTeam->team, TeamPermissionEnum::MANAGE_MANGA);
     }
 
-    public function restore(User $user, Manga $manga): bool
+    public function delete(User $user, ChapterTeam $chapterTeam): bool
+    {
+        return $user->hasTeamPermission($chapterTeam->team, TeamPermissionEnum::MANAGE_MANGA);
+    }
+
+    public function restore(User $user, ChapterTeam $chapterTeam): bool
     {
         //
     }
 
-    public function forceDelete(User $user, Manga $manga): bool
+    public function forceDelete(User $user, ChapterTeam $chapterTeam): bool
     {
         //
     }
