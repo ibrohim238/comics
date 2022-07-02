@@ -3,6 +3,7 @@
 namespace App\Enums;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\Relation;
 
 trait EnumTrait
 {
@@ -15,6 +16,9 @@ trait EnumTrait
 
     public function identify(int $id): ?Model
     {
-        return identifyModel($this->value, $id);
+        $model = Relation::getMorphedModel($this->value);
+
+        /* @var Model $model*/
+        return $model::findOrFail($id);
     }
 }
