@@ -14,7 +14,7 @@ use Spatie\QueryBuilder\QueryBuilder;
 class ChapterTeamRepository
 {
     public function __construct(
-        private ChapterTeam|HasMany $chapterTeam
+        private ChapterTeam $chapterTeam
     ) {
     }
 
@@ -28,48 +28,38 @@ class ChapterTeamRepository
             )->paginate($perPage);
     }
 
-    public function load(): ChapterTeam|HasMany
+    public function load(): static
     {
-        return $this->chapterTeam->load('chapter');
+        $this->chapterTeam->load('chapter');
+
+        return  $this;
     }
 
-    public function fill(ChapterTeamDto $dto): static
+    public function getChapter(): ChapterTeam
     {
-        $this->chapterTeam->fill($dto->toArray());
+        return $this->chapterTeam;
+    }
+
+    public function updateOrCreate(array $data): static
+    {
+        $this->chapterTeam = $this->chapterTeam
+            ->updateOrCreate(
+                $data['attributes'],
+                $data['values']
+            );
 
         return $this;
     }
 
-    public function save(): static
-    {
-        $this->chapterTeam->save();
-
-        return $this;
-    }
-    public function addMedia(array $images): static
+    public function addMedia(?array $images): static
     {
         if (! empty($images)) {
             $this->chapterTeam->clearMediaCollection();
+            $this->chapterTeam->addMultipleMediaFromRequest(['images'])
+                ->each(function ($fileAdder) {
+                    $fileAdder->toMediaCollection();
+                });
         }
-
-        $this->chapterTeam->addMultipleMediaFromRequest(['images'])
-            ->each(function ($fileAdder) {
-                $fileAdder->toMediaCollection();
-            });
-
-        return $this;
-    }
-
-    public function associateChapter(Chapter $chapter): static
-    {
-        $this->chapterTeam->chapter()->associate($chapter);
-
-        return $this;
-    }
-
-    public function associateTeam(Team $team): static
-    {
-        $this->chapterTeam->team()->associate($team);
 
         return $this;
     }

@@ -38,14 +38,16 @@ class RouteServiceProvider extends ServiceProvider
                 ->firstOrFail();
         });
 
-        Route::bind('identifyModel', function (string $identifyModel) {
-            [$type, $id] = explode(':', $identifyModel);
+        Route::pattern('id', '[0-9]+');
 
-            $model = Relation::getMorphedModel($type);
-
-            /* @var Model $model*/
-            return $model::findOrFail($id);
-        });
+//        Route::bind('identifyModel', function (string $identifyModel) {
+//            [$type, $id] = explode(':', $identifyModel);
+//
+//            $model = Relation::getMorphedModel($type);
+//
+//            /* @var Model $model*/
+//            return $model::findOrFail($id);
+//        });
 
         $this->configureRateLimiting();
 

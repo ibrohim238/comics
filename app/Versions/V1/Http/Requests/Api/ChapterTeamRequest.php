@@ -8,14 +8,16 @@ use Illuminate\Foundation\Http\FormRequest;
 /**
  * @property-read Carbon $free_at
  * @property-read array $images
-*/
+ * @property-read int $teamId
+ */
 class ChapterTeamRequest extends FormRequest
 {
-    public function rules()
+    public function rules(): array
     {
         return [
-            'free_at' => ['required', 'date'],
-            'images' => ['required', 'array', 'image'],
+            'teamId' => ['required', 'int', 'exists:teams,id'],
+            'image.*' => ['nullable', 'image'],
+            'free_at' => ['nullable', 'date'],
         ];
     }
 }

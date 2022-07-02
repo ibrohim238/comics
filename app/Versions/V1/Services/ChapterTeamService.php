@@ -4,7 +4,6 @@ namespace App\Versions\V1\Services;
 
 use App\Models\Chapter;
 use App\Models\ChapterTeam;
-use App\Models\Team;
 use App\Versions\V1\Dto\ChapterTeamDto;
 use App\Versions\V1\Repository\ChapterTeamRepository;
 
@@ -14,32 +13,20 @@ class ChapterTeamService
 
     public function __construct(
         private ChapterTeam $chapterTeam
-    ) {
+    )
+    {
         $this->repository = app(ChapterTeamRepository::class, [
-           'chapterTeam' => $this->chapterTeam
+            'chapterTeam' => $this->chapterTeam
         ]);
     }
 
-    public function create(Chapter $chapter, Team $team, ChapterTeamDto $dto): ChapterTeam
+    public function updateOrCreate(Chapter $chapter, ChapterTeamDto $dto): ChapterTeam
     {
-        $this->repository
-            ->fill($dto)
-            ->associateTeam($team)
-            ->associateChapter($chapter)
-            ->save()
-            ->addMedia($dto->images);
-
-        return $this->chapterTeam;
-    }
-
-    public function update(ChapterTeamDto $dto): ChapterTeam
-    {
-        $this->repository
-            ->fill($dto)
-            ->save()
-            ->addMedia($dto->images);
-
-        return $this->chapterTeam;
+        return $this->repository
+            ->updateOrCreate(
+                $this->prepareData($dto, $chapter)
+            )->addMedia($dto->images)
+            ->getChapter();
     }
 
     public function delete(): void
@@ -47,5 +34,19 @@ class ChapterTeamService
         $this->repository
             ->deleteMedia()
             ->delete();
+    }
+
+    private function prepareData(
+        ChapterTeamDto $dto,
+        Chapter        $chapter,
+    ): array
+    {
+        return [
+            'attributes' => [
+                'chapter_id' => $chapter->id,
+                'team_id' => $dto->teamId,
+            ],
+            'values' => $dto->except('teamId', 'images')->toArray()
+        ];
     }
 }

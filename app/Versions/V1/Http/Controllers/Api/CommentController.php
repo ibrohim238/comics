@@ -2,6 +2,7 @@
 
 namespace App\Versions\V1\Http\Controllers\Api;
 
+use App\Enums\CommentableTypeEnum;
 use App\Models\Chapter;
 use App\Models\Comment;
 use App\Models\Manga;
@@ -29,9 +30,9 @@ class CommentController extends Controller
     /**
      * @throws Exception
      */
-    public function index(string $model, int $id, Request $request)
+    public function index(CommentableTypeEnum $model, int $id, Request $request)
     {
-        $model = $this->identifyModel($model, $id);
+        $model = $model->identify($id);
 
         /* @var Manga|Chapter $model*/
         $comments = $model->comments()->with('user')
@@ -45,12 +46,12 @@ class CommentController extends Controller
      * @throws Exception
      */
     public function store(
-        string $model,
+        CommentableTypeEnum $model,
         int $id,
         CommentRequest $request,
         CommentService $service
     ): CommentResource {
-        $model = $this->identifyModel($model, $id);
+        $model = $model->identify($id);
 
         /* @var Manga|Chapter $model*/
         $comment = $service->create($model, CommentDto::fromRequest($request));

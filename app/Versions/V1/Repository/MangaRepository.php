@@ -15,14 +15,13 @@ use Spatie\QueryBuilder\QueryBuilder;
 class MangaRepository
 {
     public function __construct(
-        private MorphToMany|Manga $manga
+        private Manga $manga
     ) {
     }
 
     public function paginate(?int $perPage): LengthAwarePaginator
     {
         return QueryBuilder::for($this->manga)
-            ->with('chapterVotes')
             ->allowedFilters(
                 AllowedFilter::exact('teams', 'teams.id'),
                 AllowedFilter::exact('genres', 'genres.name'),
