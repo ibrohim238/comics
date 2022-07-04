@@ -44,7 +44,6 @@ class MangaController extends Controller
         );
     }
 
-
     /**
      * @throws UnknownProperties
      */
