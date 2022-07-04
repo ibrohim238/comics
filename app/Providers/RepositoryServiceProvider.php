@@ -24,12 +24,12 @@ class RepositoryServiceProvider extends ServiceProvider
 
     public function boot()
     {
-        $this->app->when(MangaRepository::class)
-            ->needs('$manga')
-            ->give((new Manga()));
-
-        $this->app->when(ChapterResource::class)
-            ->needs('$chapterTeam')
-            ->give((new ChapterTeam()));
+    //        $this->app->when(MangaRepository::class)
+    //            ->needs('$manga')
+    //            ->give((new Manga()));
+    //
+    //        $this->app->when(ChapterResource::class)
+    //            ->needs('$chapterTeam')
+    //            ->give((new ChapterTeam()));
     }
 }

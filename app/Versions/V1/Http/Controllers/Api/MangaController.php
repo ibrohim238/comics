@@ -12,8 +12,6 @@ use App\Versions\V1\Repository\MangaRepository;
 use App\Versions\V1\Services\MangaService;
 use Illuminate\Http\Request;
 use Spatie\DataTransferObject\Exceptions\UnknownProperties;
-use Spatie\MediaLibrary\MediaCollections\Exceptions\FileDoesNotExist;
-use Spatie\MediaLibrary\MediaCollections\Exceptions\FileIsTooBig;
 
 class MangaController extends Controller
 {

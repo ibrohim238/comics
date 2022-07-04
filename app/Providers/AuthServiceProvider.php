@@ -44,7 +44,6 @@ class AuthServiceProvider extends ServiceProvider
         User::class => UserPolicy::class,
         Coupon::class => CouponPolicy::class,
         ChapterTeam::class => ChapterTeamPolicy::class,
-        TeamUser::class => TeamUserPolicy::class,
     ];
 
     /**

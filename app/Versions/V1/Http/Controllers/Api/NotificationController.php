@@ -20,14 +20,10 @@ class NotificationController extends Controller
         $notifications = Auth::user()->notifications()
             ->whereNull('read_at', 'and', $request->get('viewed', false))
             ->lastPerGroup('data->group_id', 'baseId')
-            ->paginate($request->get('count'));
+            ->toSql();
 
-        /* @var LengthAwarePaginator $notifications*/
-        $notifications
-            ->transform(
-                fn(DatabaseNotification $notification): NotificationDto => app(NotificationTransformer::class)
-                    ->transform($notification)
-            );
+
+        dd($notifications);
 
         return new NotificationCollection($notifications);
     }
