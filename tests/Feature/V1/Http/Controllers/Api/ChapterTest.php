@@ -26,7 +26,9 @@ class ChapterTest extends TestCase
         $this->manga = Manga::factory()->create();
         $this->chapter = Chapter::factory()->for($this->manga)->create();
         $this->user = User::factory()->create();
-        $this->team->users()->attach($this->user->id, ['role' => 'owner']);
+
+        $this->user->addToTeam($this->team,'owner');
+
         $this->team->mangas()->attach($this->manga->id);
     }
 

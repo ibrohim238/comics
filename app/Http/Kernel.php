@@ -66,5 +66,8 @@ class Kernel extends HttpKernel
         'role' => \Spatie\Permission\Middlewares\RoleMiddleware::class,
         'permission' => \Spatie\Permission\Middlewares\PermissionMiddleware::class,
         'role_or_permission' => \Spatie\Permission\Middlewares\RoleOrPermissionMiddleware::class,
+        'team_role' => \IAleroy\Teams\Middleware\TeamRoleMiddleware::class,
+        'team_permission' => \IAleroy\Teams\Middleware\TeamPermissionMiddleware::class,
+        'team_role_or_team_permission' => \IAleroy\Teams\Middleware\TeamRoleOrTeamPermissionMiddleware::class
     ];
 }

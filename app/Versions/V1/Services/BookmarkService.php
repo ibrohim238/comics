@@ -15,7 +15,7 @@ class BookmarkService
     ) {
     }
 
-    public function add(): void
+    public function attach(): void
     {
         if($this->exists()) {
             throw BookmarksException::exists();
@@ -24,7 +24,7 @@ class BookmarkService
         $this->bookmarkable->bookmarkUsers()->attach($this->user->id);
     }
 
-    public function delete(): void
+    public function detach(): void
     {
         if(! $this->exists()) {
             throw BookmarksException::notFound();

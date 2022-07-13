@@ -2,10 +2,10 @@
 
 namespace App\Versions\V1\Services;
 
+use App\Dto\ChapterDto;
 use App\Models\Chapter;
 use App\Models\Manga;
-use App\Versions\V1\Dto\ChapterDto;
-use App\Versions\V1\Repository\ChapterRepository;
+use App\Versions\V1\Repositories\ChapterRepository;
 
 class ChapterService
 {

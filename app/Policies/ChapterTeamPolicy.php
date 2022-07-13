@@ -28,17 +28,17 @@ class ChapterTeamPolicy
 
     public function create(User $user, int $teamId): bool
     {
-        return $user->hasTeamPermission(Team::find($teamId), TeamPermissionEnum::MANAGE_MANGA);
+        return $user->hasTeamPermission($teamId, TeamPermissionEnum::MANAGE_MANGA->value);
     }
 
     public function update(User $user, ChapterTeam $chapterTeam): bool
     {
-        return $user->hasTeamPermission($chapterTeam->team, TeamPermissionEnum::MANAGE_MANGA);
+        return $user->hasTeamPermission($chapterTeam->team, TeamPermissionEnum::MANAGE_MANGA->value);
     }
 
     public function delete(User $user, ChapterTeam $chapterTeam): bool
     {
-        return $user->hasTeamPermission($chapterTeam->team, TeamPermissionEnum::MANAGE_MANGA);
+        return $user->hasTeamPermission($chapterTeam->team, TeamPermissionEnum::MANAGE_MANGA->value);
     }
 
     public function restore(User $user, ChapterTeam $chapterTeam): bool

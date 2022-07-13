@@ -6,9 +6,10 @@ use App\Models\Invitation;
 use App\Models\User;
 use App\Versions\V1\Http\Controllers\Controller;
 use App\Versions\V1\Http\Resources\InvitationCollection;
-use App\Versions\V1\Repository\UserRepository;
+use App\Versions\V1\Repositories\UserRepository;
 use App\Versions\V1\Services\UserInviteService;
 use Illuminate\Auth\Access\AuthorizationException;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
 class InvitationController extends Controller
@@ -21,7 +22,7 @@ class InvitationController extends Controller
     /**
      * @throws AuthorizationException
      */
-    public function index(User $user, Request $request)
+    public function index(User $user, Request $request): InvitationCollection
     {
         $this->authorize('viewAny', [Invitation::class, $user]);
 
@@ -35,7 +36,7 @@ class InvitationController extends Controller
     /**
      * @throws AuthorizationException
      */
-    public function accept(User $user, Invitation $invitation)
+    public function accept(User $user, Invitation $invitation): JsonResponse
     {
         $this->authorize('accept', $invitation);
 
@@ -50,7 +51,7 @@ class InvitationController extends Controller
     /**
      * @throws AuthorizationException
      */
-    public function reject(User $user, Invitation $invitation)
+    public function reject(User $user, Invitation $invitation): JsonResponse
     {
         $this->authorize('accept', $invitation);
 

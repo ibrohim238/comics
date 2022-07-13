@@ -8,6 +8,7 @@ use App\Models\Manga;
 use App\Models\User;
 use App\Versions\V1\Http\Resources\MangaCollection;
 use App\Versions\V1\Http\Resources\MangaResource;
+use IAleroy\Tags\Tag;
 use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 use function route;
@@ -22,7 +23,7 @@ class MangaTest extends TestCase
 
         $this->seed();
         $this->user = User::factory()->create();
-        $this->filters = Filter::factory()->count(10)->create()->pluck('id');
+        $this->filters = Tag::factory()->count(10)->create()->pluck('id');
 
         $this->user->assignRole('owner');
     }

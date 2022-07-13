@@ -2,9 +2,9 @@
 
 namespace App\Versions\V1\Services;
 
+use App\Dto\MangaDto;
 use App\Models\Manga;
-use App\Versions\V1\Dto\MangaDto;
-use App\Versions\V1\Repository\MangaRepository;
+use App\Versions\V1\Repositories\MangaRepository;
 
 class MangaService
 {

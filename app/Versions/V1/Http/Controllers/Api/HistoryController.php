@@ -10,7 +10,7 @@ use Illuminate\Http\Request;
 
 class HistoryController
 {
-    public function __invoke(Request $request)
+    public function __invoke(Request $request): EventCollection
     {
         $events = Event::query()
             ->with('eventable.manga.media')

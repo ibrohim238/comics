@@ -4,17 +4,13 @@ namespace Tests\Feature\V1\Http\Controllers\Api;
 
 use App\Enums\TeamRoleEnum;
 use App\Models\Chapter;
-use App\Models\Manga;
-use App\Models\Team;
 use App\Models\ChapterTeam;
+use App\Models\Manga;
+use App\Models\Role;
+use App\Models\Team;
 use App\Models\User;
-use App\Versions\V1\Http\Requests\Api\ChapterTeamRequest;
-use App\Versions\V1\Http\Resources\ChapterCollection;
-use App\Versions\V1\Http\Resources\ChapterResource;
 use App\Versions\V1\Http\Resources\ChapterTeamCollection;
 use App\Versions\V1\Http\Resources\ChapterTeamResource;
-use App\Versions\V1\Services\ChapterTeamService;
-use Carbon\Carbon;
 use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 use function route;
@@ -27,15 +23,15 @@ class ChapterTeamTest extends TestCase
     {
         parent::setUp();
 
+        $this->seed();
         $this->user = User::factory()->create();
         $this->team = Team::factory()->create();
         $this->manga = Manga::factory()->create();
         $this->chapter = Chapter::factory()->create();
 
-        $this->forbidden = User::factory()->create();
-
-        $this->user->teams()->attach($this->team->id, ['role' => TeamRoleEnum::owner->value]);
+        $this->user->addToTeam($this->team, TeamRoleEnum::owner->value);
         $this->manga->teams()->attach($this->team->id);
+        $this->forbidden = User::factory()->create();
     }
 
     public function testIndexOk()
@@ -47,7 +43,7 @@ class ChapterTeamTest extends TestCase
 
         $response->assertOk()
             ->assertJsonFragment(
-                (new ChapterTeamCollection($chapterTeams))->response()->getData(true),
+                (new ChapterTeamCollection($chapterTeams->load('team')))->response()->getData(true),
             );
     }
 

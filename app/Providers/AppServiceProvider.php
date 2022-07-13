@@ -10,6 +10,7 @@ use App\Models\Manga;
 use App\Models\Team;
 use App\Models\ChapterTeam;
 use App\Models\User;
+use IAleroy\Tags\Tag;
 use Illuminate\Auth\Notifications\ResetPassword;
 use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Support\ServiceProvider;
@@ -41,7 +42,7 @@ class AppServiceProvider extends ServiceProvider
             'manga' => Manga::class,
             'chapter' => Chapter::class,
             'team' => Team::class,
-            'filter' => Filter::class,
+            'tag' => Tag::class,
             'coupon' => Coupon::class,
             'comment' => Comment::class,
             'chapterTeam' => ChapterTeam::class,

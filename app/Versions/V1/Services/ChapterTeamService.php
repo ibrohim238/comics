@@ -2,10 +2,10 @@
 
 namespace App\Versions\V1\Services;
 
+use App\Dto\ChapterTeamDto;
 use App\Models\Chapter;
 use App\Models\ChapterTeam;
-use App\Versions\V1\Dto\ChapterTeamDto;
-use App\Versions\V1\Repository\ChapterTeamRepository;
+use App\Versions\V1\Repositories\ChapterTeamRepository;
 
 class ChapterTeamService
 {
@@ -26,7 +26,7 @@ class ChapterTeamService
             ->updateOrCreate(
                 $this->prepareData($dto, $chapter)
             )->addMedia($dto->images)
-            ->getChapter();
+            ->getChapterTeam();
     }
 
     public function delete(): void

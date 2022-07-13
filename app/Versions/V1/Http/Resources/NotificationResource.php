@@ -2,7 +2,7 @@
 
 namespace App\Versions\V1\Http\Resources;
 
-use App\Versions\V1\Dto\NotificationDto;
+use App\Dto\NotificationDto;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 /**

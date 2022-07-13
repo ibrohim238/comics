@@ -17,10 +17,12 @@ use App\Policies\ChapterTeamPolicy;
 use App\Policies\CouponPolicy;
 use App\Policies\FilterPolicy;
 use App\Policies\MangaPolicy;
+use App\Policies\TagPolicy;
 use App\Policies\TeamPolicy;
 use App\Policies\TeamUserPolicy;
 use App\Policies\UserPolicy;
 use Carbon\Carbon;
+use IAleroy\Tags\Tag;
 use Illuminate\Auth\Notifications\VerifyEmail;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
 use Illuminate\Support\Facades\Config;
@@ -40,7 +42,7 @@ class AuthServiceProvider extends ServiceProvider
         Manga::class => MangaPolicy::class,
         Chapter::class => ChapterPolicy::class,
         Team::class => TeamPolicy::class,
-        Filter::class => FilterPolicy::class,
+        Tag::class => TagPolicy::class,
         User::class => UserPolicy::class,
         Coupon::class => CouponPolicy::class,
         ChapterTeam::class => ChapterTeamPolicy::class,
@@ -60,13 +62,13 @@ class AuthServiceProvider extends ServiceProvider
            return $user->hasPermissionTo(PermissionEnum::MANAGE_TEAMABLE->value);
         });
         Gate::define('updateTeamMember', function (User $user, Team $team) {
-            return $user->hasTeamPermission($team, TeamPermissionEnum::MANAGE_USER);
+            return $user->hasTeamPermission($team, TeamPermissionEnum::MANAGE_MANGA->value);
         });
         Gate::define('removeTeamMember', function (User $user, Team $team) {
-            return $user->hasTeamPermission($team, TeamPermissionEnum::MANAGE_USER);
+            return $user->hasTeamPermission($team, TeamPermissionEnum::MANAGE_USER->value);
         });
         Gate::define('teamInvitation', function (User $user, Team $team) {
-            return $user->hasTeamPermission($team, TeamPermissionEnum::MANAGE_INVITATION);
+            return $user->hasTeamPermission($team, TeamPermissionEnum::MANAGE_INVITATION->value);
         });
 
         $this->registerPolicies();

@@ -2,13 +2,14 @@
 
 namespace App\Versions\V1\Http\Controllers\Api\Admin;
 
+use App\Dto\Admin\UserDto;
 use App\Models\User;
-use App\Versions\V1\Dto\AdminUserDto;
 use App\Versions\V1\Http\Controllers\Controller;
-use App\Versions\V1\Http\Requests\Api\Admin\UserRequest;
+use App\Versions\V1\Http\Requests\Admin\UserRequest;
 use App\Versions\V1\Http\Resources\UserCollection;
 use App\Versions\V1\Http\Resources\UserResource;
-use App\Versions\V1\Services\Admin\UserService;
+use App\Versions\V1\Repositories\UserRepository;
+use App\Versions\V1\Services\UserService;
 use Illuminate\Http\Request;
 
 class UserController extends Controller
@@ -18,23 +19,28 @@ class UserController extends Controller
         $this->authorizeResource(User::class);
     }
 
-    public function index(Request $request)
+    public function index(Request $request): UserCollection
     {
-        $users = User::query()->paginate($request->get('count'));
+        $users = app(UserRepository::class)
+            ->paginate($request->get('count'));
 
         return new UserCollection($users);
     }
 
-    public function show(User $user)
+    public function show(User $user): UserResource
     {
-        return new UserResource($user);
+        return new UserResource(
+            app(UserRepository::class, [
+                'user' => $user
+            ])->getUser()
+        );
     }
 
     public function update(User $user, UserRequest $request)
     {
         app(UserService::class, [
             'user' => $user
-        ])->update(AdminUserDto::fromRequest($request));
+        ])->update(UserDto::fromRequest($request));
 
         return new UserResource($user);
     }

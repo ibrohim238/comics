@@ -2,13 +2,12 @@
 
 namespace App\Versions\V1\Http\Controllers\Api\Auth;
 
-use App\Versions\V1\Dto\UserDto;
-use App\Versions\V1\Http\Controllers\Controller;
+use App\Dto\UserDto;
 use App\Models\User;
 use App\Providers\RouteServiceProvider;
+use App\Versions\V1\Http\Controllers\Controller;
 use App\Versions\V1\Services\UserService;
 use Illuminate\Foundation\Auth\RegistersUsers;
-use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Spatie\DataTransferObject\Exceptions\UnknownProperties;
 
@@ -68,6 +67,7 @@ class RegisterController extends Controller
      */
     protected function create(array $data)
     {
-        return app(UserService::class)->store(UserDto::fromArray($data));
+        return app(UserService::class)
+            ->store(UserDto::fromArray($data));
     }
 }

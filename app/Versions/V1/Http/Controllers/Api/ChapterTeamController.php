@@ -2,18 +2,20 @@
 
 namespace App\Versions\V1\Http\Controllers\Api;
 
+use App\Dto\ChapterTeamDto;
 use App\Models\Chapter;
 use App\Models\ChapterTeam;
 use App\Models\Manga;
-use App\Versions\V1\Dto\ChapterTeamDto;
 use App\Versions\V1\Http\Controllers\Controller;
-use App\Versions\V1\Http\Requests\Api\ChapterTeamRequest;
+use App\Versions\V1\Http\Requests\ChapterTeamRequest;
 use App\Versions\V1\Http\Resources\ChapterTeamCollection;
 use App\Versions\V1\Http\Resources\ChapterTeamResource;
-use App\Versions\V1\Repository\ChapterTeamRepository;
+use App\Versions\V1\Repositories\ChapterRepository;
+use App\Versions\V1\Repositories\ChapterTeamRepository;
 use App\Versions\V1\Services\ChapterTeamService;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 
 class ChapterTeamController extends Controller
 {
@@ -29,13 +31,13 @@ class ChapterTeamController extends Controller
         Manga   $manga,
         Chapter $chapter,
         Request $request
-    )
+    ): ChapterTeamCollection
     {
         $this->authorize('viewAny', ChapterTeam::class);
 
-        $chapterTeams = app(Срф::class, [
-            'chapterTeam' => $chapter->chapterTeams()
-        ])->paginate($request->get('count'));
+        $chapterTeams = app(ChapterRepository::class, [
+            'chapter' => $chapter
+        ])->paginateChapterTeam($request->get('count'));
 
         return new ChapterTeamCollection($chapterTeams);
     }
@@ -47,14 +49,14 @@ class ChapterTeamController extends Controller
         Manga       $manga,
         Chapter     $chapter,
         ChapterTeam $chapterTeam
-    )
+    ): ChapterTeamResource
     {
         $this->authorize('view', $chapterTeam);
 
         return new ChapterTeamResource(
             app(ChapterTeamRepository::class, [
                 'chapterTeam' => $chapterTeam
-            ])->load()->getChapter()
+            ])->load()->getChapterTeam()
         );
     }
 
@@ -65,7 +67,7 @@ class ChapterTeamController extends Controller
         Manga              $manga,
         Chapter            $chapter,
         ChapterTeamRequest $request
-    )
+    ): ChapterTeamResource
     {
         $this->authorize('create', [ChapterTeam::class, $request->teamId]);
 
@@ -78,7 +80,11 @@ class ChapterTeamController extends Controller
     /**
      * @throws AuthorizationException
      */
-    public function destroy(Manga $manga, Chapter $chapter, ChapterTeam $chapterTeam)
+    public function destroy(
+        Manga $manga,
+        Chapter $chapter,
+        ChapterTeam $chapterTeam
+    ): Response
     {
         $this->authorize('delete', $chapterTeam);
 

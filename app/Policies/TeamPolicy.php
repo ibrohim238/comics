@@ -6,9 +6,6 @@ use App\Enums\PermissionEnum;
 use App\Enums\TeamPermissionEnum;
 use App\Models\Team;
 use App\Models\User;
-use App\Policies\Traits\MangaTeamTrait;
-use App\Policies\Traits\TeamableTrait;
-use App\Policies\Traits\TeamMemberTrait;
 use Illuminate\Auth\Access\HandlesAuthorization;
 
 class TeamPolicy
@@ -32,19 +29,19 @@ class TeamPolicy
 
     public function update(User $user, Team $team): bool
     {
-        return $user->hasTeamPermission($team, TeamPermissionEnum::MANAGE_TEAM);
+        return $user->hasTeamPermission($team, TeamPermissionEnum::MANAGE_TEAM->value);
     }
 
     public function delete(User $user, Team $team): bool
     {
         return $user->hasPermissionTo(PermissionEnum::MANAGE_TEAM->value)
-            || $user->hasTeamPermission($team, TeamPermissionEnum::MANAGE_TEAM);
+            || $user->hasTeamPermission($team, TeamPermissionEnum::MANAGE_TEAM->value);
     }
 
     public function restore(User $user, Team $team): bool
     {
         return $user->hasPermissionTo(PermissionEnum::MANAGE_TEAM->value)
-            || $user->hasTeamPermission($team, TeamPermissionEnum::MANAGE_TEAM);
+            || $user->hasTeamPermission($team, TeamPermissionEnum::MANAGE_TEAM->value);
     }
 
 

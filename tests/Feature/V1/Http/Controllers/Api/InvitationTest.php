@@ -12,6 +12,7 @@ class InvitationTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
+        $this->seed();
 
         $this->user = User::factory()->create();
     }

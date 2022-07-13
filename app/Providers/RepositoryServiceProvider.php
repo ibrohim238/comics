@@ -6,7 +6,7 @@ namespace App\Providers;
 use App\Models\ChapterTeam;
 use App\Models\Manga;
 use App\Versions\V1\Http\Resources\ChapterResource;
-use App\Versions\V1\Repository\MangaRepository;
+use App\Versions\V1\Repositories\MangaRepository;
 use Illuminate\Support\ServiceProvider;
 
 class RepositoryServiceProvider extends ServiceProvider

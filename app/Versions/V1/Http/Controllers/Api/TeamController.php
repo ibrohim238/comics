@@ -2,18 +2,17 @@
 
 namespace App\Versions\V1\Http\Controllers\Api;
 
+use App\Dto\TeamDto;
 use App\Models\Team;
-use App\Versions\V1\Dto\TeamDto;
 use App\Versions\V1\Http\Controllers\Controller;
-use App\Versions\V1\Http\Requests\Api\TeamRequest;
+use App\Versions\V1\Http\Requests\TeamRequest;
 use App\Versions\V1\Http\Resources\TeamCollection;
 use App\Versions\V1\Http\Resources\TeamResource;
 use App\Versions\V1\Services\TeamService;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
 use Spatie\DataTransferObject\Exceptions\UnknownProperties;
-use Spatie\MediaLibrary\MediaCollections\Exceptions\FileDoesNotExist;
-use Spatie\MediaLibrary\MediaCollections\Exceptions\FileIsTooBig;
 
 class TeamController extends Controller
 {
@@ -23,14 +22,14 @@ class TeamController extends Controller
         $this->authorizeResource(Team::class);
     }
 
-    public function index(Request $request)
+    public function index(Request $request): TeamCollection
     {
         $teams = Team::query()->paginate($request->get('count'));
 
         return new TeamCollection($teams);
     }
 
-    public function show(Team $team)
+    public function show(Team $team): TeamResource
     {
         return new TeamResource($team);
     }
@@ -38,9 +37,9 @@ class TeamController extends Controller
     /**
      * @throws UnknownProperties
      */
-    public function store(TeamRequest $request)
+    public function store(TeamRequest $request): TeamResource
     {
-        $team = app(TeamService::class)->store(TeamDto::fromRequest($request), Auth::user());
+        $team = app(TeamService::class)->store(TeamDto::fromRequest($request));
 
         return new TeamResource($team);
     }
@@ -48,7 +47,7 @@ class TeamController extends Controller
     /**
      * @throws UnknownProperties
      */
-    public function update(Team $team, TeamRequest $request)
+    public function update(Team $team, TeamRequest $request): TeamResource
     {
         app(TeamService::class, [
             'team' => $team
@@ -57,7 +56,7 @@ class TeamController extends Controller
         return new TeamResource($team);
     }
 
-    public function destroy(Team $team)
+    public function destroy(Team $team): Response
     {
         app(TeamService::class, [
             'team' => $team

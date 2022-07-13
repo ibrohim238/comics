@@ -18,9 +18,10 @@ class TeamInvitationTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
+        $this->seed();
         $this->user = User::factory()->create();
         $this->team = Team::factory()->create();
-        $this->team->users()->attach($this->user->id, ['role' => TeamRoleEnum::owner->value]);
+        $this->user->addToTeam($this->team, TeamRoleEnum::owner->value);
         $this->forbidden = User::factory()->create();
     }
 

@@ -2,47 +2,44 @@
 
 namespace App\Versions\V1\Services\Admin;
 
+use App\Dto\CouponDto;
 use App\Models\Coupon;
-use App\Versions\V1\Dto\CouponDto;
+use App\Versions\V1\Repositories\CouponRepository;
 
 class CouponService
 {
+    private CouponRepository $repository;
+
     public function __construct(
-      public Coupon $coupon
+      private Coupon $coupon
     ) {
+        $this->repository = app(CouponRepository::class, [
+            'coupon'  => $this->coupon
+        ]);
     }
 
     public function create(CouponDto $dto): Coupon
     {
-        $this->fill($dto)->save();
+        $this->repository
+            ->fill($dto)
+            ->save();
 
         return $this->coupon;
     }
 
     public function update(CouponDto $dto): Coupon
     {
-        $this->fill($dto)->save();
+        $this->repository
+            ->fill($dto)
+            ->save();
 
         return $this->coupon;
     }
 
-    public function fill(CouponDto $dto): static
-    {
-        $this->coupon->fill($dto->toArray());
-
-        return $this;
-    }
-
-    public function save(): static
-    {
-        $this->coupon->save();
-
-        return $this;
-    }
-
     public function delete(): static
     {
-        $this->coupon->delete();
+        $this->repository
+            ->delete();
 
         return $this;
     }
