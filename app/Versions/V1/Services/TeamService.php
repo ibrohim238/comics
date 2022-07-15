@@ -2,13 +2,10 @@
 
 namespace App\Versions\V1\Services;
 
-use App\Enums\TeamRoleEnum;
+use App\Dto\TeamDto;
 use App\Models\Team;
 use App\Models\User;
-use App\Versions\V1\Dto\TeamDto;
-use App\Versions\V1\Repository\TeamRepository;
-use Spatie\MediaLibrary\MediaCollections\Exceptions\FileDoesNotExist;
-use Spatie\MediaLibrary\MediaCollections\Exceptions\FileIsTooBig;
+use App\Versions\V1\Repositories\TeamRepository;
 
 class TeamService
 {
@@ -22,12 +19,11 @@ class TeamService
         ]);
     }
 
-    public function store(TeamDto $dto, User $user): Team
+    public function store(TeamDto $dto): Team
     {
         $this->repository
             ->fill($dto)
-            ->save()
-            ->addMemberOwner($user);
+            ->save();
 
         return $this->team;
     }

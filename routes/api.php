@@ -1,11 +1,10 @@
 <?php
 
+
 use App\Enums\RatesTypeEnum;
 use App\Versions\V1\Http\Controllers\Api\BookmarksController;
 use App\Versions\V1\Http\Controllers\Api\ChapterController;
-use App\Versions\V1\Http\Controllers\Api\ChapterTeamController;
 use App\Versions\V1\Http\Controllers\Api\CommentController;
-use App\Versions\V1\Http\Controllers\Api\FilterController;
 use App\Versions\V1\Http\Controllers\Api\HistoryController;
 use App\Versions\V1\Http\Controllers\Api\InvitationController;
 use App\Versions\V1\Http\Controllers\Api\MangaController;
@@ -16,6 +15,7 @@ use App\Versions\V1\Http\Controllers\Api\TeamController;
 use App\Versions\V1\Http\Controllers\Api\TeamInvitationController;
 use App\Versions\V1\Http\Controllers\Api\TeamMemberController;
 use App\Versions\V1\Http\Controllers\Api\UserController;
+use App\Versions\V1\Http\Controllers\Api\TagController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -51,7 +51,7 @@ Route::prefix('v1')->group(function () {
 
 
     /* Teams */
-    Route::apiResource('team', TeamController::class);
+    Route::apiResource('team', TeamController::class)->middleware('role:owner');
     Route::apiResource('team.members', TeamMemberController::class)->parameter('members', 'user');
     Route::apiResource('team.invitation', TeamInvitationController::class);
 
@@ -62,12 +62,11 @@ Route::prefix('v1')->group(function () {
     Route::get('/manga/random', [MangaController::class, 'random'])->name('manga.random');
     Route::apiResource('manga', MangaController::class);
 
-    Route::where(['chapter' => '(\d+)-(\d+)'])->scopeBindings()->group(function () {
-        Route::apiResource('manga.chapter', ChapterController::class);
-        Route::apiResource('manga.chapter.chapter-team', ChapterTeamController::class)->except('update');
+    Route::scopeBindings()->group(function () {
+        Route::apiResource('team.manga.chapter', ChapterController::class);
     });
 
-    Route::apiResource('filter', FilterController::class);
+    Route::apiResource('tags', TagController::class);
 
     Route::group(['middleware' => 'auth'], function () {
         foreach (RatesTypeEnum::values() as $type) {

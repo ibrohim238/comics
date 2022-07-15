@@ -82,7 +82,7 @@ class TeamTest extends TestCase
     {
         $team = Team::factory()->create();
 
-        $this->user->teams()->attach($team, ['role' => 'owner']);
+        $this->user->addToTeam($team,'owner');
         $response = $this->actingAs($this->user)
             ->patchJson(route('team.update', $team), [
                 'name' => $this->faker->name

@@ -16,6 +16,10 @@ class ChapterTest extends TestCase
 {
     use WithFaker;
 
+    private Team $team;
+    private Manga $manga;
+    private User $user;
+    
     protected function setUp(): void
     {
         parent::setUp();
@@ -24,39 +28,45 @@ class ChapterTest extends TestCase
 
         $this->team = Team::factory()->create();
         $this->manga = Manga::factory()->create();
-        $this->chapter = Chapter::factory()->for($this->manga)->create();
         $this->user = User::factory()->create();
-        $this->team->users()->attach($this->user->id, ['role' => 'owner']);
+
+        $this->user->addToTeam($this->team,'owner');
+
         $this->team->mangas()->attach($this->manga->id);
     }
 
     public function testIndexOk()
     {
-        $manga = Manga::factory()->create();
-        $chapters = Chapter::factory()->for($manga)->count(3)->create();
+        $chapters = Chapter::factory()
+            ->for($this->manga)
+            ->for($this->team)
+            ->count(3)
+            ->create();
 
-        $response = $this->getJson(route('manga.chapter.index', $manga));
+        $response = $this->getJson(route('team.manga.chapter.index', [$this->team, $this->manga]));
 
         $response
             ->assertOk()
             ->assertJsonFragment(
-                (new ChapterCollection($chapters))->response()->getData(true)
+                (new ChapterCollection($chapters->load('team')))->response()->getData(true)
             );
     }
 
     public function testShowOk()
     {
-        $response = $this->getJson(route('manga.chapter.show', [$this->manga, $this->chapter]));
+        $chapter = Chapter::factory()->for($this->manga)->create();
+        
+        $response = $this->getJson(route('team.manga.chapter.show', [$this->team, $this->manga, $chapter]));
 
         $response->assertOk()
             ->assertJsonFragment(
-                (new ChapterResource($this->chapter->load('manga.media')))->response()->getData(true)
+                (new ChapterResource($chapter->load('manga.media')))->response()->getData(true)
             );
     }
 
     public function testShowNotFound()
     {
-        $response = $this->getJson(route('manga.chapter.show', [$this->manga, 'n']));
+        $response = $this->getJson(route('team.manga.chapter.show', [$this->team, $this->manga, 'n']));
 
         $response->assertNotFound();
     }
@@ -64,7 +74,7 @@ class ChapterTest extends TestCase
     public function testStoreOk()
     {
         $response = $this->actingAs($this->user)
-            ->postJson(route('manga.chapter.store', [$this->manga]), [
+            ->postJson(route('team.manga.chapter.store', [$this->team, $this->manga]), [
             'volume' => $this->faker->numberBetween(1, 5),
             'number' => $this->faker->numberBetween(0, 1000),
             'name' => $this->faker->name
@@ -75,8 +85,13 @@ class ChapterTest extends TestCase
 
     public function testUpdateOk()
     {
+        $chapter = Chapter::factory()
+            ->for($this->manga)
+            ->for($this->team)
+            ->create();
+        
         $response = $this->actingAs($this->user)
-            ->patchJson(route('manga.chapter.update', [$this->manga, $this->chapter]), [
+            ->patchJson(route('team.manga.chapter.update', [$this->team, $this->manga, $chapter]), [
             'volume' => $this->faker->numberBetween(1, 5),
             'number' => $this->faker->numberBetween(0, 1000),
             'name' => $this->faker->name
@@ -85,10 +100,12 @@ class ChapterTest extends TestCase
         $response->assertOk();
     }
 
-    public function testDestroy()
+    public function testDestroyOk()
     {
+        $chapter = Chapter::factory()->for($this->manga)->create();
+        
         $response = $this->actingAs($this->user)
-            ->deleteJson(route('manga.chapter.destroy', [$this->manga, $this->chapter]));
+            ->deleteJson(route('team.manga.chapter.destroy', [$this->team, $this->manga, $chapter]));
 
         $response->assertNoContent();
     }

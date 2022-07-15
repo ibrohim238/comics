@@ -2,8 +2,8 @@
 
 namespace App\Versions\V1\Transformers;
 
+use App\Dto\NotificationDto;
 use App\Notifications\ChapterCreated;
-use App\Versions\V1\Dto\NotificationDto;
 use Illuminate\Notifications\DatabaseNotification;
 
 class NotificationTransformer

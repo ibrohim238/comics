@@ -4,6 +4,7 @@ namespace App\Providers;
 
 use App\Models\Chapter;
 use Illuminate\Cache\RateLimiting\Limit;
+use Illuminate\Contracts\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Foundation\Support\Providers\RouteServiceProvider as ServiceProvider;
@@ -30,13 +31,18 @@ class RouteServiceProvider extends ServiceProvider
     public function boot()
     {
 
-        Route::bind('chapter', function (string $chapter) {
-            [$volume, $number] = explode('-', $chapter);
-            return Chapter::query()
-                ->where('number', $number)
-                ->where('volume', $volume)
-                ->firstOrFail();
-        });
+//        Route::bind('chapter', function (string $chapter) {
+//            $teamId = request()->route('team');
+//            $mangaSlug = request()->route('manga');
+//
+//            [$volume, $number] = explode('-', $chapter);
+//            return Chapter::query()
+//                ->whereHas('manga', fn (Builder $builder) => $builder->where('slug', $mangaSlug))
+//                ->where('team_id', $teamId)
+//                ->where('number', $number)
+//                ->where('volume', $volume)
+//                ->firstOrFail();
+//        });
 
         Route::pattern('id', '[0-9]+');
 

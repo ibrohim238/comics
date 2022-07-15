@@ -18,6 +18,8 @@ class ChapterFactory extends Factory
             'number' => $this->faker->numberBetween(0, 100),
             'name' => $this->faker->title,
             'manga_id' => Manga::factory(),
+            'team_id' => Team::factory(),
+            'free_at' => $this->faker->dateTimeBetween('-30 days', '+30 days')
         ];
     }
 }

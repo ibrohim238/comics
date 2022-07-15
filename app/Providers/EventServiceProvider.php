@@ -3,10 +3,8 @@
 namespace App\Providers;
 
 use App\Models\Chapter;
-use App\Models\ChapterTeam;
 use App\Models\Manga;
 use App\Versions\V1\Observers\ChapterObserver;
-use App\Versions\V1\Observers\ChapterTeamObserver;
 use App\Versions\V1\Observers\MangaObserver;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
@@ -34,7 +32,6 @@ class EventServiceProvider extends ServiceProvider
     {
         Manga::observe(MangaObserver::class);
         Chapter::observe(ChapterObserver::class);
-        ChapterTeam::observe(ChapterTeamObserver::class);
     }
 
     /**

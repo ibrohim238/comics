@@ -6,9 +6,11 @@ use App\Versions\V1\Http\Controllers\Api\Auth\RegisterController;
 use App\Versions\V1\Http\Controllers\Api\Auth\ResetPasswordController;
 use App\Versions\V1\Http\Controllers\Api\Auth\VerificationController;
 
-Route::post('logout', [LogoutController::class, 'logout']);
+Route::post('logout', [LogoutController::class, 'logout'])
+    ->name('logout');
 
-Route::post('register', [RegisterController::class, 'register']);
+Route::post('register', [RegisterController::class, 'register'])
+    ->name('register');
 
 Route::get('verify-email/{id}/{hash}', [VerificationController::class, 'verify'])
     ->name('verification.verify');

@@ -8,6 +8,7 @@ use App\Versions\V1\Http\Controllers\Controller;
 use App\Versions\V1\Services\TeamableService;
 use App\Versions\V1\Traits\IdentifiesModels;
 use Illuminate\Auth\Access\AuthorizationException;
+use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Lang;
 
 class TeamableController extends Controller
@@ -22,7 +23,7 @@ class TeamableController extends Controller
     /**
      * @throws AuthorizationException
      */
-    public function attach(Team $team, TeamableTypeEnum $model, int $id)
+    public function attach(Team $team, TeamableTypeEnum $model, int $id): Response
     {
         $this->authorize('attach_teamable');
 
@@ -33,13 +34,13 @@ class TeamableController extends Controller
             'teamable' => $model,
         ])->attach();
 
-        return response(['message' => Lang::get('teamable.attach')]);
+        return response((['message' => Lang::get('teamable.attach')]));
     }
 
     /**
      * @throws AuthorizationException
      */
-    public function detach(Team $team, TeamableTypeEnum $model, int $id)
+    public function detach(Team $team, TeamableTypeEnum $model, int $id): Response
     {
         $this->authorize('detach_teamable');
 

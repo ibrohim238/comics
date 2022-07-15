@@ -6,17 +6,16 @@ use App\Enums\RatesTypeEnum;
 use App\Interfaces\Bookmarkable;
 use App\Interfaces\Commentable;
 use App\Interfaces\Eventable;
-use App\Interfaces\Filterable;
 use App\Interfaces\Rateable;
 use App\Interfaces\Ratingable;
 use App\Interfaces\Teamable;
 use App\Traits\HasBookmarks;
 use App\Traits\HasComments;
 use App\Traits\HasEvents;
-use App\Traits\HasFilters;
 use App\Traits\HasRates;
 use App\Traits\HasRatings;
 use App\Traits\HasTeams;
+use IAleroy\Tags\Taggable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -25,6 +24,7 @@ use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
 use Spatie\Sluggable\HasSlug;
 use Spatie\Sluggable\SlugOptions;
+use IAleroy\Tags\HasTags;
 
 class Manga extends Model
     implements
@@ -32,7 +32,7 @@ class Manga extends Model
     Eventable,
     Commentable,
     Teamable,
-    Filterable,
+    Taggable,
     Rateable,
     Ratingable,
     Bookmarkable
@@ -43,7 +43,7 @@ class Manga extends Model
     use HasComments;
     use InteractsWithMedia;
     use HasTeams;
-    use HasFilters;
+    use HasTags;
     use HasRates;
     use HasRatings;
     use HasBookmarks;

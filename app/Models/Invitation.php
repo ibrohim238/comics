@@ -44,7 +44,7 @@ class Invitation extends Model
     public function accept()
     {
         if ($this->checked()) {
-            $this->team->teams()->attach($this->user->id, ['role' => $this->data->role]);
+            $this->user->addToTeam($this->team, $this->data->role);
 
             $this->update(['status' => InvitationStatusEnum::ACCEPTED_STATUS]);
         }

@@ -2,11 +2,11 @@
 
 namespace App\Models;
 
+use App\Dto\FallbackMedia;
 use App\Traits\CanBookmarks;
 use App\Traits\CanInvitation;
 use App\Traits\CanRates;
-use App\Traits\CanTeams;
-use App\Versions\V1\Dto\FallbackMedia;
+use IAleroy\Teams\Traits\CanTeams;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
