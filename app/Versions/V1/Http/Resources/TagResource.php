@@ -16,6 +16,7 @@ class TagResource extends JsonResource
             'id' => $this->id,
             'name' => $this->name,
             'description' => $this->description,
+            'type' => $this->type
         ];
     }
 }

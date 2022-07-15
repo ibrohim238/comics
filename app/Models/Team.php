@@ -5,7 +5,7 @@ namespace App\Models;
 use App\Interfaces\Invited;
 use App\Traits\HasInvitations;
 use IAleroy\Teams\Models\Team as BaseTeam;
-use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\MorphToMany;
 
 class Team extends BaseTeam implements Invited
@@ -17,9 +17,8 @@ class Team extends BaseTeam implements Invited
         return $this->morphedByMany(Manga::class, 'teamable');
     }
 
-    public function chapters(): BelongsToMany
+    public function chapters(): HasMany
     {
-        return $this->belongsToMany(Chapter::class, ChapterTeam::class)
-            ->withPivot('free_at');
+        return $this->hasMany(Chapter::class);
     }
 }

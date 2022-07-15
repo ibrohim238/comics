@@ -18,6 +18,9 @@ class ChapterResource extends JsonResource
             'number' => $this->number,
             'name' => $this->name,
             'manga' => new MangaResource($this->whenLoaded('manga')),
+            'team' => new TeamResource($this->whenLoaded('team')),
+            'media' => new MediaCollection($this->whenLoaded('media')),
+            'free_at' => $this->free_at
         ];
     }
 }

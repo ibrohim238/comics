@@ -5,6 +5,7 @@ namespace App\Versions\V1\Repositories;
 use App\Dto\MangaDto;
 use App\Models\Chapter;
 use App\Models\Manga;
+use App\Models\Team;
 use App\Versions\V1\Services\ChapterService;
 use App\Versions\V1\Services\TagSynchronizer;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
@@ -18,9 +19,11 @@ class MangaRepository
     ) {
     }
 
-    public function paginateChapter(?int $perPage): LengthAwarePaginator
+    public function paginateChapter(Team $team, ?int $perPage): LengthAwarePaginator
     {
         return QueryBuilder::for($this->manga->chapters())
+            ->with('team')
+            ->where('team_id', $team->id)
             ->defaultSorts('-volume', '-number')
             ->allowedSorts('volume', 'number')
             ->paginate($perPage);
@@ -31,8 +34,6 @@ class MangaRepository
         return QueryBuilder::for($this->manga)
             ->allowedFilters(
                 AllowedFilter::exact('teams', 'teams.id'),
-                AllowedFilter::exact('genres', 'genres.name'),
-                AllowedFilter::exact('categories', 'categories.name'),
                 AllowedFilter::exact('tags', 'tags.name')
             )
             ->paginate($perPage);
@@ -45,7 +46,7 @@ class MangaRepository
 
     public function load(): static
     {
-        $this->manga->load('categories', 'genres', 'tags');
+        $this->manga->load('tags');
 
         return $this;
     }
@@ -73,12 +74,9 @@ class MangaRepository
         return $this;
     }
 
-    public function syncFilter(MangaDto $dto): static
+    public function syncTags(MangaDto $dto): static
     {
-        app(TagSynchronizer::class, [
-            'filters' => $dto->filters,
-            'filterable' => $this->manga
-        ])->sync();
+        $this->manga->syncTags($dto->tags);
 
         return $this;
     }

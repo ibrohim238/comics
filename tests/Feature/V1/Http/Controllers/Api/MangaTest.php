@@ -3,13 +3,13 @@
 namespace Tests\Feature\V1\Http\Controllers\Api;
 
 use App\Enums\RolePermissionEnum;
-use App\Models\Filter;
 use App\Models\Manga;
 use App\Models\User;
 use App\Versions\V1\Http\Resources\MangaCollection;
 use App\Versions\V1\Http\Resources\MangaResource;
 use IAleroy\Tags\Tag;
 use Illuminate\Foundation\Testing\WithFaker;
+use Illuminate\Support\Collection;
 use Tests\TestCase;
 use function route;
 
@@ -17,13 +17,15 @@ class MangaTest extends TestCase
 {
     use WithFaker;
 
+    private Collection $tags;
+
     protected function setUp(): void
     {
         parent::setUp();
 
         $this->seed();
         $this->user = User::factory()->create();
-        $this->filters = Tag::factory()->count(10)->create()->pluck('id');
+        $this->tags = Tag::factory()->count(10)->create()->pluck('id');
 
         $this->user->assignRole('owner');
     }
@@ -50,7 +52,7 @@ class MangaTest extends TestCase
         $response
             ->assertOk()
             ->assertJsonFragment(
-                (new MangaResource($manga->load('categories', 'genres', 'tags')))->response()->getData(true)
+                (new MangaResource($manga->load('tags')))->response()->getData(true)
             );
     }
 
@@ -68,7 +70,7 @@ class MangaTest extends TestCase
                 'name' => $this->faker->name,
                 'description' => $this->faker->text,
                 'is_published' => $this->faker->boolean,
-                'filters' => $this->filters
+                'tags' => $this->tags
             ]);
 
         $response->assertCreated();
@@ -81,7 +83,7 @@ class MangaTest extends TestCase
                 'name' => 'err',
                 'description' => $this->faker->text,
                 'is_published' => $this->faker->boolean,
-                'filters' => $this->filters
+                'tags' => $this->tags
             ]);
 
         $response
@@ -96,7 +98,7 @@ class MangaTest extends TestCase
                 'name' => 'err',
                 'description' => $this->faker->text,
                 'is_published' => $this->faker->boolean,
-                'filters' => $this->filters
+                'tags' => $this->tags
             ]);
 
         $response->assertUnauthorized();
@@ -111,7 +113,7 @@ class MangaTest extends TestCase
                 'name' => 'err',
                 'description' => $this->faker->text,
                 'is_published' => $this->faker->boolean,
-                'filters' => $this->filters
+                'tags' => $this->tags
             ]);
 
         $response->assertForbidden();
@@ -126,7 +128,7 @@ class MangaTest extends TestCase
                 'name' => $this->faker->name,
                 'description' => $this->faker->text,
                 'is_published' => $this->faker->boolean,
-                'filters' => $this->filters
+                'tags' => $this->tags
             ]);
 
         $response->assertOk();
@@ -141,7 +143,7 @@ class MangaTest extends TestCase
                 'name' => $this->faker->name,
                 'description' => $this->faker->text,
                 'is_published' => $this->faker->boolean,
-                'filters' => $this->filters
+                'tags' => $this->tags
             ]);
 
         $response->assertUnauthorized();
@@ -157,7 +159,7 @@ class MangaTest extends TestCase
                 'name' => $this->faker->name,
                 'description' => $this->faker->text,
                 'is_published' => $this->faker->boolean,
-                'filters' => $this->filters
+                'tags' => $this->tags
             ]);
 
         $response->assertForbidden();
@@ -173,7 +175,7 @@ class MangaTest extends TestCase
                 'name' => $this->faker->name,
                 'description' => $this->faker->text,
                 'is_published' => $this->faker->boolean,
-                'filters' => $this->filters
+                'tags' => $this->tags
             ]);
 
         $response->assertNotFound();

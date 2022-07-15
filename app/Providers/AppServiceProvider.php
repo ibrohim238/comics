@@ -5,10 +5,8 @@ namespace App\Providers;
 use App\Models\Chapter;
 use App\Models\Comment;
 use App\Models\Coupon;
-use App\Models\Filter;
 use App\Models\Manga;
 use App\Models\Team;
-use App\Models\ChapterTeam;
 use App\Models\User;
 use IAleroy\Tags\Tag;
 use Illuminate\Auth\Notifications\ResetPassword;
@@ -45,7 +43,6 @@ class AppServiceProvider extends ServiceProvider
             'tag' => Tag::class,
             'coupon' => Coupon::class,
             'comment' => Comment::class,
-            'chapterTeam' => ChapterTeam::class,
         ]);
     }
 }

@@ -2,6 +2,8 @@
 
 namespace App\Policies;
 
+use App\Enums\PermissionEnum;
+use App\Enums\TeamPermissionEnum;
 use App\Models\Chapter;
 use App\Models\Manga;
 use App\Models\Team;
@@ -23,30 +25,18 @@ class ChapterPolicy
         return true;
     }
 
-    public function create(User $user, Manga $manga): bool
+    public function create(User $user, Team $team): bool
     {
-        return
-            $user->teams()
-                ->whereHas('mangas', function (Builder $builder) use ($manga){
-                        $builder->where('teamable_id', $manga->id);
-                })->exists();
+        return $user->hasTeamPermission($team, TeamPermissionEnum::MANAGE_MANGA->value);
     }
 
-    public function update(User $user, Chapter $chapter, Manga $manga): bool
+    public function update(User $user, Chapter $chapter, Team $team): bool
     {
-        return
-            $user->teams()
-                ->whereHas('mangas', function (Builder $builder) use ($manga) {
-                    $builder->where('teamable_id', $manga->id);
-                })->exists();
+        return $user->hasTeamPermission($team, TeamPermissionEnum::MANAGE_MANGA->value);
     }
 
-    public function delete(User $user, Chapter $chapter, Manga $manga): bool
+    public function delete(User $user, Chapter $chapter, Team $team): bool
     {
-        return
-            $user->teams()
-                ->whereHas('mangas', function (Builder $builder) use ($manga) {
-                    $builder->where('teamable_id', $manga->id);
-                })->exists();
+        return $user->hasTeamPermission($team, TeamPermissionEnum::MANAGE_MANGA->value);
     }
 }

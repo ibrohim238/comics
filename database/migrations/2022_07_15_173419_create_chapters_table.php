@@ -19,7 +19,11 @@ return new class extends Migration
             $table->float('number');
             $table->string('name');
             $table->foreignId('manga_id')->constrained();
+            $table->foreignId('team_id')->constrained();
+            $table->timestamp('free_at')->nullable();
             $table->timestamps();
+
+            $table->unique(['volume', 'number', 'manga_id', 'team_id']);
         });
     }
 

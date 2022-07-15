@@ -13,8 +13,8 @@ return new class extends Migration
      */
     public function up()
     {
-        $tableNames = config('team.table_names');
-        $columnNames = config('team.column_names');
+        $tableNames = config('teams.table_names');
+        $columnNames = config('teams.column_names');
 
         Schema::create($tableNames['teams'], function (Blueprint $table)  use ($columnNames){
             $table->id();
@@ -24,12 +24,10 @@ return new class extends Migration
             $table->timestamps();
         });
 
-        Schema::create('team_user', function (Blueprint $table) use ($columnNames) {
-            $table->id();
+        Schema::create($tableNames['team_user'], function (Blueprint $table) use ($columnNames) {
             $table->foreignId($columnNames['user_foreign_key'])->constrained();
             $table->foreignId($columnNames['team_foreign_key'])->constrained();
             $table->string($columnNames['role']);
-            $table->timestamps();
 
             $table->unique([$columnNames['team_foreign_key'], $columnNames['user_foreign_key']]);
         });

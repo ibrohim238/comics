@@ -2,8 +2,6 @@
 
 namespace Tests\Feature\V1\Http\Controllers\Api;
 use App\Models\Chapter;
-use App\Models\ChapterTeam;
-use App\Models\Comment;
 use App\Models\User;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Support\Facades\Lang;
@@ -14,7 +12,7 @@ use function route;
 class
 
 
-ChapterTeamVoteTest extends TestCase
+ChapterVoteTest extends TestCase
 {
     use WithFaker;
 
@@ -25,13 +23,13 @@ ChapterTeamVoteTest extends TestCase
         $this->seed();
         $this->user = User::factory()->create();
 
-        $this->chapterTeam = ChapterTeam::factory()->create();
+        $this->chapter = Chapter::factory()->create();
     }
 
     public function testStoreOk()
     {
         $response = $this->actingAs($this->user)
-            ->postJson(route('vote.rate', [getMorphedType($this->chapterTeam::class), $this->chapterTeam->id]));
+            ->postJson(route('vote.rate', [getMorphedType($this->chapter::class), $this->chapter->id]));
 
         $response->assertOk()
             ->assertJsonFragment([
@@ -41,11 +39,8 @@ ChapterTeamVoteTest extends TestCase
 
     public function testStoreUnauthorized()
     {
-
-        $chapter = Chapter::factory()->create();
-
         $response = $this
-            ->postJson(route('vote.rate', [getMorphedType($this->chapterTeam::class), $this->chapterTeam->id]));
+            ->postJson(route('vote.rate', [getMorphedType($this->chapter::class), $this->chapter->id]));
 
         $response->assertUnauthorized();
     }
@@ -53,10 +48,10 @@ ChapterTeamVoteTest extends TestCase
     public function testUpdateOk()
     {
         $this->actingAs($this->user)
-            ->postJson(route('vote.rate', [getMorphedType($this->chapterTeam::class), $this->chapterTeam->id]));
+            ->postJson(route('vote.rate', [getMorphedType($this->chapter::class), $this->chapter->id]));
 
         $response = $this->actingAs($this->user)
-            ->postJson(route('vote.rate', [getMorphedType($this->chapterTeam::class), $this->chapterTeam->id]));
+            ->postJson(route('vote.rate', [getMorphedType($this->chapter::class), $this->chapter->id]));
 
         $response->assertOk()
             ->assertJsonFragment([
@@ -67,10 +62,10 @@ ChapterTeamVoteTest extends TestCase
     public function testDeleteOk()
     {
         $this->actingAs($this->user)
-            ->postJson(route('vote.rate', [getMorphedType($this->chapterTeam::class), $this->chapterTeam->id]));
+            ->postJson(route('vote.rate', [getMorphedType($this->chapter::class), $this->chapter->id]));
 
         $response = $this->actingAs($this->user)
-            ->deleteJson(route('vote.un-rate', [getMorphedType($this->chapterTeam::class), $this->chapterTeam->id]));
+            ->deleteJson(route('vote.un-rate', [getMorphedType($this->chapter::class), $this->chapter->id]));
 
         $response->assertOk()
             ->assertJsonFragment([
@@ -81,7 +76,7 @@ ChapterTeamVoteTest extends TestCase
     public function testDeleteBusy()
     {
         $response = $this->actingAs($this->user)
-            ->deleteJson(route('vote.un-rate', [getMorphedType($this->chapterTeam::class), $this->chapterTeam->id]));
+            ->deleteJson(route('vote.un-rate', [getMorphedType($this->chapter::class), $this->chapter->id]));
 
         $response->assertStatus(Response::HTTP_BAD_REQUEST)
             ->assertJsonFragment([
@@ -92,7 +87,7 @@ ChapterTeamVoteTest extends TestCase
     public function testDeleteUnauthorized()
     {
         $response = $this
-            ->deleteJson(route('vote.un-rate', [getMorphedType($this->chapterTeam::class), $this->chapterTeam->id]));
+            ->deleteJson(route('vote.un-rate', [getMorphedType($this->chapter::class), $this->chapter->id]));
 
         $response->assertUnauthorized();
     }

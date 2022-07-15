@@ -14,17 +14,27 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Spatie\MediaLibrary\HasMedia;
+use Spatie\MediaLibrary\InteractsWithMedia;
 
-class Chapter extends Model implements Eventable, Commentable
+class Chapter extends Model implements Eventable, Commentable,HasMedia,Rateable, Votable
 {
     use HasFactory;
-    use HasEvents;
     use HasComments;
+    use InteractsWithMedia;
+    use HasEvents;
+    use HasRates;
+    use HasVotes;
 
     protected $fillable = [
         'volume',
         'number',
         'name',
+        'free_at'
+    ];
+
+    protected $casts = [
+        'free_at' => 'datetime'
     ];
 
     public function manga(): BelongsTo
@@ -32,13 +42,8 @@ class Chapter extends Model implements Eventable, Commentable
         return $this->belongsTo(Manga::class);
     }
 
-    public function chapterTeams(): HasMany
+    public function team(): BelongsTo
     {
-        return $this->hasMany(ChapterTeam::class);
-    }
-
-    public function getRouteKey(): string
-    {
-        return $this->volume . '-' . $this->number;
+        return $this->belongsTo(Team::class);
     }
 }

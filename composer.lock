@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "c1492b9a0fceaab523f032d48e2d2d98",
+    "content-hash": "9ce993dd2a87d7acfc7a3404ce5a3c7e",
     "packages": [
         {
             "name": "brick/math",
@@ -1022,17 +1022,69 @@
             "time": "2022-06-20T21:43:11+00:00"
         },
         {
+            "name": "ialeroy/laravel-tags",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/ibrohim238/laravel-tags.git",
+                "reference": "c98225dda6f06a44fc9f03bbaf73ed3748d9c71d"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/ibrohim238/laravel-tags/zipball/c98225dda6f06a44fc9f03bbaf73ed3748d9c71d",
+                "reference": "c98225dda6f06a44fc9f03bbaf73ed3748d9c71d",
+                "shasum": ""
+            },
+            "require": {
+                "php": "8.1.*",
+                "spatie/laravel-sluggable": "^3.4"
+            },
+            "require-dev": {
+                "orchestra/testbench": "^7.6"
+            },
+            "default-branch": true,
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "IAleroy\\Tags\\TagsServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "IAleroy\\Tags\\": "src/",
+                    "IAleroy\\Tags\\Database\\Factories\\": "database/factories/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "ialeroy",
+                    "email": "ibrohim238@mail.ru"
+                }
+            ],
+            "support": {
+                "issues": "https://github.com/ibrohim238/laravel-tags/issues",
+                "source": "https://github.com/ibrohim238/laravel-tags/tree/master"
+            },
+            "time": "2022-07-15T00:45:06+00:00"
+        },
+        {
             "name": "ialeroy/laravel-teams",
             "version": "dev-master",
             "source": {
                 "type": "git",
                 "url": "https://github.com/ibrohim238/laravel-teams.git",
-                "reference": "5a709e4db05f52c45b418eb453bb5ee12e22cb6a"
+                "reference": "601bdae448327c301962acc1b161cbeefa67ffeb"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/ibrohim238/laravel-teams/zipball/5a709e4db05f52c45b418eb453bb5ee12e22cb6a",
-                "reference": "5a709e4db05f52c45b418eb453bb5ee12e22cb6a",
+                "url": "https://api.github.com/repos/ibrohim238/laravel-teams/zipball/601bdae448327c301962acc1b161cbeefa67ffeb",
+                "reference": "601bdae448327c301962acc1b161cbeefa67ffeb",
                 "shasum": ""
             },
             "require": {
@@ -1071,7 +1123,7 @@
                 "issues": "https://github.com/ibrohim238/laravel-teams/issues",
                 "source": "https://github.com/ibrohim238/laravel-teams/tree/master"
             },
-            "time": "2022-07-13T02:01:12+00:00"
+            "time": "2022-07-15T21:38:33+00:00"
         },
         {
             "name": "intervention/image",
@@ -10475,6 +10527,7 @@
     "aliases": [],
     "minimum-stability": "dev",
     "stability-flags": {
+        "ialeroy/laravel-tags": 20,
         "ialeroy/laravel-teams": 20
     },
     "prefer-stable": true,

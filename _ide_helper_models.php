@@ -21,8 +21,6 @@ namespace App\Models{
  * @property int $manga_id
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\ChapterTeam[] $chapterTeams
- * @property-read int|null $chapter_teams_count
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Comment[] $comments
  * @property-read int|null $comments_count
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\User[] $eventUsers
@@ -30,6 +28,13 @@ namespace App\Models{
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Event[] $events
  * @property-read int|null $events_count
  * @property-read \App\Models\Manga $manga
+ * @property-read \Spatie\MediaLibrary\MediaCollections\Models\Collections\MediaCollection|\Spatie\MediaLibrary\MediaCollections\Models\Media[] $media
+ * @property-read int|null $media_count
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Rate[] $rates
+ * @property-read int|null $rates_count
+ * @property-read \App\Models\Team|null $team
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Rate[] $votes
+ * @property-read int|null $votes_count
  * @method static \Database\Factories\ChapterFactory factory(...$parameters)
  * @method static \Illuminate\Database\Eloquent\Builder|Chapter newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Chapter newQuery()
@@ -42,43 +47,7 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|Chapter whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Chapter whereVolume($value)
  */
-	class Chapter extends \Eloquent implements \App\Interfaces\Eventable, \App\Interfaces\Commentable {}
-}
-
-namespace App\Models{
-/**
- * App\Models\ChapterTeam
- *
- * @property int $id
- * @property int $team_id
- * @property int $chapter_id
- * @property \Illuminate\Support\Carbon|null $free_at
- * @property \Illuminate\Support\Carbon|null $created_at
- * @property \Illuminate\Support\Carbon|null $updated_at
- * @property-read \App\Models\Chapter $chapter
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\User[] $eventUsers
- * @property-read int|null $event_users_count
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Event[] $events
- * @property-read int|null $events_count
- * @property-read \Spatie\MediaLibrary\MediaCollections\Models\Collections\MediaCollection|\Spatie\MediaLibrary\MediaCollections\Models\Media[] $media
- * @property-read int|null $media_count
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Rate[] $rates
- * @property-read int|null $rates_count
- * @property-read \App\Models\Team $team
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Rate[] $votes
- * @property-read int|null $votes_count
- * @method static \Database\Factories\ChapterTeamFactory factory(...$parameters)
- * @method static \Illuminate\Database\Eloquent\Builder|ChapterTeam newModelQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|ChapterTeam newQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|ChapterTeam query()
- * @method static \Illuminate\Database\Eloquent\Builder|ChapterTeam whereChapterId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|ChapterTeam whereCreatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|ChapterTeam whereFreeAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|ChapterTeam whereId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|ChapterTeam whereTeamId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|ChapterTeam whereUpdatedAt($value)
- */
-	class ChapterTeam extends \Eloquent implements \Spatie\MediaLibrary\HasMedia, \App\Interfaces\Eventable, \App\Interfaces\Rateable, \App\Interfaces\Votable {}
+	class Chapter extends \Eloquent implements \App\Interfaces\Eventable, \App\Interfaces\Commentable, \Spatie\MediaLibrary\HasMedia, \App\Interfaces\Rateable, \App\Interfaces\Votable {}
 }
 
 namespace App\Models{
@@ -222,12 +191,8 @@ namespace App\Models{
  * @property string|null $published_at
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
- * @property-read \Illuminate\Database\Eloquent\Collection|\IAleroy\Tags\Tag[] $allTags
- * @property-read int|null $all_tags_count
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\User[] $bookmarkUsers
  * @property-read int|null $bookmark_users_count
- * @property-read \Illuminate\Database\Eloquent\Collection|\IAleroy\Tags\Tag[] $categories
- * @property-read int|null $categories_count
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Rate[] $chapterVotes
  * @property-read int|null $chapter_votes_count
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Chapter[] $chapters
@@ -238,8 +203,6 @@ namespace App\Models{
  * @property-read int|null $event_users_count
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Event[] $events
  * @property-read int|null $events_count
- * @property-read \Illuminate\Database\Eloquent\Collection|\IAleroy\Tags\Tag[] $genres
- * @property-read int|null $genres_count
  * @property-read \Spatie\MediaLibrary\MediaCollections\Models\Collections\MediaCollection|\Spatie\MediaLibrary\MediaCollections\Models\Media[] $media
  * @property-read int|null $media_count
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Rate[] $rates
@@ -261,6 +224,7 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|Manga wherePublishedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Manga whereSlug($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Manga whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Manga withType(string $type)
  */
 	class Manga extends \Eloquent implements \Spatie\MediaLibrary\HasMedia, \App\Interfaces\Eventable, \App\Interfaces\Commentable, \App\Interfaces\Teamable, \IAleroy\Tags\Taggable, \App\Interfaces\Rateable, \App\Interfaces\Ratingable, \App\Interfaces\Bookmarkable {}
 }
@@ -334,7 +298,6 @@ namespace App\Models{
  * App\Models\Role
  *
  * @property int $id
- * @property int|null $team_id
  * @property string $name
  * @property string $guard_name
  * @property \Illuminate\Support\Carbon|null $created_at
@@ -351,7 +314,6 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|Role whereGuardName($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Role whereId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Role whereName($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Role whereTeamId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Role whereUpdatedAt($value)
  */
 	class Role extends \Eloquent {}
@@ -363,7 +325,7 @@ namespace App\Models{
  *
  * @property int $id
  * @property string $name
- * @property string $slug
+ * @property string|null $slug
  * @property string|null $description
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at

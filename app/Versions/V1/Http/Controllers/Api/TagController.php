@@ -8,15 +8,19 @@ use App\Versions\V1\Http\Requests\TagRequest;
 use App\Versions\V1\Http\Resources\TagCollection;
 use App\Versions\V1\Http\Resources\TagResource;
 use App\Versions\V1\Services\TagService;
-use IAleroy\Tags\Tag;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Spatie\DataTransferObject\Exceptions\UnknownProperties;
 use Spatie\QueryBuilder\QueryBuilder;
+use IAleroy\Tags\Tag;
 
 class TagController extends Controller
 {
-
+    public function __construct()
+    {
+        $this->middleware('auth')->except('index', 'show');
+        $this->authorizeResource(Tag::class);
+    }
 
     public function index(Request $request): TagCollection
     {

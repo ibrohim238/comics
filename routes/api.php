@@ -1,9 +1,9 @@
 <?php
 
+
 use App\Enums\RatesTypeEnum;
 use App\Versions\V1\Http\Controllers\Api\BookmarksController;
 use App\Versions\V1\Http\Controllers\Api\ChapterController;
-use App\Versions\V1\Http\Controllers\Api\ChapterTeamController;
 use App\Versions\V1\Http\Controllers\Api\CommentController;
 use App\Versions\V1\Http\Controllers\Api\HistoryController;
 use App\Versions\V1\Http\Controllers\Api\InvitationController;
@@ -62,9 +62,8 @@ Route::prefix('v1')->group(function () {
     Route::get('/manga/random', [MangaController::class, 'random'])->name('manga.random');
     Route::apiResource('manga', MangaController::class);
 
-    Route::where(['chapter' => '(\d+)-(\d+)'])->scopeBindings()->group(function () {
-        Route::apiResource('manga.chapter', ChapterController::class);
-        Route::apiResource('manga.chapter.chapter-team', ChapterTeamController::class)->except('update');
+    Route::scopeBindings()->group(function () {
+        Route::apiResource('team.manga.chapter', ChapterController::class);
     });
 
     Route::apiResource('tags', TagController::class);

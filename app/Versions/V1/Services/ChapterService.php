@@ -5,11 +5,12 @@ namespace App\Versions\V1\Services;
 use App\Dto\ChapterDto;
 use App\Models\Chapter;
 use App\Models\Manga;
+use App\Models\Team;
 use App\Versions\V1\Repositories\ChapterRepository;
 
 class ChapterService
 {
-    public ChapterRepository $repository;
+    private ChapterRepository $repository;
 
     public function __construct(
         private Chapter $chapter,
@@ -19,10 +20,11 @@ class ChapterService
         ]);
     }
 
-    public function store(ChapterDto $dto, Manga $manga): Chapter
+    public function store(ChapterDto $dto, Team $team, Manga $manga): Chapter
     {
         $this->repository
             ->fill($dto)
+            ->associateTeam($team)
             ->associateManga($manga)
             ->save();
 
@@ -41,7 +43,7 @@ class ChapterService
     public function delete(): void
     {
         $this->repository
-            ->deleteTeams()
+            ->deleteMedia()
             ->delete();
     }
 }

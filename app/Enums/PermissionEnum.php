@@ -12,7 +12,7 @@ enum PermissionEnum: string
     case MANAGE_COUPON = 'manage coupon';
     case MANAGE_USER = 'manage user';
     case MANAGE_TEAM = 'manage team';
-    case MANAGE_FILTER = 'manage filter';
+    case MANAGE_TAG = 'manage tag';
     case CREATE_TEAM = 'create team';
     case VIEW_ADMIN_PANEL = 'view admin panel';
     case ASSIGN_MODERATOR = 'assign moderator';

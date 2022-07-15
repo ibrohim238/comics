@@ -3,10 +3,6 @@
 namespace App\Providers;
 
 
-use App\Models\ChapterTeam;
-use App\Models\Manga;
-use App\Versions\V1\Http\Resources\ChapterResource;
-use App\Versions\V1\Repositories\MangaRepository;
 use Illuminate\Support\ServiceProvider;
 
 class RepositoryServiceProvider extends ServiceProvider
@@ -28,8 +24,5 @@ class RepositoryServiceProvider extends ServiceProvider
     //            ->needs('$manga')
     //            ->give((new Manga()));
     //
-    //        $this->app->when(ChapterResource::class)
-    //            ->needs('$chapterTeam')
-    //            ->give((new ChapterTeam()));
     }
 }

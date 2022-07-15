@@ -13,7 +13,7 @@ class MangaDto extends DataTransferObject
     public string $name;
     public string $description;
     public ?Carbon $published_at;
-    public array $filters;
+    public ?array $tags;
     public ?UploadedFile $image;
 
     /**

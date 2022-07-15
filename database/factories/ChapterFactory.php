@@ -4,6 +4,7 @@ namespace Database\Factories;
 
 use App\Models\Chapter;
 use App\Models\Manga;
+use App\Models\Team;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 class ChapterFactory extends Factory
@@ -17,6 +18,8 @@ class ChapterFactory extends Factory
             'number' => $this->faker->numberBetween(0, 100),
             'name' => $this->faker->title,
             'manga_id' => Manga::factory(),
+            'team_id' => Team::factory(),
+            'free_at' => $this->faker->dateTimeBetween('-30 days', '+30 days')
         ];
     }
 }

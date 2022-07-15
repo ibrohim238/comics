@@ -4,9 +4,8 @@ namespace App\Versions\V1\Repositories;
 
 use App\Dto\ChapterDto;
 use App\Models\Chapter;
-use App\Models\ChapterTeam;
 use App\Models\Manga;
-use App\Versions\V1\Services\ChapterTeamService;
+use App\Models\Team;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Spatie\QueryBuilder\AllowedFilter;
 use Spatie\QueryBuilder\QueryBuilder;
@@ -16,16 +15,6 @@ class ChapterRepository
     public function __construct(
         private Chapter $chapter
     ) {
-    }
-
-    public function paginateChapterTeam(?int $perPage): LengthAwarePaginator
-    {
-        return QueryBuilder::for($this->chapter->chapterTeams())
-            ->with('team')
-            ->allowedFilters(
-                AllowedFilter::exact('volume', 'chapter.volume'),
-                AllowedFilter::exact('number', 'chapter.number'),
-            )->paginate($perPage);
     }
 
     public function getChapter(): Chapter
@@ -54,6 +43,13 @@ class ChapterRepository
         return $this;
     }
 
+    public function associateTeam(Team $team): static
+    {
+        $this->chapter->team()->associate($team);
+
+        return $this;
+    }
+
     public function associateManga(Manga $manga): static
     {
         $this->chapter->manga()->associate($manga);
@@ -61,13 +57,9 @@ class ChapterRepository
         return $this;
     }
 
-    public function deleteTeams(): static
+    public function deleteMedia(): static
     {
-        $this->chapter->chapterTeams()->each(function (ChapterTeam $chapterTeam) {
-            app(ChapterTeamService::class, [
-                'chapterTeam' => $chapterTeam
-            ])->delete();
-        });
+        $this->chapter->clearMediaCollection();
 
         return $this;
     }

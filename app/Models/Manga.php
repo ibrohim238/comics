@@ -14,7 +14,6 @@ use App\Traits\HasComments;
 use App\Traits\HasEvents;
 use App\Traits\HasRates;
 use App\Traits\HasRatings;
-use App\Traits\HasTags;
 use App\Traits\HasTeams;
 use IAleroy\Tags\Taggable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -25,6 +24,7 @@ use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
 use Spatie\Sluggable\HasSlug;
 use Spatie\Sluggable\SlugOptions;
+use IAleroy\Tags\HasTags;
 
 class Manga extends Model
     implements

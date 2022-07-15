@@ -22,26 +22,26 @@ class TagPolicy
 
     public function create(User $user): bool
     {
-        return $user->hasPermissionTo(PermissionEnum::MANAGE_FILTER->value);
+        return $user->hasPermissionTo(PermissionEnum::MANAGE_TAG->value);
     }
 
     public function update(User $user): bool
     {
-        return $user->hasPermissionTo(PermissionEnum::MANAGE_FILTER->value);
+        return $user->hasPermissionTo(PermissionEnum::MANAGE_TAG->value);
     }
 
     public function delete(User $user): bool
     {
-        return $user->hasPermissionTo(PermissionEnum::MANAGE_FILTER->value);
+        return $user->hasPermissionTo(PermissionEnum::MANAGE_TAG->value);
     }
 
     public function restore(User $user): bool
     {
-        return $user->hasPermissionTo(PermissionEnum::MANAGE_FILTER->value);
+        return $user->hasPermissionTo(PermissionEnum::MANAGE_TAG->value);
     }
 
     public function forceDelete(User $user): bool
     {
-        return $user->hasPermissionTo(PermissionEnum::MANAGE_FILTER->value);
+        return $user->hasPermissionTo(PermissionEnum::MANAGE_TAG->value);
     }
 }

@@ -24,7 +24,7 @@ class MangaService
             ->fill($dto)
             ->save()
             ->addMedia($dto)
-            ->syncFilter($dto);
+            ->syncTags($dto);
 
         return $this->manga;
     }
@@ -35,7 +35,7 @@ class MangaService
             ->fill($dto)
             ->save()
             ->addMedia($dto)
-            ->syncFilter($dto);
+            ->syncTags($dto);
 
         return $this->manga;
     }

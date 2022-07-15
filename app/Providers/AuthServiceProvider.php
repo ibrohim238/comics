@@ -5,30 +5,24 @@ namespace App\Providers;
 use App\Enums\PermissionEnum;
 use App\Enums\TeamPermissionEnum;
 use App\Models\Chapter;
-use App\Models\ChapterTeam;
 use App\Models\Coupon;
-use App\Models\Filter;
 use App\Models\Manga;
 use App\Models\Team;
-use App\Models\TeamUser;
 use App\Models\User;
 use App\Policies\ChapterPolicy;
-use App\Policies\ChapterTeamPolicy;
 use App\Policies\CouponPolicy;
-use App\Policies\FilterPolicy;
 use App\Policies\MangaPolicy;
 use App\Policies\TagPolicy;
 use App\Policies\TeamPolicy;
-use App\Policies\TeamUserPolicy;
 use App\Policies\UserPolicy;
 use Carbon\Carbon;
-use IAleroy\Tags\Tag;
 use Illuminate\Auth\Notifications\VerifyEmail;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\URL;
 use Laravel\Passport\Passport;
+use IAleroy\Tags\Tag;
 
 class AuthServiceProvider extends ServiceProvider
 {
@@ -45,7 +39,6 @@ class AuthServiceProvider extends ServiceProvider
         Tag::class => TagPolicy::class,
         User::class => UserPolicy::class,
         Coupon::class => CouponPolicy::class,
-        ChapterTeam::class => ChapterTeamPolicy::class,
     ];
 
     /**
@@ -59,7 +52,7 @@ class AuthServiceProvider extends ServiceProvider
             return $user->hasPermissionTo(PermissionEnum::MANAGE_TEAMABLE->value);
         });
         Gate::define('detach_teamable', function (User $user) {
-           return $user->hasPermissionTo(PermissionEnum::MANAGE_TEAMABLE->value);
+            return $user->hasPermissionTo(PermissionEnum::MANAGE_TEAMABLE->value);
         });
         Gate::define('updateTeamMember', function (User $user, Team $team) {
             return $user->hasTeamPermission($team, TeamPermissionEnum::MANAGE_MANGA->value);

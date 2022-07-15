@@ -17,6 +17,8 @@ class ChapterRequest extends FormRequest
             'volume' => ['required', 'int'],
             'number' => ['required', 'int'],
             'name' => ['required', 'string'],
+            'image.*' => ['nullable', 'image'],
+            'free_at' => ['nullable', 'date'],
         ];
     }
 }
