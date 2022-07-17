@@ -2,8 +2,8 @@
 
 namespace App\Versions\V1\Http\Controllers\Api;
 
-use App\Dto\MangaDto;
 use App\Models\Manga;
+use App\Versions\V1\Dto\MangaDto;
 use App\Versions\V1\Http\Controllers\Controller;
 use App\Versions\V1\Http\Requests\MangaRequest;
 use App\Versions\V1\Http\Resources\MangaCollection;
@@ -13,6 +13,9 @@ use App\Versions\V1\Services\MangaService;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Spatie\DataTransferObject\Exceptions\UnknownProperties;
+use function app;
+use function response;
+use function route;
 
 class MangaController extends Controller
 {

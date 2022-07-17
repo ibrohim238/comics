@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Dto;
+namespace App\Versions\V1\Dto;
 
-use App\Versions\V1\Http\Requests\InvitationRequest;
+use App\Versions\V1\Http\Requests\TeamInvitationRequest;
 use Carbon\Carbon;
 
 class InvitationDto extends BaseDto
@@ -11,7 +11,7 @@ class InvitationDto extends BaseDto
     public ?Carbon $ends_at;
     public string $data;
 
-    public static function fromRequest(InvitationRequest $request): InvitationDto
+    public static function fromRequest(TeamInvitationRequest $request): InvitationDto
     {
         return new self($request->validated());
     }

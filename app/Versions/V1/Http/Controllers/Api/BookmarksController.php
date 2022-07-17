@@ -14,6 +14,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Lang;
 use Symfony\Component\HttpFoundation\Response;
+use function app;
+use function response;
 
 class BookmarksController extends Controller
 {

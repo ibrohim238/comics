@@ -2,11 +2,11 @@
 
 namespace App\Versions\V1\Http\Resources;
 
-use App\Dto\NotificationDto;
+use App\Versions\V1\Dto\NotificationDto;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 /**
- * @mixin NotificationDto
+ * @mixin \App\Versions\V1\Dto\\App\Versions\V1\Dto\NotificationDto
  */
 class NotificationResource extends JsonResource
 {

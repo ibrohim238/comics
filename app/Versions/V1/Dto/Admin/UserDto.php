@@ -1,9 +1,8 @@
 <?php
 
-namespace App\Dto\Admin;
+namespace App\Versions\V1\Dto\Admin;
 
 use App\Enums\RolePermissionEnum;
-use App\Versions\V1\Http\Requests\Admin\UserRequest;
 use Spatie\DataTransferObject\Attributes\CastWith;
 use Spatie\DataTransferObject\DataTransferObject;
 
@@ -13,7 +12,7 @@ class UserDto extends DataTransferObject
     #[CastWith(RolePermissionEnum::class)]
     public RolePermissionEnum $role;
 
-    public static function fromRequest(UserRequest $request): UserDto
+    public static function fromRequest(\App\Versions\V1\Http\Requests\Admin\UserRequest $request): UserDto
     {
         return new self($request->validated());
     }

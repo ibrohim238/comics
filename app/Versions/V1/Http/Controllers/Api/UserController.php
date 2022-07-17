@@ -7,6 +7,7 @@ use App\Versions\V1\Http\Requests\UserRequest;
 use App\Versions\V1\Http\Resources\UserResource;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
+use function response;
 
 class UserController extends Controller
 {

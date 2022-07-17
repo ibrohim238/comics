@@ -8,7 +8,7 @@ use Illuminate\Foundation\Http\FormRequest;
  * @property-read int $userId
  * @property-read string $data
 */
-class InvitationRequest extends FormRequest
+class TeamInvitationRequest extends FormRequest
 {
 
     public function rules(): array

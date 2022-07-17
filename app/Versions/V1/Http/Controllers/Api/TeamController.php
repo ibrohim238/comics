@@ -2,17 +2,19 @@
 
 namespace App\Versions\V1\Http\Controllers\Api;
 
-use App\Dto\TeamDto;
 use App\Models\Team;
+use App\Versions\V1\Dto\TeamDto;
 use App\Versions\V1\Http\Controllers\Controller;
 use App\Versions\V1\Http\Requests\TeamRequest;
 use App\Versions\V1\Http\Resources\TeamCollection;
 use App\Versions\V1\Http\Resources\TeamResource;
+use App\Versions\V1\Repositories\TeamRepository;
 use App\Versions\V1\Services\TeamService;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
-use Illuminate\Support\Facades\Auth;
 use Spatie\DataTransferObject\Exceptions\UnknownProperties;
+use function app;
+use function response;
 
 class TeamController extends Controller
 {
@@ -24,7 +26,8 @@ class TeamController extends Controller
 
     public function index(Request $request): TeamCollection
     {
-        $teams = Team::query()->paginate($request->get('count'));
+        $teams = app(TeamRepository::class)
+            ->paginate($request->get('count'));
 
         return new TeamCollection($teams);
     }
@@ -39,7 +42,8 @@ class TeamController extends Controller
      */
     public function store(TeamRequest $request): TeamResource
     {
-        $team = app(TeamService::class)->store(TeamDto::fromRequest($request));
+        $team = app(TeamService::class)
+            ->store(TeamDto::fromRequest($request));
 
         return new TeamResource($team);
     }

@@ -1,8 +1,7 @@
 <?php
 
-namespace App\Dto;
+namespace App\Versions\V1\Dto;
 
-use App\Models\User;
 use App\Versions\V1\Http\Requests\TeamRequest;
 use Spatie\DataTransferObject\DataTransferObject;
 use Spatie\DataTransferObject\Exceptions\UnknownProperties;

@@ -2,10 +2,10 @@
 
 namespace App\Versions\V1\Services;
 
-use App\Dto\Admin\UserDto as AdminUserDto;
-use App\Dto\UserDto;
 use App\Enums\RolePermissionEnum;
 use App\Models\User;
+use App\Versions\V1\Dto\Admin\UserDto as AdminUserDto;
+use App\Versions\V1\Dto\UserDto;
 use App\Versions\V1\Repositories\UserRepository;
 use function app;
 

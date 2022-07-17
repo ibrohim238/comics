@@ -14,18 +14,24 @@ class TeamMemberRepository
     {
     }
 
-    public function syncRole(string $role)
-    {
-        $this->user->syncTeam($this->team, $role);
-    }
-
-    public function assignRole(string $role): void
+    public function assignRole(string $role): static
     {
         $this->user->addToTeam($this->team, $role);
+
+        return $this;
     }
 
-    public function removeRole(): void
+    public function updateRole(string $role): static
+    {
+        $this->user->updateToTeam($this->team, $role);
+
+        return $this;
+    }
+
+    public function removeRole(): static
     {
         $this->user->removeToTeam($this->team);
+
+        return $this;
     }
 }

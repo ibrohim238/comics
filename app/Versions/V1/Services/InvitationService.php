@@ -2,10 +2,11 @@
 
 namespace App\Versions\V1\Services;
 
-use App\Dto\InvitationDto;
 use App\Interfaces\Invited;
 use App\Models\Invitation;
+use App\Versions\V1\Dto\InvitationDto;
 use App\Versions\V1\Repositories\InvitationRepository;
+use function app;
 
 class InvitationService
 {

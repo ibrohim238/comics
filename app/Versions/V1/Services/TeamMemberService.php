@@ -2,11 +2,12 @@
 
 namespace App\Versions\V1\Services;
 
-use App\Dto\TeamMemberDto;
 use App\Enums\TeamRoleEnum;
 use App\Models\Team;
 use App\Models\User;
+use App\Versions\V1\Dto\TeamMemberDto;
 use App\Versions\V1\Repositories\TeamMemberRepository;
+use function app;
 
 class TeamMemberService
 {
@@ -23,18 +24,18 @@ class TeamMemberService
         ]);
     }
 
-    public function syncRoles(TeamMemberDto $dto)
+    public function assignRole(TeamMemberDto $dto)
     {
-        $this->repository->syncRoles($dto->roles);
+        $this->repository->assignRole($dto->role->value);
     }
 
-    public function assignRole(TeamRoleEnum $enum)
+    public function updateRole(TeamMemberDto $dto)
     {
-        $this->repository->assignRole($enum->value);
+        $this->repository->updateRole($dto->role->value);
     }
 
-    public function removeRole(TeamRoleEnum $enum)
+    public function removeRole()
     {
-        $this->repository->removeRole($enum->value);
+        $this->repository->removeRole();
     }
 }

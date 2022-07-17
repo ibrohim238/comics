@@ -2,11 +2,12 @@
 
 namespace App\Versions\V1\Services;
 
-use App\Dto\ChapterDto;
 use App\Models\Chapter;
 use App\Models\Manga;
 use App\Models\Team;
+use App\Versions\V1\Dto\ChapterDto;
 use App\Versions\V1\Repositories\ChapterRepository;
+use function app;
 
 class ChapterService
 {
@@ -20,12 +21,12 @@ class ChapterService
         ]);
     }
 
-    public function store(ChapterDto $dto, Team $team, Manga $manga): Chapter
+    public function store(ChapterDto $dto): Chapter
     {
         $this->repository
-            ->fill($dto)
-            ->associateTeam($team)
-            ->associateManga($manga)
+            ->fill($dto->toArray())
+            ->associateTeam($dto->team_id)
+            ->associateManga($dto->manga_id)
             ->save();
 
         return $this->chapter;
@@ -34,7 +35,7 @@ class ChapterService
     public function update(ChapterDto $dto): Chapter
     {
         $this->repository
-            ->fill($dto)
+            ->fill($dto->toArray())
             ->save();
 
         return $this->chapter;

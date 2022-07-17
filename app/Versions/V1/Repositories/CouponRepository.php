@@ -2,8 +2,8 @@
 
 namespace App\Versions\V1\Repositories;
 
-use App\Dto\CouponDto;
 use App\Models\Coupon;
+use App\Versions\V1\Dto\CouponDto;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Spatie\QueryBuilder\QueryBuilder;
 

@@ -2,8 +2,8 @@
 
 namespace App\Versions\V1\Http\Controllers\Api;
 
-use App\Dto\RateDto;
 use App\Exceptions\RatingsException;
+use App\Versions\V1\Dto\RateDto;
 use App\Versions\V1\Http\Controllers\Controller;
 use App\Versions\V1\Http\Requests\RateRequest;
 use App\Versions\V1\Services\RatingService;
@@ -13,6 +13,8 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Lang;
 use Spatie\DataTransferObject\Exceptions\UnknownProperties;
 use Symfony\Component\HttpFoundation\Response;
+use function app;
+use function response;
 
 class RateableController extends Controller
 {

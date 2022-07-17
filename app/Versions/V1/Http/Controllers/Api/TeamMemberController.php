@@ -2,17 +2,18 @@
 
 namespace App\Versions\V1\Http\Controllers\Api;
 
-use App\Dto\TeamMemberDto;
 use App\Models\Team;
 use App\Models\User;
+use App\Versions\V1\Dto\TeamMemberDto;
 use App\Versions\V1\Http\Controllers\Controller;
 use App\Versions\V1\Http\Requests\TeamMemberRequest;
 use App\Versions\V1\Http\Resources\UserCollection;
 use App\Versions\V1\Http\Resources\UserResource;
+use App\Versions\V1\Repositories\TeamRepository;
 use App\Versions\V1\Services\TeamMemberService;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Lang;
+use function app;
 
 class TeamMemberController extends Controller
 {
@@ -23,7 +24,9 @@ class TeamMemberController extends Controller
 
     public function index(Team $team, Request $request): UserCollection
     {
-        $members = $team->users()->paginate($request->get('count'));
+        $members = app(TeamRepository::class, [
+            'team' => $team
+        ])->paginate($request->get('count'));
 
         return new UserCollection($members);
     }
@@ -43,10 +46,21 @@ class TeamMemberController extends Controller
         app(TeamMemberService::class, [
             'team' => $team,
             'user' => $user,
-        ])->syncRoles(
-            TeamMemberDto::fromArray($request)
-        );
+        ])->updateRole(TeamMemberDto::fromArray($request));
 
         return new UserResource($user);
+    }
+
+    /**
+     * @throws AuthorizationException
+     */
+    public function destroy(Team $team, User $user)
+    {
+        $this->authorize('removeTeamMember', $team);
+
+        app(TeamMemberService::class, [
+            'team' => $team,
+            'user' => $user,
+        ])->removeRole();
     }
 }

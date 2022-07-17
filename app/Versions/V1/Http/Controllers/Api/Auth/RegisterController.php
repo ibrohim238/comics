@@ -2,14 +2,15 @@
 
 namespace App\Versions\V1\Http\Controllers\Api\Auth;
 
-use App\Dto\UserDto;
 use App\Models\User;
 use App\Providers\RouteServiceProvider;
+use App\Versions\V1\Dto\UserDto;
 use App\Versions\V1\Http\Controllers\Controller;
 use App\Versions\V1\Services\UserService;
 use Illuminate\Foundation\Auth\RegistersUsers;
 use Illuminate\Support\Facades\Validator;
 use Spatie\DataTransferObject\Exceptions\UnknownProperties;
+use function app;
 
 class RegisterController extends Controller
 {

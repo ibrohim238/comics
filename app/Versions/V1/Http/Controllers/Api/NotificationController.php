@@ -2,11 +2,10 @@
 
 namespace App\Versions\V1\Http\Controllers\Api;
 
-use App\Dto\NotificationDto;
 use App\Models\Notification;
+use App\Versions\V1\Dto\NotificationDto;
 use App\Versions\V1\Http\Controllers\Controller;
 use App\Versions\V1\Http\Resources\NotificationCollection;
-use App\Versions\V1\Http\Resources\NotificationResource;
 use App\Versions\V1\Services\NotificationService;
 use App\Versions\V1\Transformers\NotificationTransformer;
 use Illuminate\Http\Request;
@@ -14,6 +13,8 @@ use Illuminate\Http\Response;
 use Illuminate\Notifications\DatabaseNotification;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\Auth;
+use function app;
+use function response;
 
 class NotificationController extends Controller
 {

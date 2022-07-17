@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Dto;
+namespace App\Versions\V1\Dto;
 
 use App\Versions\V1\Http\Requests\Admin\CouponRequest;
 use Carbon\Carbon;
