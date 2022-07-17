@@ -43,7 +43,7 @@ class ChapterTest extends TestCase
             ->count(3)
             ->create();
 
-        $response = $this->getJson(route('team.manga.chapter.index', [$this->team, $this->manga]));
+        $response = $this->getJson(route('chapter.index'));
 
         $response
             ->assertOk()
@@ -56,7 +56,7 @@ class ChapterTest extends TestCase
     {
         $chapter = Chapter::factory()->for($this->manga)->create();
         
-        $response = $this->getJson(route('team.manga.chapter.show', [$this->team, $this->manga, $chapter]));
+        $response = $this->getJson(route('chapter.show', $chapter));
 
         $response->assertOk()
             ->assertJsonFragment(
@@ -66,7 +66,7 @@ class ChapterTest extends TestCase
 
     public function testShowNotFound()
     {
-        $response = $this->getJson(route('team.manga.chapter.show', [$this->team, $this->manga, 'n']));
+        $response = $this->getJson(route('chapter.show', 'n'));
 
         $response->assertNotFound();
     }
@@ -74,10 +74,12 @@ class ChapterTest extends TestCase
     public function testStoreOk()
     {
         $response = $this->actingAs($this->user)
-            ->postJson(route('team.manga.chapter.store', [$this->team, $this->manga]), [
+            ->postJson(route('chapter.store'), [
             'volume' => $this->faker->numberBetween(1, 5),
             'number' => $this->faker->numberBetween(0, 1000),
-            'name' => $this->faker->name
+            'name' => $this->faker->name,
+            'team_id' => $this->team->id,
+            'manga_id' => $this->manga->id,
         ]);
 
         $response->assertCreated();
@@ -91,7 +93,7 @@ class ChapterTest extends TestCase
             ->create();
         
         $response = $this->actingAs($this->user)
-            ->patchJson(route('team.manga.chapter.update', [$this->team, $this->manga, $chapter]), [
+            ->patchJson(route('chapter.update', $chapter), [
             'volume' => $this->faker->numberBetween(1, 5),
             'number' => $this->faker->numberBetween(0, 1000),
             'name' => $this->faker->name
@@ -102,10 +104,13 @@ class ChapterTest extends TestCase
 
     public function testDestroyOk()
     {
-        $chapter = Chapter::factory()->for($this->manga)->create();
+        $chapter = Chapter::factory()
+            ->for($this->manga)
+            ->for($this->team)
+            ->create();
         
         $response = $this->actingAs($this->user)
-            ->deleteJson(route('team.manga.chapter.destroy', [$this->team, $this->manga, $chapter]));
+            ->deleteJson(route('chapter.destroy', $chapter));
 
         $response->assertNoContent();
     }

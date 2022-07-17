@@ -2,10 +2,10 @@
 
 namespace App\Versions\V1\Repositories;
 
-use App\Dto\ChapterDto;
 use App\Models\Chapter;
 use App\Models\Manga;
 use App\Models\Team;
+use App\Versions\V1\Dto\ChapterDto;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Spatie\QueryBuilder\AllowedFilter;
 use Spatie\QueryBuilder\QueryBuilder;
@@ -15,6 +15,15 @@ class ChapterRepository
     public function __construct(
         private Chapter $chapter
     ) {
+    }
+
+    public function paginate(?int $perPage): LengthAwarePaginator
+    {
+        return QueryBuilder::for($this->chapter)
+            ->with('team')
+            ->allowedFilters([
+               'manga_id'
+            ])->paginate($perPage);
     }
 
     public function getChapter(): Chapter
@@ -29,9 +38,9 @@ class ChapterRepository
         return $this;
     }
 
-    public function fill(ChapterDto $dto): static
+    public function fill(array $data): static
     {
-        $this->chapter->fill($dto->toArray());
+        $this->chapter->fill($data);
 
         return $this;
     }
@@ -43,16 +52,16 @@ class ChapterRepository
         return $this;
     }
 
-    public function associateTeam(Team $team): static
+    public function associateTeam(int $teamId): static
     {
-        $this->chapter->team()->associate($team);
+        $this->chapter->team()->associate($teamId);
 
         return $this;
     }
 
-    public function associateManga(Manga $manga): static
+    public function associateManga(int $mangaId): static
     {
-        $this->chapter->manga()->associate($manga);
+        $this->chapter->manga()->associate($mangaId);
 
         return $this;
     }

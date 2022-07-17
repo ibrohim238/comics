@@ -2,7 +2,7 @@
 
 namespace App\Versions\V1\Transformers;
 
-use App\Dto\NotificationDto;
+use App\Versions\V1\Dto\NotificationDto;
 use Illuminate\Notifications\DatabaseNotification;
 
 interface NotificationTransformerContract

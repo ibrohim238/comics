@@ -2,7 +2,6 @@
 
 namespace App\Versions\V1\Repositories;
 
-use App\Dto\UserDto;
 use App\Enums\RolePermissionEnum;
 use App\Models\User;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;

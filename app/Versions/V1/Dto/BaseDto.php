@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Dto;
+namespace App\Versions\V1\Dto;
 
 use App\Caster\CarbonCaster;
 use Carbon\Carbon;

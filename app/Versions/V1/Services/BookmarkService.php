@@ -4,7 +4,6 @@ namespace App\Versions\V1\Services;
 
 use App\Exceptions\BookmarksException;
 use App\Interfaces\Bookmarkable;
-use App\Models\Manga;
 use App\Models\User;
 
 class BookmarkService

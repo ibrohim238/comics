@@ -2,11 +2,11 @@
 
 namespace App\Versions\V1\Http\Controllers\Api;
 
-use App\Dto\CommentDto;
 use App\Enums\CommentableTypeEnum;
 use App\Models\Chapter;
 use App\Models\Comment;
 use App\Models\Manga;
+use App\Versions\V1\Dto\CommentDto;
 use App\Versions\V1\Http\Controllers\Controller;
 use App\Versions\V1\Http\Requests\CommentRequest;
 use App\Versions\V1\Http\Resources\CommentCollection;
@@ -17,6 +17,7 @@ use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Spatie\DataTransferObject\Exceptions\UnknownProperties;
+use function response;
 
 class CommentController extends Controller
 {

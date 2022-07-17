@@ -2,20 +2,48 @@
 
 namespace App\Versions\V1\Repositories;
 
-use App\Dto\TeamDto;
-use App\Enums\RolePermissionEnum;
 use App\Enums\TeamRoleEnum;
 use App\Models\Team;
 use App\Models\User;
+use App\Versions\V1\Dto\TeamDto;
 use App\Versions\V1\Services\TeamMemberService;
+use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Spatie\MediaLibrary\MediaCollections\Exceptions\FileDoesNotExist;
 use Spatie\MediaLibrary\MediaCollections\Exceptions\FileIsTooBig;
+use Spatie\QueryBuilder\QueryBuilder;
+use function app;
 
 class TeamRepository
 {
     public function __construct(
         private Team $team
     ) {
+    }
+
+    public function paginate(?int $perPage): LengthAwarePaginator
+    {
+        return QueryBuilder::for($this->team)
+            ->allowedFilters([
+
+            ])->paginate($perPage);
+    }
+
+    public function memberPaginate(?int $perPage): LengthAwarePaginator
+    {
+        return QueryBuilder::for($this->team->users())
+            ->allowedFilters([
+
+            ])
+            ->paginate($perPage);
+    }
+
+    public function invitationPaginate(?int $perPage): LengthAwarePaginator
+    {
+        return QueryBuilder::for($this->team->invitations())
+            ->allowedFilters([
+
+            ])
+            ->paginate($perPage);
     }
 
     public function fill(TeamDto $dto): static

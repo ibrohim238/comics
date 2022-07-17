@@ -18,8 +18,6 @@ class MangaResource extends JsonResource
             'slug' => $this->slug,
             'description' => $this->description,
             'media' => new MediaResource($this->getFirstMedia()),
-            'categories' => new TagCollection($this->whenLoaded('categories')),
-            'genres' => new TagCollection($this->whenLoaded('genres')),
             'tags' => new TagCollection($this->whenLoaded('tags')),
             'rating' => round($this->ratings()->avg('value'), 3),
             'ratings_count' => $this->ratings()->count(),

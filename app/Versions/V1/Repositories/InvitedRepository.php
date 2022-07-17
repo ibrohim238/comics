@@ -2,9 +2,9 @@
 
 namespace App\Versions\V1\Repositories;
 
-use App\Dto\InvitationDto;
 use App\Interfaces\Invited;
 use App\Models\User;
+use App\Versions\V1\Dto\InvitationDto;
 
 class InvitedRepository
 {

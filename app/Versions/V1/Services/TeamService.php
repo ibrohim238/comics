@@ -2,10 +2,10 @@
 
 namespace App\Versions\V1\Services;
 
-use App\Dto\TeamDto;
 use App\Models\Team;
-use App\Models\User;
+use App\Versions\V1\Dto\TeamDto;
 use App\Versions\V1\Repositories\TeamRepository;
+use function app;
 
 class TeamService
 {

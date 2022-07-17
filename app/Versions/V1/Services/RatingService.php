@@ -2,10 +2,10 @@
 
 namespace App\Versions\V1\Services;
 
-use App\Dto\RateDto;
 use App\Exceptions\RatingsException;
 use App\Interfaces\Rateable;
 use App\Models\User;
+use App\Versions\V1\Dto\RateDto;
 use App\Versions\V1\Reporters\RateReporter;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Support\Facades\Lang;

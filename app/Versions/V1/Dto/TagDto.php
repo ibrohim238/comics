@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Dto;
+namespace App\Versions\V1\Dto;
 
 use App\Caster\TagTypeEnumCaster;
 use App\Enums\TagTypeEnum;

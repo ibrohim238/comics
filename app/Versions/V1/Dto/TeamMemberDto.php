@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Dto;
+namespace App\Versions\V1\Dto;
 
 use App\Caster\TeamRoleEnumCaster;
 use App\Enums\TeamRoleEnum;
@@ -10,7 +10,8 @@ use Spatie\DataTransferObject\DataTransferObject;
 
 class TeamMemberDto extends DataTransferObject
 {
-    public array $roles;
+    #[CastWith(TeamRoleEnumCaster::class)]
+    public TeamRoleEnum $role;
 
     public static function fromArray(TeamMemberRequest $request): TeamMemberDto
     {

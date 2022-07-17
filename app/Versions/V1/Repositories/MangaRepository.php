@@ -2,31 +2,22 @@
 
 namespace App\Versions\V1\Repositories;
 
-use App\Dto\MangaDto;
 use App\Models\Chapter;
 use App\Models\Manga;
 use App\Models\Team;
-use App\Versions\V1\Services\ChapterService;
 use App\Versions\V1\Services\TagSynchronizer;
+use App\Versions\V1\Dto\MangaDto;
+use App\Versions\V1\Services\ChapterService;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Spatie\QueryBuilder\AllowedFilter;
 use Spatie\QueryBuilder\QueryBuilder;
+use function app;
 
 class MangaRepository
 {
     public function __construct(
         private Manga $manga
     ) {
-    }
-
-    public function paginateChapter(Team $team, ?int $perPage): LengthAwarePaginator
-    {
-        return QueryBuilder::for($this->manga->chapters())
-            ->with('team')
-            ->where('team_id', $team->id)
-            ->defaultSorts('-volume', '-number')
-            ->allowedSorts('volume', 'number')
-            ->paginate($perPage);
     }
 
     public function paginate(?int $perPage): LengthAwarePaginator

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Dto;
+namespace App\Versions\V1\Dto;
 
 use App\Versions\V1\Http\Requests\ChapterRequest;
 use Carbon\Carbon;
@@ -14,6 +14,8 @@ class ChapterDto extends DataTransferObject
     public string $name;
     public ?Carbon $free_at;
     public ?array $images;
+    public ?int $manga_id;
+    public ?int $team_id;
 
     /**
      * @throws UnknownProperties

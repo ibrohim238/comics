@@ -35,7 +35,6 @@ Route::prefix('v1')->group(function () {
         require('admin.php');
     });
 
-    /* Auth */
     require('auth.php');
 
     /* User */
@@ -51,20 +50,22 @@ Route::prefix('v1')->group(function () {
 
 
     /* Teams */
-    Route::apiResource('team', TeamController::class)->middleware('role:owner');
-    Route::apiResource('team.members', TeamMemberController::class)->parameter('members', 'user');
-    Route::apiResource('team.invitation', TeamInvitationController::class);
+    Route::apiResource('team', TeamController::class);
+    Route::apiResource('team.members', TeamMemberController::class)
+        ->parameter('members', 'user')
+        ->middleware('team_permission:manage user');
+    Route::apiResource('team.invitation', TeamInvitationController::class)
+        ->middleware('team_permission:manage invitation');
 
-    Route::post('/team/{team}/{model}/{id}', [TeamableController::class, 'attach'])->name('team.manga.attach');
-    Route::delete('/team/{team}/{model}/{id}', [TeamableController::class, 'detach'])->name('team.manga.detach');
+    Route::middleware(['auth', 'permission:manage teamable'])->group(function () {
+        Route::post('/team/{team}/{model}/{id}', [TeamableController::class, 'attach'])->name('team.manga.attach');
+        Route::delete('/team/{team}/{model}/{id}', [TeamableController::class, 'detach'])->name('team.manga.detach');
+    });
 
     /* Manga */
-    Route::get('/manga/random', [MangaController::class, 'random'])->name('manga.random');
     Route::apiResource('manga', MangaController::class);
-
-    Route::scopeBindings()->group(function () {
-        Route::apiResource('team.manga.chapter', ChapterController::class);
-    });
+    Route::get('/manga/random', [MangaController::class, 'random'])->name('manga.random');
+    Route::apiResource('chapter', ChapterController::class);
 
     Route::apiResource('tags', TagController::class);
 

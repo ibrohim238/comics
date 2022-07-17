@@ -2,8 +2,8 @@
 
 namespace App\Versions\V1\Http\Controllers\Api\Admin;
 
-use App\Dto\Admin\UserDto;
 use App\Models\User;
+use App\Versions\V1\Dto\Admin\UserDto;
 use App\Versions\V1\Http\Controllers\Controller;
 use App\Versions\V1\Http\Requests\Admin\UserRequest;
 use App\Versions\V1\Http\Resources\UserCollection;
@@ -11,6 +11,7 @@ use App\Versions\V1\Http\Resources\UserResource;
 use App\Versions\V1\Repositories\UserRepository;
 use App\Versions\V1\Services\UserService;
 use Illuminate\Http\Request;
+use function app;
 
 class UserController extends Controller
 {
@@ -36,11 +37,11 @@ class UserController extends Controller
         );
     }
 
-    public function update(User $user, UserRequest $request)
+    public function update(User $user, \App\Versions\V1\Http\Requests\Admin\UserRequest $request)
     {
         app(UserService::class, [
             'user' => $user
-        ])->update(UserDto::fromRequest($request));
+        ])->update(\App\Versions\V1\Dto\Admin\UserDto::fromRequest($request));
 
         return new UserResource($user);
     }

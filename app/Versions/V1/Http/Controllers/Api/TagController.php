@@ -2,17 +2,19 @@
 
 namespace App\Versions\V1\Http\Controllers\Api;
 
-use App\Dto\TagDto;
+use App\Versions\V1\Dto\TagDto;
 use App\Versions\V1\Http\Controllers\Controller;
 use App\Versions\V1\Http\Requests\TagRequest;
 use App\Versions\V1\Http\Resources\TagCollection;
 use App\Versions\V1\Http\Resources\TagResource;
 use App\Versions\V1\Services\TagService;
+use IAleroy\Tags\Tag;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Spatie\DataTransferObject\Exceptions\UnknownProperties;
 use Spatie\QueryBuilder\QueryBuilder;
-use IAleroy\Tags\Tag;
+use function app;
+use function response;
 
 class TagController extends Controller
 {

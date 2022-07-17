@@ -3,7 +3,6 @@
 namespace App\Versions\V1\Actions;
 
 use App\Models\Manga;
-use Illuminate\Database\Eloquent\Relations\MorphMany;
 
 class ShowMangaAction
 {
