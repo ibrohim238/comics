@@ -5,7 +5,9 @@ namespace App\Versions\V1\Http\Controllers\Api;
 use App\Enums\BookmarkableTypeEnum;
 use App\Exceptions\BookmarksException;
 use App\Models\User;
+use App\Versions\V1\Dto\BookmarkDto;
 use App\Versions\V1\Http\Controllers\Controller;
+use App\Versions\V1\Http\Requests\BookmarkRequest;
 use App\Versions\V1\Http\Resources\MangaCollection;
 use App\Versions\V1\Repositories\UserRepository;
 use App\Versions\V1\Services\BookmarkService;
@@ -36,14 +38,17 @@ class BookmarksController extends Controller
         return new MangaCollection($bookmarks);
     }
 
-    public function attach(BookmarkableTypeEnum $model, int $id): JsonResponse
+    public function attach(
+        BookmarkableTypeEnum $model,
+        int $id,
+        BookmarkRequest $request
+    ): JsonResponse
     {
-        $user = Auth::user();
-
         try {
             app(BookmarkService::class, [
                 'bookmarkable' => $model->identify($id),
-                'user' => $user,
+                'user' => $request->user(),
+                'dto' => BookmarkDto::fromRequest($request),
             ])->attach();
         } catch (BookmarksException $exception) {
             return response()->json(['message' => $exception->getMessage()], Response::HTTP_BAD_REQUEST);
@@ -52,14 +57,17 @@ class BookmarksController extends Controller
         return response()->json(['message' => Lang::get('bookmark.created')]);
     }
 
-    public function detach(BookmarkableTypeEnum $model, int $id): JsonResponse
+    public function detach(
+        BookmarkableTypeEnum $model,
+        int $id,
+        BookmarkRequest $request
+    ): JsonResponse
     {
-        $user = Auth::user();
-
         try {
             app(BookmarkService::class, [
                 'bookmarkable' => $model->identify($id),
-                'user' => $user
+                'user' => $request->user(),
+                'dto' => BookmarkDto::fromRequest($request),
             ])->detach();
         } catch (BookmarksException $exception) {
             return response()->json(['message' => $exception->getMessage()], Response::HTTP_BAD_REQUEST);

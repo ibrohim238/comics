@@ -9,6 +9,6 @@ class TagTypeEnumCaster implements Caster
 {
     public function cast(mixed $value): TagTypeEnum
     {
-        return TagTypeEnum::tryFrom($value);
+        return TagTypeEnum::from($value);
     }
 }

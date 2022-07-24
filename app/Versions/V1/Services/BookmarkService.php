@@ -5,38 +5,40 @@ namespace App\Versions\V1\Services;
 use App\Exceptions\BookmarksException;
 use App\Interfaces\Bookmarkable;
 use App\Models\User;
+use App\Versions\V1\Dto\BookmarkDto;
+use App\Versions\V1\Repositories\BookmarkRepository;
 
 class BookmarkService
 {
+    private BookmarkRepository $repository;
+
     public function __construct(
-        public Bookmarkable $bookmarkable,
-        public User $user,
+        private Bookmarkable $bookmarkable,
+        private User $user,
+        private BookmarkDto $dto,
     ) {
+        $this->repository = app(BookmarkRepository::class, [
+            'bookmarkable' => $this->bookmarkable,
+            'user' => $this->user,
+            'type' => $this->dto->type,
+        ]);
     }
 
     public function attach(): void
     {
-        if($this->exists()) {
+        if ($this->repository->exists()) {
             throw BookmarksException::exists();
         }
 
-        $this->bookmarkable->bookmarkUsers()->attach($this->user->id);
+        $this->repository->attach();
     }
 
     public function detach(): void
     {
-        if(! $this->exists()) {
+        if (!$this->repository->exists()) {
             throw BookmarksException::notFound();
         }
 
-        $this->bookmarkable->bookmarkUsers()->detach([$this->user->id]);
-    }
-
-    private function exists(): bool
-    {
-        return $this->bookmarkable
-            ->bookmarkUsers()
-            ->where('id', $this->user->id)
-            ->exists();
+        $this->repository->detach();
     }
 }

@@ -2,6 +2,7 @@
 
 namespace Tests\Feature\V1\Http\Controllers\Api;
 
+use App\Enums\BookmarkTypeEnum;
 use App\Models\Manga;
 use App\Models\User;
 use App\Versions\V1\Http\Resources\MangaCollection;
@@ -11,22 +12,33 @@ use Symfony\Component\HttpFoundation\Response;
 use Tests\TestCase;
 use function route;
 
-class MangaBookmarksTest extends TestCase
+class MangaBookmarkTest extends TestCase
 {
     use WithFaker;
+
+    private int $type;
 
     protected function setUp(): void
     {
         parent::setUp();
 
         $this->user = User::factory()->create();
+        $this->type = $this->faker->randomElement(BookmarkTypeEnum::values());
     }
 
     public function testIndexOk()
     {
         $mangas = Manga::factory()->count(3)->create();
 
-        $this->user->mangas()->sync($mangas->pluck('id'));
+        $pluck = $mangas->pluck('id')
+            ->mapWithKeys(function (int $id) {
+                return [
+                    $id => [
+                        'type' => $this->type,
+                    ]
+                ];
+            });
+        $this->user->mangas()->sync($pluck);
 
         $response = $this
             ->actingAs($this->user)
@@ -53,7 +65,9 @@ class MangaBookmarksTest extends TestCase
 
         $response = $this
             ->actingAs($this->user)
-            ->postJson(route('bookmarks.attach', [getMorphedType($manga::class), $manga->id]));
+            ->postJson(route('bookmarks.attach', [getMorphedType($manga::class), $manga->id]), [
+                'type' => $this->type
+            ]);
 
         $response->assertOk()
             ->assertJsonFragment([
@@ -67,11 +81,15 @@ class MangaBookmarksTest extends TestCase
 
         $this
             ->actingAs($this->user)
-            ->postJson(route('bookmarks.attach', [getMorphedType($manga::class), $manga->id]));
+            ->postJson(route('bookmarks.attach', [getMorphedType($manga::class), $manga->id]), [
+                'type' => $this->type
+            ]);
 
         $response = $this
             ->actingAs($this->user)
-            ->postJson(route('bookmarks.attach', [getMorphedType($manga::class), $manga->id]));
+            ->postJson(route('bookmarks.attach', [getMorphedType($manga::class), $manga->id]), [
+                'type' => $this->type
+            ]);
 
         $response
             ->assertStatus(Response::HTTP_BAD_REQUEST)
@@ -85,7 +103,9 @@ class MangaBookmarksTest extends TestCase
         $manga = Manga::factory()->create();
 
         $response = $this
-            ->postJson(route('bookmarks.attach', [getMorphedType($manga::class), $manga->id]));
+            ->postJson(route('bookmarks.attach', [getMorphedType($manga::class), $manga->id]), [
+                'type' => $this->type
+            ]);
 
         $response
             ->assertUnauthorized();
@@ -97,11 +117,15 @@ class MangaBookmarksTest extends TestCase
 
         $this
             ->actingAs($this->user)
-            ->postJson(route('bookmarks.attach', [getMorphedType($manga::class), $manga->id]));
+            ->postJson(route('bookmarks.attach', [getMorphedType($manga::class), $manga->id]), [
+                'type' => $this->type,
+            ]);
 
         $response = $this
             ->actingAs($this->user)
-            ->deleteJson(route('bookmarks.detach', [getMorphedType($manga::class), $manga->id]));
+            ->deleteJson(route('bookmarks.detach', [getMorphedType($manga::class), $manga->id]), [
+                'type' => $this->type
+            ]);
 
         $response->assertOk()
             ->assertJsonFragment([
@@ -114,7 +138,9 @@ class MangaBookmarksTest extends TestCase
         $manga = Manga::factory()->create();
 
         $response = $this->actingAs($this->user)
-            ->deleteJson(route('bookmarks.detach', [getMorphedType($manga::class), $manga->id]));
+            ->deleteJson(route('bookmarks.detach', [getMorphedType($manga::class), $manga->id]), [
+                'type' => $this->type
+            ]);
 
         $response
             ->assertStatus(Response::HTTP_BAD_REQUEST)
@@ -127,7 +153,9 @@ class MangaBookmarksTest extends TestCase
     {
         $manga = Manga::factory()->create();
 
-        $response = $this->deleteJson(route('bookmarks.detach', [getMorphedType($manga::class), $manga->id]));
+        $response = $this->deleteJson(route('bookmarks.detach', [getMorphedType($manga::class), $manga->id]), [
+            'type' => $this->type
+        ]);
 
         $response->assertUnauthorized();
     }

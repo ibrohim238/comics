@@ -4,8 +4,6 @@ namespace App\Versions\V1\Transformers;
 
 use App\Notifications\ChapterCreated;
 use App\Versions\V1\Dto\NotificationDto;
-use App\Versions\V1\Transformers\ChapterNotificationTransformer;
-use App\Versions\V1\Transformers\NotificationTransformerContract;
 use Illuminate\Notifications\DatabaseNotification;
 
 class NotificationTransformer
@@ -21,10 +19,10 @@ class NotificationTransformer
     /**
      * @throws \Exception
      */
-    private function getTransformer(string $notificationType): \App\Versions\V1\Transformers\NotificationTransformerContract
+    private function getTransformer(string $notificationType): NotificationTransformerContract
     {
         return match ($notificationType) {
-            ChapterCreated::class => new \App\Versions\V1\Transformers\ChapterNotificationTransformer(),
+            ChapterCreated::class => new ChapterNotificationTransformer(),
             default => throw new \Exception('Не поддерживаемый тип нотификаций'),
         };
     }

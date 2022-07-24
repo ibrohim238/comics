@@ -15,7 +15,7 @@ class CommentRequest extends FormRequest
     {
         return [
             'content' => ['required', 'string'],
-            'parent_id' => ['nullable', 'integer'],
+            'parent_id' => ['nullable', 'integer', 'exists:comments,id'],
         ];
     }
 }

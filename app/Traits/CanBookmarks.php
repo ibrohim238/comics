@@ -9,6 +9,7 @@ trait CanBookmarks
 {
     public function mangas(): MorphToMany
     {
-        return $this->morphedByMany(Manga::class, 'bookmarkable', 'bookmarks');
+        return $this->morphedByMany(Manga::class, 'bookmarkable', 'bookmarks')
+            ->withPivot(['type']);
     }
 }

@@ -9,6 +9,6 @@ class RolePermissionEnumCaster implements Caster
 {
     public function cast(mixed $value): RolePermissionEnum
     {
-        return RolePermissionEnum::tryFrom($value);
+        return RolePermissionEnum::from($value);
     }
 }

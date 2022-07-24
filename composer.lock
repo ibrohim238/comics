@@ -1079,12 +1079,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/ibrohim238/laravel-teams.git",
-                "reference": "f48b3090805965a0133274faa49dcc41d292de1f"
+                "reference": "3efc4b3c1355a6df3a7278f5883ce6df0f7bb18a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/ibrohim238/laravel-teams/zipball/f48b3090805965a0133274faa49dcc41d292de1f",
-                "reference": "f48b3090805965a0133274faa49dcc41d292de1f",
+                "url": "https://api.github.com/repos/ibrohim238/laravel-teams/zipball/3efc4b3c1355a6df3a7278f5883ce6df0f7bb18a",
+                "reference": "3efc4b3c1355a6df3a7278f5883ce6df0f7bb18a",
                 "shasum": ""
             },
             "require": {
@@ -1123,7 +1123,7 @@
                 "issues": "https://github.com/ibrohim238/laravel-teams/issues",
                 "source": "https://github.com/ibrohim238/laravel-teams/tree/master"
             },
-            "time": "2022-07-17T09:30:49+00:00"
+            "time": "2022-07-17T10:31:04+00:00"
         },
         {
             "name": "intervention/image",

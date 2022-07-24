@@ -14,7 +14,7 @@ class TeamMemberRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'role' => [new Enum(TeamRoleEnum::class)]
+            'role' => ['required', new Enum(TeamRoleEnum::class)]
         ];
     }
 }

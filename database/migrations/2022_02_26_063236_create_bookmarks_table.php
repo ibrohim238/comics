@@ -16,11 +16,13 @@ return new class extends Migration
         Schema::create('bookmarks', function (Blueprint $table) {
             $table->foreignId('user_id')->constrained();
             $table->morphs('bookmarkable');
+            $table->unsignedSmallInteger('type')->nullable();
 
             $table->unique([
                 'user_id',
                 'bookmarkable_id',
                 'bookmarkable_type',
+                'type',
             ]);
         });
     }

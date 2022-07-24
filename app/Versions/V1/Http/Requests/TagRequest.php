@@ -19,7 +19,7 @@ class TagRequest extends FormRequest
         return [
             'name' => ['required', 'string'],
             'description' => ['nullable', 'string'],
-            'type' => [new Enum(TagTypeEnum::class)]
+            'type' => ['required', new Enum(TagTypeEnum::class)]
         ];
     }
 }
