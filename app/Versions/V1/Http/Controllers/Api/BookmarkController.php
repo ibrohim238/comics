@@ -19,7 +19,7 @@ use Symfony\Component\HttpFoundation\Response;
 use function app;
 use function response;
 
-class BookmarksController extends Controller
+class BookmarkController extends Controller
 {
     public function __construct()
     {

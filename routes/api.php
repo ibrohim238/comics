@@ -2,7 +2,7 @@
 
 
 use App\Enums\RatesTypeEnum;
-use App\Versions\V1\Http\Controllers\Api\BookmarksController;
+use App\Versions\V1\Http\Controllers\Api\BookmarkController;
 use App\Versions\V1\Http\Controllers\Api\ChapterController;
 use App\Versions\V1\Http\Controllers\Api\CommentController;
 use App\Versions\V1\Http\Controllers\Api\HistoryController;
@@ -80,9 +80,9 @@ Route::prefix('v1')->group(function () {
         }
 
         /* Bookmarks */
-        Route::get('/bookmarks/manga', [BookmarksController::class, 'indexManga'])->name('bookmarks.index-manga');
-        Route::post('/bookmarks/{model}/{id}', [BookmarksController::class, 'attach'])->name('bookmarks.attach');
-        Route::delete('/bookmarks/{model}/{id}', [BookmarksController::class, 'detach'])->name('bookmarks.detach');
+        Route::get('/bookmarks/manga', [BookmarkController::class, 'indexManga'])->name('bookmarks.index-manga');
+        Route::post('/bookmarks/{model}/{id}', [BookmarkController::class, 'attach'])->name('bookmarks.attach');
+        Route::delete('/bookmarks/{model}/{id}', [BookmarkController::class, 'detach'])->name('bookmarks.detach');
         /* Notifications */
         Route::get('/notifications', [NotificationController::class, 'index'])->name('notification.index');
         Route::get('/notifications/more/{groupId}', [NotificationController::class, 'more'])->name('notification.more');

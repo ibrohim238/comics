@@ -2,10 +2,8 @@
 
 namespace App\Versions\V1\Services;
 
-use App\Enums\RolePermissionEnum;
 use App\Models\User;
-use App\Versions\V1\Dto\Admin\UserDto as AdminUserDto;
-use App\Versions\V1\Dto\UserDto;
+use App\Versions\V1\Dto\UserDtoContract;
 use App\Versions\V1\Repositories\UserRepository;
 use function app;
 
@@ -22,22 +20,22 @@ class UserService
         ]);
     }
 
-    public function store(UserDto $dto): User
+    public function store(UserDtoContract $dto): User
     {
         $this->repository
-            ->fill($dto->toArray())
+            ->fill($dto->forFillArray())
             ->save()
-            ->assignRole(RolePermissionEnum::USER);
+            ->assignRole($dto->getRole());
 
         return $this->user;
     }
 
-    public function update(AdminUserDto $dto): User
+    public function update(UserDtoContract $dto): User
     {
         $this->repository
-            ->fill($dto->except('role')->toArray())
+            ->fill($dto->forFillArray())
             ->save()
-            ->syncRoles($dto->role);
+            ->syncRoles($dto->getRole());
 
         return $this->user;
     }

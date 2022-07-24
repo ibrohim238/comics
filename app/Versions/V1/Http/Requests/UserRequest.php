@@ -12,7 +12,7 @@ class UserRequest extends FormRequest
         return true;
     }
 
-    public function rules()
+    public function rules(): array
     {
         return [
             'name' => 'sometimes|required|string|max:255',

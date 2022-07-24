@@ -2,6 +2,7 @@
 
 namespace App\Versions\V1\Http\Controllers\Api\Auth;
 
+use App\Enums\RolePermissionEnum;
 use App\Models\User;
 use App\Providers\RouteServiceProvider;
 use App\Versions\V1\Dto\UserDto;
@@ -53,7 +54,7 @@ class RegisterController extends Controller
     protected function validator(array $data)
     {
         return Validator::make($data, [
-            'username' => ['required', 'string', 'max:30', 'regex:/(^([a-zA-Z]+)(\d+)?$)/u'],
+            'username' => ['required', 'string', 'max:30', 'regex:/(^([a-zA-Z]+)(\d+)?$)/u', 'unique:users'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
             'password' => ['required', 'string', 'min:8', 'confirmed'],
         ]);
@@ -64,11 +65,10 @@ class RegisterController extends Controller
      *
      * @param array $data
      * @return User
-     * @throws UnknownProperties
      */
     protected function create(array $data)
     {
         return app(UserService::class)
-            ->store(UserDto::fromArray($data));
+            ->store(UserDto::fromArray($data + ['role' => RolePermissionEnum::USER]));
     }
 }
