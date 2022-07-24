@@ -9,6 +9,6 @@ class TeamRoleEnumCaster implements Caster
 {
     public function cast(mixed $value): TeamRoleEnum
     {
-        return TeamRoleEnum::tryFrom($value);
+        return TeamRoleEnum::from($value);
     }
 }
