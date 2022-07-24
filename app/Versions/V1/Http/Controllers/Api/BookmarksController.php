@@ -28,11 +28,8 @@ class BookmarksController extends Controller
 
     public function indexManga(Request $request): MangaCollection
     {
-        $user = Auth::user();
-
-        /** @var User $user */
         $bookmarks = app(UserRepository::class, [
-           'user' => $user
+           'user' => $request->user()
         ])->paginateManga($request->get('count'));
 
         return new MangaCollection($bookmarks);

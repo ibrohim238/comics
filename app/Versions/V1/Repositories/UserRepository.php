@@ -34,12 +34,13 @@ class UserRepository
     public function paginateManga(?int $perPage): LengthAwarePaginator
     {
         return QueryBuilder::for($this->user->mangas())
-            ->allowedFilters(
+            ->allowedFilters([
+                AllowedFilter::exact('type', 'bookmarks.type'),
                 AllowedFilter::exact('teams', 'teams.id'),
                 AllowedFilter::exact('genres', 'genres.name'),
                 AllowedFilter::exact('categories', 'categories.name'),
                 AllowedFilter::exact('tags', 'tags.name')
-            )->paginate($perPage);
+            ])->paginate($perPage);
     }
 
     public function getUser(): User
