@@ -2,9 +2,10 @@
 
 namespace App\Versions\V1\Http\Requests;
 
-use App\Enums\RatesTypeEnum;
+use App\Enums\RateTypeEnum;
 use Exception;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rules\Enum;
 
 /**
  * @property-read int $value
@@ -17,15 +18,21 @@ class RateRequest extends FormRequest
      */
     public function rules(): array
     {
-        return match ($this->segment(3)) {
-            RatesTypeEnum::RATING_TYPE->value => [
+        $rules = match ($this->type) {
+            RateTypeEnum::RATING_TYPE->value => [
                 'value' => ['required', 'numeric', 'min:0', 'max:5'],
             ],
-            RatesTypeEnum::LIKE_TYPE->value => [
-                'value' => ['required', 'boolean'],
+            RateTypeEnum::LIKE_TYPE->value => [
+                'value' => ['required', 'boolean']
             ],
-            RatesTypeEnum::VOTE_TYPE->value => [],
-            default => throw new Exception('Unexpected match value'),
+            RateTypeEnum::VOTE_TYPE->value => []
+        };
+
+
+
+        return match ($this->method()) {
+            'POST' => $rules,
+            'DELETE' => []
         };
     }
 }

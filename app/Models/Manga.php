@@ -2,7 +2,7 @@
 
 namespace App\Models;
 
-use App\Enums\RatesTypeEnum;
+use App\Enums\RateTypeEnum;
 use App\Interfaces\Bookmarkable;
 use App\Interfaces\Commentable;
 use App\Interfaces\Eventable;
@@ -69,7 +69,7 @@ class Manga extends Model
     {
         return $this->hasManyThrough(Rate::class, Chapter::class, 'manga_id', 'rateable_id')
             ->where('rateable_type', getMorphedType(Chapter::class))
-            ->where('type', RatesTypeEnum::VOTE_TYPE->value);
+            ->where('type', RateTypeEnum::VOTE_TYPE->value);
     }
 
     public function registerMediaCollections(): void

@@ -2,7 +2,7 @@
 
 namespace App\Models;
 
-use App\Enums\RatesTypeEnum;
+use App\Enums\RateTypeEnum;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
@@ -18,7 +18,7 @@ class Rate extends Model
     ];
 
     protected $casts = [
-        'type' => RatesTypeEnum::class,
+        'type' => RateTypeEnum::class,
     ];
 
     public function user(): BelongsTo

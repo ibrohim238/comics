@@ -5,26 +5,29 @@ namespace App\Versions\V1\Services;
 use App\Interfaces\Commentable;
 use App\Models\Comment;
 use App\Versions\V1\Dto\CommentDto;
+use App\Versions\V1\Repositories\CommentRepository;
 
 class CommentService
 {
-    public function create(Commentable $commentable, CommentDto $dto): Comment
-    {
-        return $commentable->comments()
-            ->create($dto->toArray());
+    private CommentRepository $repository;
+
+    public function __construct(
+      private Comment $comment
+    ) {
+        $this->repository = app(CommentRepository::class, [
+           'comment' => $this->comment,
+        ]);
     }
 
-    public function update(Comment $comment, CommentDto $dto)
+    public function update(CommentDto $dto): Comment
     {
-        $comment->update(
-            $dto
-                ->only('content')
-                ->toArray()
-        );
+        return $this->repository
+            ->update($dto);
     }
 
-    public function delete(Comment $comment)
+    public function destroy(): void
     {
-        $comment->delete();
+        $this->repository
+            ->delete();
     }
 }

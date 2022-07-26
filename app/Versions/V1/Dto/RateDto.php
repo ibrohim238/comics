@@ -2,22 +2,10 @@
 
 namespace App\Versions\V1\Dto;
 
-use App\Versions\V1\Http\Requests\RateRequest;
-use Spatie\DataTransferObject\DataTransferObject;
-use Spatie\DataTransferObject\Exceptions\UnknownProperties;
-
-class RateDto extends DataTransferObject
+abstract class RateDto extends BaseDto
 {
-    public ?int $value;
-    public string $type;
-
-    /**
-     * @throws UnknownProperties
-     */
-    public static function fromRequest(RateRequest $request): RateDto
+    public function getValue(): int
     {
-        return new self([
-            'type' => $request->segment(3),
-        ] + $request->validated());
+        return $this->value;
     }
 }

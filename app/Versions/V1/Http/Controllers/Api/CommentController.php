@@ -3,6 +3,7 @@
 namespace App\Versions\V1\Http\Controllers\Api;
 
 use App\Enums\CommentableTypeEnum;
+use App\Interfaces\Commentable;
 use App\Models\Chapter;
 use App\Models\Comment;
 use App\Models\Manga;
@@ -11,6 +12,9 @@ use App\Versions\V1\Http\Controllers\Controller;
 use App\Versions\V1\Http\Requests\CommentRequest;
 use App\Versions\V1\Http\Resources\CommentCollection;
 use App\Versions\V1\Http\Resources\CommentResource;
+use App\Versions\V1\Repositories\CommentableRepository;
+use App\Versions\V1\Repositories\CommentRepository;
+use App\Versions\V1\Services\CommentableService;
 use App\Versions\V1\Services\CommentService;
 use App\Versions\V1\Traits\IdentifiesModels;
 use Exception;
@@ -29,60 +33,57 @@ class CommentController extends Controller
         $this->authorizeResource(Comment::class);
     }
 
-    /**
-     * @throws Exception
-     */
     public function index(
         CommentableTypeEnum $model,
         int                 $id,
         Request             $request
     ): CommentCollection
     {
-        $model = $model->identify($id);
-
-        /* @var Manga|Chapter $model */
-        $comments = $model->comments()->with('user')
-            ->paginate($request->get('count'));
+        $comments = app(CommentableRepository::class, [
+            'commentable' => $model->identify($id)
+        ])->paginate($request->get('count'));
 
         return new CommentCollection($comments);
     }
 
-    /**
-     * @throws UnknownProperties
-     * @throws Exception
-     */
+    public function loadChild(int $parentId, Request $request)
+    {
+        $comments = app(CommentRepository::class)
+            ->loadChild($parentId, $request->get('count'));
+
+        return new CommentCollection($comments);
+    }
+
     public function store(
         CommentableTypeEnum $model,
         int                 $id,
         CommentRequest      $request,
-        CommentService      $service
     ): CommentResource
     {
-        $model = $model->identify($id);
-
-        /* @var Manga|Chapter $model */
-        $comment = $service->create($model, CommentDto::fromRequest($request));
+        $comment = app(CommentableService::class, [
+           'commentable' => $model->identify($id),
+        ])->store(CommentDto::fromRequest($request));
 
         return new CommentResource($comment);
     }
 
-    /**
-     * @throws UnknownProperties
-     */
     public function update(
         Comment        $comment,
         CommentRequest $request,
-        CommentService $service
     ): CommentResource
     {
-        $service->update($comment, CommentDto::fromRequest($request));
+        app(CommentService::class, [
+            'comment' => $comment
+        ])->update(CommentDto::fromRequest($request));
 
         return new CommentResource($comment);
     }
 
-    public function destroy(Comment $comment, CommentService $service): Response
+    public function destroy(Comment $comment): Response
     {
-        $service->delete($comment);
+        app(CommentService::class, [
+            'comment' => $comment
+        ])->destroy();
 
         return response()->noContent();
     }

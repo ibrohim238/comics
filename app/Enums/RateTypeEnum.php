@@ -2,7 +2,7 @@
 
 namespace App\Enums;
 
-enum RatesTypeEnum: string
+enum RateTypeEnum: string
 {
     use EnumTrait;
 

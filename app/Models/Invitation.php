@@ -11,7 +11,6 @@ use Illuminate\Database\Eloquent\Relations\MorphTo;
 
 class Invitation extends Model
 {
-
     use HasFactory;
 
     /**

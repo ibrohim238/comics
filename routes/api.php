@@ -1,21 +1,24 @@
 <?php
 
 
-use App\Enums\RatesTypeEnum;
+use App\Enums\RateTypeEnum;
 use App\Versions\V1\Http\Controllers\Api\BookmarkController;
 use App\Versions\V1\Http\Controllers\Api\ChapterController;
 use App\Versions\V1\Http\Controllers\Api\CommentController;
 use App\Versions\V1\Http\Controllers\Api\HistoryController;
 use App\Versions\V1\Http\Controllers\Api\InvitationController;
+use App\Versions\V1\Http\Controllers\Api\LikeController;
 use App\Versions\V1\Http\Controllers\Api\MangaController;
 use App\Versions\V1\Http\Controllers\Api\NotificationController;
 use App\Versions\V1\Http\Controllers\Api\RateableController;
+use App\Versions\V1\Http\Controllers\Api\RatingController;
 use App\Versions\V1\Http\Controllers\Api\TeamableController;
 use App\Versions\V1\Http\Controllers\Api\TeamController;
 use App\Versions\V1\Http\Controllers\Api\TeamInvitationController;
 use App\Versions\V1\Http\Controllers\Api\TeamMemberController;
 use App\Versions\V1\Http\Controllers\Api\UserController;
 use App\Versions\V1\Http\Controllers\Api\TagController;
+use App\Versions\V1\Http\Controllers\Api\VoteController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -70,14 +73,12 @@ Route::prefix('v1')->group(function () {
     Route::apiResource('tags', TagController::class);
 
     Route::group(['middleware' => 'auth'], function () {
-        foreach (RatesTypeEnum::values() as $type) {
-            Route::post("/${type}/{model}/{id}", [RateableController::class, 'rate'])
-                ->name("$type.rate")
-                ->whereIn('model', RatesTypeEnum::tryFrom($type)->rateable());
-            Route::delete("/${type}/{model}/{id}", [RateableController::class, 'unRate'])
-                ->name("$type.un-rate")
-                ->whereIn('model', RatesTypeEnum::tryFrom($type)->rateable());
-        }
+        Route::post("/rating/{model}/{id}", [RatingController::class, 'rate'])->name('rating.rate');
+        Route::delete("/rating/{model}/{id}", [RatingController::class, 'unRate'])->name('rating.unRate');
+        Route::post("/like/{model}/{id}", [LikeController::class, 'rate'])->name('like.rate');
+        Route::delete("/like/{model}/{id}", [LikeController::class, 'unRate'])->name('like.unRate');
+        Route::post("/vote/{model}/{id}", [VoteController::class, 'rate'])->name('vote.rate');
+        Route::delete("/vote/{model}/{id}", [VoteController::class, 'unRate'])->name('vote.unRate');
 
         /* Bookmarks */
         Route::get('/bookmarks/manga', [BookmarkController::class, 'indexManga'])->name('bookmarks.index-manga');
@@ -97,6 +98,7 @@ Route::prefix('v1')->group(function () {
 
     /* Comments */
     Route::get('/comment/{model}/{id}', [CommentController::class, 'index'])->name('comment.index');
+    Route::get('/comment/{parentId}', [CommentController::class, 'loadChild'])->name('comment.load-child');
     Route::post('/comment/{model}/{id}', [CommentController::class, 'store'])->name('comment.store');
     Route::patch('/comment/{comment}', [CommentController::class, 'update'])->name('comment.update');
     Route::delete('/comment/{comment}', [CommentController::class, 'destroy'])->name('comment.destroy');

@@ -2,7 +2,7 @@
 
 namespace App\Versions\V1\Reporters;
 
-use App\Enums\RatesTypeEnum;
+use App\Enums\RateTypeEnum;
 use App\Interfaces\Rateable;
 use App\Models\Rate;
 use Illuminate\Database\Eloquent\Builder;
@@ -71,7 +71,7 @@ class RateReporter
 
     public function avg()
     {
-        if ($this->type == RatesTypeEnum::LIKE_TYPE->value) {
+        if ($this->type == RateTypeEnum::LIKE_TYPE->value) {
             throw new \LogicException('U can`t count avg `like` type ratings');
         }
 
@@ -87,7 +87,7 @@ class RateReporter
     public function likesCount(): int
     {
         return $this->builder()
-            ->where('type', RatesTypeEnum::LIKE_TYPE->value)
+            ->where('type', RateTypeEnum::LIKE_TYPE->value)
             ->where('value', true)
             ->count();
     }
@@ -95,7 +95,7 @@ class RateReporter
     public function dislikesCount(): int
     {
         return $this->builder()
-            ->where('type', RatesTypeEnum::LIKE_TYPE->value)
+            ->where('type', RateTypeEnum::LIKE_TYPE->value)
             ->where('value', false)->count();
     }
 }

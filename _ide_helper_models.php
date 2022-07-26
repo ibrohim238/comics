@@ -270,7 +270,7 @@ namespace App\Models{
  *
  * @property int $id
  * @property int|null $value
- * @property \App\Enums\RatesTypeEnum $type
+ * @property \App\Enums\RateTypeEnum $type
  * @property int $user_id
  * @property string $rateable_type
  * @property int $rateable_id

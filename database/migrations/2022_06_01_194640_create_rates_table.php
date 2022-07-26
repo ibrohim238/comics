@@ -20,6 +20,8 @@ return new class extends Migration
             $table->foreignId('user_id')->constrained();
             $table->morphs('rateable');
             $table->timestamps();
+
+            $table->unique(['user_id', 'rateable_type', 'rateable_id', 'type']);
         });
     }
 
