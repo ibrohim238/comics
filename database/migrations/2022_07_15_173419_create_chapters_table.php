@@ -15,11 +15,12 @@ return new class extends Migration
     {
         Schema::create('chapters', function (Blueprint $table) {
             $table->id();
-            $table->integer('volume');
+            $table->unsignedSmallInteger('volume');
             $table->float('number');
             $table->string('name');
             $table->foreignId('manga_id')->constrained();
-            $table->foreignId('team_id')->constrained();
+            $table->foreignId('team_id')->nullable()->constrained();
+            $table->float('price')->nullable();
             $table->timestamp('free_at')->nullable();
             $table->timestamps();
 

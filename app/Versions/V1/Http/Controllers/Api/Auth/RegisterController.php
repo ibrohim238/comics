@@ -2,39 +2,15 @@
 
 namespace App\Versions\V1\Http\Controllers\Api\Auth;
 
-use App\Enums\RolePermissionEnum;
-use App\Models\User;
-use App\Providers\RouteServiceProvider;
 use App\Versions\V1\Dto\UserDto;
 use App\Versions\V1\Http\Controllers\Controller;
+use App\Versions\V1\Http\Requests\RegisterRequest;
+use App\Versions\V1\Http\Resources\UserResource;
 use App\Versions\V1\Services\UserService;
-use Illuminate\Foundation\Auth\RegistersUsers;
-use Illuminate\Support\Facades\Validator;
-use Spatie\DataTransferObject\Exceptions\UnknownProperties;
 use function app;
 
 class RegisterController extends Controller
 {
-    /*
-    |--------------------------------------------------------------------------
-    | Register Controller
-    |--------------------------------------------------------------------------
-    |
-    | This controller handles the registration of new users as well as their
-    | validation and creation. By default this controller uses a trait to
-    | provide this functionality without requiring any additional code.
-    |
-    */
-
-    use RegistersUsers;
-
-    /**
-     * Where to redirect users after registration.
-     *
-     * @var string
-     */
-    protected $redirectTo = RouteServiceProvider::HOME;
-
     /**
      * Create a new controller instance.
      *
@@ -45,30 +21,11 @@ class RegisterController extends Controller
         $this->middleware('guest');
     }
 
-    /**
-     * Get a validator for an incoming registration request.
-     *
-     * @param  array  $data
-     * @return \Illuminate\Contracts\Validation\Validator
-     */
-    protected function validator(array $data)
+    public function register(RegisterRequest $request)
     {
-        return Validator::make($data, [
-            'username' => ['required', 'string', 'max:30', 'regex:/(^([a-zA-Z]+)(\d+)?$)/u', 'unique:users'],
-            'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
-            'password' => ['required', 'string', 'min:8', 'confirmed'],
-        ]);
-    }
+        $user = app(UserService::class)
+            ->store(UserDto::fromRequest($request));
 
-    /**
-     * Create a new user instance after a valid registration.
-     *
-     * @param array $data
-     * @return User
-     */
-    protected function create(array $data)
-    {
-        return app(UserService::class)
-            ->store(UserDto::fromArray($data + ['role' => RolePermissionEnum::USER]));
+        return new UserResource($user);
     }
 }

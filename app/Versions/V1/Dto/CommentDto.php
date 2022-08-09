@@ -14,8 +14,8 @@ class CommentDto extends DataTransferObject
 
     public static function fromRequest(CommentRequest $request): self
     {
-        return new self(array_merge($request->validated(), [
+        return new self($request->validated() + [
             'user_id' => $request->user()->id
-        ]));
+        ]);
     }
 }

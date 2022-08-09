@@ -54,7 +54,7 @@ class MangaController extends Controller
     /**
      * @throws UnknownProperties
      */
-    public function store(MangaRequest $request): MangaResource
+    public function store(MangaRequest $request)
     {
         $manga = app(MangaService::class)
             ->store(MangaDto::fromRequest($request));

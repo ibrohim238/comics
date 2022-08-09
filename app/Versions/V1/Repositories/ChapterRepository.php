@@ -20,9 +20,9 @@ class ChapterRepository
     public function paginate(?int $perPage): LengthAwarePaginator
     {
         return QueryBuilder::for($this->chapter)
-            ->with('team')
+            ->with('team', 'manga')
             ->allowedFilters([
-               'manga_id'
+               AllowedFilter::exact('manga', 'manga.slug')
             ])->paginate($perPage);
     }
 
@@ -33,7 +33,7 @@ class ChapterRepository
 
     public function load(): static
     {
-        $this->chapter->load('manga.media');
+        $this->chapter->load('manga.media', 'media');
 
         return $this;
     }
@@ -52,16 +52,28 @@ class ChapterRepository
         return $this;
     }
 
-    public function associateTeam(int $teamId): static
+    public function associateTeam(?int $teamId): static
     {
         $this->chapter->team()->associate($teamId);
 
         return $this;
     }
 
-    public function associateManga(int $mangaId): static
+    public function addMedia(?array $images): static
     {
-        $this->chapter->manga()->associate($mangaId);
+        if (! is_null($images)) {
+            $this->chapter->addMultipleMediaFromRequest(['media'])
+                ->each(function ($fileAdder) {
+                    $fileAdder->toMediaCollection();
+                });
+        }
+
+        return $this;
+    }
+
+    public function associateManga(Manga $manga): static
+    {
+        $this->chapter->manga()->associate($manga);
 
         return $this;
     }

@@ -2,8 +2,11 @@
 
 namespace App\Versions\V1\Dto;
 
+use App\Caster\MangaSlugCaster;
+use App\Models\Manga;
 use App\Versions\V1\Http\Requests\ChapterRequest;
 use Carbon\Carbon;
+use Spatie\DataTransferObject\Attributes\CastWith;
 use Spatie\DataTransferObject\DataTransferObject;
 use Spatie\DataTransferObject\Exceptions\UnknownProperties;
 
@@ -13,9 +16,11 @@ class ChapterDto extends DataTransferObject
     public int $number;
     public string $name;
     public ?Carbon $free_at;
-    public ?array $images;
-    public ?int $manga_id;
+    public ?array $media;
+    #[CastWith(MangaSlugCaster::class)]
+    public ?Manga $manga;
     public ?int $team_id;
+    public float $price;
 
     /**
      * @throws UnknownProperties

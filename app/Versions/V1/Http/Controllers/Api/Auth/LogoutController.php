@@ -18,6 +18,6 @@ class LogoutController extends Controller
     {
         Auth::user()->token()->revoke();
 
-        return response(null, Response::HTTP_NO_CONTENT);
+        return response()->noContent();
     }
 }

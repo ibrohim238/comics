@@ -12,7 +12,7 @@ use Illuminate\Http\UploadedFile;
  * @property-read Carbon $published_at
  * @property-read bool $is_published
  * @property-read array $tags
- * @property-read UploadedFile $image
+ * @property-read UploadedFile $media
 */
 class MangaRequest extends FormRequest
 {
@@ -35,7 +35,7 @@ class MangaRequest extends FormRequest
             'description' => ['required', 'string', 'min:4', 'max:625'],
             'published_at' => ['nullable', 'date'],
             'tags' => ['required', 'array', 'exists:tags,id'],
-            'image' => ['nullable', 'image'],
+            'media' => ['nullable', 'image'],
         ];
     }
 }

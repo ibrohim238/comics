@@ -17,10 +17,12 @@ class ChapterResource extends JsonResource
             'volume' => $this->volume,
             'number' => $this->number,
             'name' => $this->name,
+            'free_at' => $this->free_at,
+            'price' => $this->price,
             'manga' => new MangaResource($this->whenLoaded('manga')),
             'team' => new TeamResource($this->whenLoaded('team')),
             'media' => new MediaCollection($this->whenLoaded('media')),
-            'free_at' => $this->free_at
+            'created_at' => $this->created_at->format('d-m-Y')
         ];
     }
 }

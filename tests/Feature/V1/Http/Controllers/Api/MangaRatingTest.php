@@ -80,7 +80,7 @@ class MangaRatingTest extends TestCase
             ]);
 
         $response = $this->actingAs($user)
-            ->deleteJson(route('rating.un-rate', [getMorphedType($manga::class), $manga->id]));
+            ->deleteJson(route('rating.unRate', [getMorphedType($manga::class), $manga->id]));
 
         $response->assertOk()
             ->assertJsonFragment([
@@ -95,7 +95,7 @@ class MangaRatingTest extends TestCase
         $manga = Manga::factory()->create();
 
         $response = $this->actingAs($user)
-            ->deleteJson(route('rating.un-rate', [getMorphedType($manga::class), $manga->id]));
+            ->deleteJson(route('rating.unRate', [getMorphedType($manga::class), $manga->id]));
 
         $response->assertStatus(Response::HTTP_BAD_REQUEST)
             ->assertJsonFragment([
@@ -110,7 +110,7 @@ class MangaRatingTest extends TestCase
 
 
         $response = $this
-            ->deleteJson(route('rating.un-rate', [getMorphedType($manga::class), $manga->id]), [
+            ->deleteJson(route('rating.unRate', [getMorphedType($manga::class), $manga->id]), [
                 'value' => $this->faker->numberBetween(1, 5)
             ]);
 

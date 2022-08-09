@@ -4,7 +4,7 @@ namespace App\Versions\V1\Services;
 
 use App\Versions\V1\Dto\TagDto;
 use App\Versions\V1\Repositories\TagRepository;
-use IAleroy\Tags\Tag;
+use App\Models\Tag;
 use function app;
 
 class TagService

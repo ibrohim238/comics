@@ -5,7 +5,11 @@ namespace App\Versions\V1\Http\Requests;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Auth;
 
-class UserRequest extends FormRequest
+/**
+ * @property-read string $username
+ * @property-read string $password
+ */
+class LoginRequest extends FormRequest
 {
     public function authorize()
     {
@@ -15,9 +19,8 @@ class UserRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => 'sometimes|required|string|max:255',
-            'email' => 'sometimes|required|string|email|max:255|unique:users,email,'.Auth::id(),
-            'password' => 'sometimes|required|string|min:8|max:255|confirmed',
+            'username' => ['required', 'string'],
+            'password' => ['required', 'string'],
         ];
     }
 }

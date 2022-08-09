@@ -26,8 +26,9 @@ class ChapterService
         $this->repository
             ->fill($dto->toArray())
             ->associateTeam($dto->team_id)
-            ->associateManga($dto->manga_id)
-            ->save();
+            ->associateManga($dto->manga)
+            ->save()
+            ->addMedia($dto->media);
 
         return $this->chapter;
     }
@@ -36,7 +37,8 @@ class ChapterService
     {
         $this->repository
             ->fill($dto->toArray())
-            ->save();
+            ->save()
+            ->addMedia($dto->media);
 
         return $this->chapter;
     }

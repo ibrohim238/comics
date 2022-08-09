@@ -65,7 +65,7 @@ ChapterVoteTest extends TestCase
             ->postJson(route('vote.rate', [getMorphedType($this->chapter::class), $this->chapter->id]));
 
         $response = $this->actingAs($this->user)
-            ->deleteJson(route('vote.un-rate', [getMorphedType($this->chapter::class), $this->chapter->id]));
+            ->deleteJson(route('vote.unRate', [getMorphedType($this->chapter::class), $this->chapter->id]));
 
         $response->assertOk()
             ->assertJsonFragment([
@@ -76,7 +76,7 @@ ChapterVoteTest extends TestCase
     public function testDeleteBusy()
     {
         $response = $this->actingAs($this->user)
-            ->deleteJson(route('vote.un-rate', [getMorphedType($this->chapter::class), $this->chapter->id]));
+            ->deleteJson(route('vote.unRate', [getMorphedType($this->chapter::class), $this->chapter->id]));
 
         $response->assertStatus(Response::HTTP_BAD_REQUEST)
             ->assertJsonFragment([
@@ -87,7 +87,7 @@ ChapterVoteTest extends TestCase
     public function testDeleteUnauthorized()
     {
         $response = $this
-            ->deleteJson(route('vote.un-rate', [getMorphedType($this->chapter::class), $this->chapter->id]));
+            ->deleteJson(route('vote.unRate', [getMorphedType($this->chapter::class), $this->chapter->id]));
 
         $response->assertUnauthorized();
     }

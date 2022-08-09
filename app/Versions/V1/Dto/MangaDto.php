@@ -14,7 +14,7 @@ class MangaDto extends DataTransferObject
     public string $description;
     public ?Carbon $published_at;
     public ?array $tags;
-    public ?UploadedFile $image;
+    public ?UploadedFile $media;
 
     /**
      * @throws UnknownProperties

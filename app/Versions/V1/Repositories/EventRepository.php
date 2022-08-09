@@ -1,18 +1,17 @@
 <?php
 
-namespace App\Versions\V1\Http\Controllers\Api;
+namespace App\Versions\V1\Repositories;
 
 use App\Enums\EventTypeEnum;
 use App\Models\Chapter;
 use App\Models\Event;
-use App\Versions\V1\Http\Resources\EventCollection;
-use Illuminate\Http\Request;
+use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 
-class HistoryController
+class EventRepository
 {
-    public function __invoke(Request $request): EventCollection
+    public function chapterPaginate(?int $perPage): LengthAwarePaginator
     {
-        $events = Event::query()
+        return Event::query()
             ->with('eventable.manga.media')
             ->whereMorphRelation(
                 'eventable',
@@ -21,8 +20,6 @@ class HistoryController
                 '!=',
                 EventTypeEnum::DELETE_TYPE->value
             )
-            ->paginate($request->get('count'));
-
-        return new EventCollection($events);
+            ->paginate($perPage);
     }
 }

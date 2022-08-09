@@ -1,22 +1,19 @@
 <?php
 
-
-use App\Enums\RateTypeEnum;
 use App\Versions\V1\Http\Controllers\Api\BookmarkController;
 use App\Versions\V1\Http\Controllers\Api\ChapterController;
 use App\Versions\V1\Http\Controllers\Api\CommentController;
-use App\Versions\V1\Http\Controllers\Api\HistoryController;
+use App\Versions\V1\Http\Controllers\Api\NewsController;
 use App\Versions\V1\Http\Controllers\Api\InvitationController;
 use App\Versions\V1\Http\Controllers\Api\LikeController;
 use App\Versions\V1\Http\Controllers\Api\MangaController;
 use App\Versions\V1\Http\Controllers\Api\NotificationController;
-use App\Versions\V1\Http\Controllers\Api\RateableController;
 use App\Versions\V1\Http\Controllers\Api\RatingController;
 use App\Versions\V1\Http\Controllers\Api\TeamableController;
 use App\Versions\V1\Http\Controllers\Api\TeamController;
 use App\Versions\V1\Http\Controllers\Api\TeamInvitationController;
 use App\Versions\V1\Http\Controllers\Api\TeamMemberController;
-use App\Versions\V1\Http\Controllers\Api\UserController;
+use App\Versions\V1\Http\Controllers\Api\ProfileController;
 use App\Versions\V1\Http\Controllers\Api\TagController;
 use App\Versions\V1\Http\Controllers\Api\VoteController;
 use Illuminate\Support\Facades\Route;
@@ -40,17 +37,13 @@ Route::prefix('v1')->group(function () {
 
     require('auth.php');
 
-    /* User */
-    Route::get('user', [UserController::class, 'show']);
-
-    Route::patch('user', [UserController::class, 'update']);
-
-    Route::delete('user', [UserController::class, 'destroy']);
-
-    Route::get('user/{user}/invitations', [InvitationController::class, 'index'])->name('user.invitation.index');
-    Route::post('user/{user}/invitations/{invitation}', [InvitationController::class, 'accept'])->name('user.invitation.accept');
-    Route::delete('user/{user}/invitations/{invitation}', [InvitationController::class, 'reject'])->name('user.invitation.reject');
-
+    Route::group(['middleware' => 'auth'], function () {
+        Route::get('user/{user}/invitations', [InvitationController::class, 'index'])->name('user.invitation.index');
+        Route::post('user/{user}/invitations/{invitation}',
+            [InvitationController::class, 'accept'])->name('user.invitation.accept');
+        Route::delete('user/{user}/invitations/{invitation}',
+            [InvitationController::class, 'reject'])->name('user.invitation.reject');
+    });
 
     /* Teams */
     Route::apiResource('team', TeamController::class);
@@ -94,7 +87,7 @@ Route::prefix('v1')->group(function () {
         Route::post('/notifications/readAll', [NotificationController::class, 'readAll'])->name('notifications.readAll');
     });
 
-    Route::get('history', HistoryController::class);
+    Route::get('news', NewsController::class);
 
     /* Comments */
     Route::get('/comment/{model}/{id}', [CommentController::class, 'index'])->name('comment.index');

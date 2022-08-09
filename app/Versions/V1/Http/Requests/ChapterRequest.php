@@ -22,14 +22,15 @@ class ChapterRequest extends FormRequest
             'volume' => ['required', 'int'],
             'number' => ['required', 'int'],
             'name' => ['required', 'string'],
-            'image.*' => ['nullable', 'image'],
+            'media.*' => ['nullable', 'image'],
             'free_at' => ['nullable', 'date'],
+            'price' => ['required', 'int']
         ];
         return
             match ($this->getMethod()) {
                 'POST' => $rules + [
-                        'manga_id' => ['required', 'int', 'exists:mangas,id'],
-                        'team_id' => ['required', 'int', 'exists:teams,id'],
+                        'manga' => ['required', 'string', 'exists:mangas,slug'],
+                        'team_id' => ['nullable', 'int', 'exists:teams,id'],
                 ],
                 'PATCH' => $rules,
             };

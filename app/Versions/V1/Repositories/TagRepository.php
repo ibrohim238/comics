@@ -3,7 +3,7 @@
 namespace App\Versions\V1\Repositories;
 
 use App\Versions\V1\Dto\TagDto;
-use IAleroy\Tags\Tag;
+use App\Models\Tag;
 
 class TagRepository
 {

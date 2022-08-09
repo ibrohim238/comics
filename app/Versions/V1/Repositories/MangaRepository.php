@@ -4,8 +4,6 @@ namespace App\Versions\V1\Repositories;
 
 use App\Models\Chapter;
 use App\Models\Manga;
-use App\Models\Team;
-use App\Versions\V1\Services\TagSynchronizer;
 use App\Versions\V1\Dto\MangaDto;
 use App\Versions\V1\Services\ChapterService;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
@@ -58,8 +56,8 @@ class MangaRepository
 
     public function addMedia(MangaDto $dto): static
     {
-        if ($dto->image) {
-            $this->manga->addMediaFromRequest('image')->toMediaCollection();
+        if ($dto->media) {
+            $this->manga->addMediaFromRequest('media')->toMediaCollection();
         }
 
         return $this;

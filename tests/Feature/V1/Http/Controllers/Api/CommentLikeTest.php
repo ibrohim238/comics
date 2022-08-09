@@ -83,7 +83,7 @@ class CommentLikeTest extends TestCase
             ]);
 
         $response = $this->actingAs($user)
-            ->deleteJson(route('like.un-rate', [getMorphedType($comment::class), $comment->id]));
+            ->deleteJson(route('like.unRate', [getMorphedType($comment::class), $comment->id]));
 
         $response->assertOk()
             ->assertJsonFragment([
@@ -98,7 +98,7 @@ class CommentLikeTest extends TestCase
         $comment = Comment::factory()->create();
 
         $response = $this->actingAs($user)
-            ->deleteJson(route('like.un-rate', [getMorphedType($comment::class), $comment->id]));
+            ->deleteJson(route('like.unRate', [getMorphedType($comment::class), $comment->id]));
 
         $response->assertStatus(Response::HTTP_BAD_REQUEST)
             ->assertJsonFragment([
@@ -112,7 +112,7 @@ class CommentLikeTest extends TestCase
         $comment = Comment::factory()->create();
 
         $response = $this
-            ->deleteJson(route('like.un-rate', [getMorphedType($comment::class), $comment->id]));
+            ->deleteJson(route('like.unRate', [getMorphedType($comment::class), $comment->id]));
 
         $response->assertUnauthorized();
     }

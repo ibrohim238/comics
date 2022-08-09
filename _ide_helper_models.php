@@ -19,10 +19,15 @@ namespace App\Models{
  * @property float $number
  * @property string $name
  * @property int $manga_id
+ * @property int $team_id
+ * @property float|null $price
+ * @property \Illuminate\Support\Carbon|null $free_at
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Comment[] $comments
  * @property-read int|null $comments_count
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\User[] $customers
+ * @property-read int|null $customers_count
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\User[] $eventUsers
  * @property-read int|null $event_users_count
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Event[] $events
@@ -30,9 +35,11 @@ namespace App\Models{
  * @property-read \App\Models\Manga $manga
  * @property-read \Spatie\MediaLibrary\MediaCollections\Models\Collections\MediaCollection|\Spatie\MediaLibrary\MediaCollections\Models\Media[] $media
  * @property-read int|null $media_count
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Purchase[] $purchases
+ * @property-read int|null $purchases_count
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Rate[] $rates
  * @property-read int|null $rates_count
- * @property-read \App\Models\Team|null $team
+ * @property-read \App\Models\Team $team
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Rate[] $votes
  * @property-read int|null $votes_count
  * @method static \Database\Factories\ChapterFactory factory(...$parameters)
@@ -40,14 +47,17 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|Chapter newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Chapter query()
  * @method static \Illuminate\Database\Eloquent\Builder|Chapter whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Chapter whereFreeAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Chapter whereId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Chapter whereMangaId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Chapter whereName($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Chapter whereNumber($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Chapter wherePrice($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Chapter whereTeamId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Chapter whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Chapter whereVolume($value)
  */
-	class Chapter extends \Eloquent implements \App\Interfaces\Eventable, \App\Interfaces\Commentable, \Spatie\MediaLibrary\HasMedia, \App\Interfaces\Rateable, \App\Interfaces\Votable {}
+	class Chapter extends \Eloquent implements \App\Interfaces\Eventable, \App\Interfaces\Commentable, \Spatie\MediaLibrary\HasMedia, \App\Interfaces\Rateable, \App\Interfaces\Votable, \App\Interfaces\Purchasable {}
 }
 
 namespace App\Models{
@@ -266,6 +276,33 @@ namespace App\Models{
 
 namespace App\Models{
 /**
+ * App\Models\Purchase
+ *
+ * @property int $id
+ * @property int $user_id
+ * @property string $purchasable_type
+ * @property int $purchasable_id
+ * @property int $payment_id
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \Illuminate\Database\Eloquent\Model|\Eloquent $purchasable
+ * @property-read \App\Models\User $user
+ * @method static \Illuminate\Database\Eloquent\Builder|Purchase newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Purchase newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Purchase query()
+ * @method static \Illuminate\Database\Eloquent\Builder|Purchase whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Purchase whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Purchase wherePaymentId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Purchase wherePurchasableId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Purchase wherePurchasableType($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Purchase whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Purchase whereUserId($value)
+ */
+	class Purchase extends \Eloquent {}
+}
+
+namespace App\Models{
+/**
  * App\Models\Rate
  *
  * @property int $id
@@ -317,6 +354,32 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|Role whereUpdatedAt($value)
  */
 	class Role extends \Eloquent {}
+}
+
+namespace App\Models{
+/**
+ * App\Models\Tag
+ *
+ * @property int $id
+ * @property string $name
+ * @property string $slug
+ * @property string|null $description
+ * @property string|null $type
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @method static \IAleroy\Tags\Database\Factories\TagFactory factory(...$parameters)
+ * @method static \Illuminate\Database\Eloquent\Builder|Tag newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Tag newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Tag query()
+ * @method static \Illuminate\Database\Eloquent\Builder|Tag whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Tag whereDescription($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Tag whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Tag whereName($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Tag whereSlug($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Tag whereType($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Tag whereUpdatedAt($value)
+ */
+	class Tag extends \Eloquent {}
 }
 
 namespace App\Models{
@@ -380,6 +443,8 @@ namespace App\Models{
  * @property-read int|null $notifications_count
  * @property-read \Illuminate\Database\Eloquent\Collection|\Spatie\Permission\Models\Permission[] $permissions
  * @property-read int|null $permissions_count
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Purchase[] $purchases
+ * @property-read int|null $purchases_count
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Rate[] $rates
  * @property-read int|null $rates_count
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Rate[] $ratings
