@@ -1,0 +1,926 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "Comics documentation",
+        "description": "V1 Api docs",
+        "contact": {
+            "email": ""
+        },
+        "license": {
+            "name": "Apache 2.0",
+            "url": "https://www.apache.org/licenses/LICENSE-2.0.html"
+        },
+        "version": "1.0.0"
+    },
+    "servers": [
+        {
+            "url": "/api/v1"
+        }
+    ],
+    "paths": {
+        "/manga": {
+            "get": {
+                "tags": [
+                    "Mangas"
+                ],
+                "summary": "Список манг",
+                "description": "Список манг",
+                "operationId": "89f6e81c7206269aebf4f9f9195f6023",
+                "parameters": [
+                    {
+                        "name": "page",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "limit",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "filter[name]",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "filter[teams]",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "filter[tags]",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/MangaResource"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "api-key": []
+                    }
+                ]
+            }
+        },
+        "/manga/{slug}": {
+            "get": {
+                "tags": [
+                    "Mangas"
+                ],
+                "summary": "Страница манги",
+                "description": "Страница манги",
+                "operationId": "511b53d51e7360d6efcb33e2d31f1d20",
+                "parameters": [
+                    {
+                        "name": "slug",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        },
+                        "example": 1
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/MangaResource"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "404": {
+                        "description": "Not found."
+                    }
+                },
+                "security": [
+                    {
+                        "api-key": []
+                    }
+                ]
+            }
+        },
+        "/mangas": {
+            "post": {
+                "tags": [
+                    "Mangas"
+                ],
+                "summary": "Добавить мангу",
+                "description": "Добавить мангу",
+                "operationId": "c237b7d2aeb9ba03a8e048e940dc7514",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/MangaRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/MangaResource"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Unprocessable entity.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string"
+                                        },
+                                        "errors": {
+                                            "type": "array",
+                                            "items": {}
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    }
+                },
+                "security": [
+                    {
+                        "api-key": []
+                    }
+                ]
+            }
+        },
+        "/manga/{id}": {
+            "delete": {
+                "tags": [
+                    "Mangas"
+                ],
+                "summary": "Обновить мангу",
+                "description": "Обновить мангу",
+                "operationId": "4e0e1d3e392650777333de7060158776",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/MangaResource"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Not found."
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    }
+                },
+                "security": [
+                    {
+                        "api-key": []
+                    }
+                ]
+            },
+            "patch": {
+                "tags": [
+                    "Mangas"
+                ],
+                "summary": "Обновить мангу",
+                "description": "Обновить мангу",
+                "operationId": "3ac5b136f41593b970d3b34ce748184e",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/MangaRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/MangaResource"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Unprocessable entity.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string"
+                                        },
+                                        "errors": {
+                                            "type": "array",
+                                            "items": {}
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Not found."
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    }
+                },
+                "security": [
+                    {
+                        "api-key": []
+                    }
+                ]
+            }
+        },
+        "/media/{media_model}/{id}": {
+            "get": {
+                "tags": [
+                    "Media"
+                ],
+                "summary": "Список Изображений модели",
+                "description": "Список Изображений модели",
+                "operationId": "645112afee56a713e5b428b7b2c9ef2f",
+                "parameters": [
+                    {
+                        "name": "media_model",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "enum": [
+                                "manga",
+                                "chapter"
+                            ]
+                        }
+                    },
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "limit",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "page",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/MediaResource"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Not found."
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    }
+                },
+                "security": [
+                    {
+                        "api-key": []
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "Media"
+                ],
+                "summary": "Добавить Изображение в модель",
+                "description": "Добавить Изображение в модель",
+                "operationId": "a54d24787ed883917fa24a7f86443f57",
+                "parameters": [
+                    {
+                        "name": "media_model",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "enum": [
+                                "manga",
+                                "chapter"
+                            ]
+                        }
+                    },
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/HasMediaRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Not found."
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    }
+                },
+                "security": [
+                    {
+                        "api-key": []
+                    }
+                ]
+            }
+        },
+        "/media/{id}": {
+            "delete": {
+                "tags": [
+                    "Media"
+                ],
+                "summary": "Удалить изображение",
+                "description": "Удалить изображение",
+                "operationId": "69ef316f361a35f4214e95e99d618256",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Not found."
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    }
+                },
+                "security": [
+                    {
+                        "api-key": []
+                    }
+                ]
+            }
+        }
+    },
+    "components": {
+        "schemas": {
+            "Manga": {
+                "title": "Manga",
+                "description": "Manga Model",
+                "properties": {
+                    "id": {
+                        "title": "id",
+                        "description": "id",
+                        "type": "integer"
+                    },
+                    "name": {
+                        "title": "name",
+                        "description": "name",
+                        "type": "string"
+                    },
+                    "slug": {
+                        "title": "slug",
+                        "description": "slug",
+                        "type": "string"
+                    },
+                    "description": {
+                        "title": "description",
+                        "description": "description",
+                        "type": "string"
+                    },
+                    "media": {
+                        "title": "media",
+                        "description": "media",
+                        "type": "string"
+                    },
+                    "tags": {
+                        "title": "tags",
+                        "description": "tags",
+                        "type": "string"
+                    },
+                    "rating": {
+                        "title": "rating",
+                        "description": "rating",
+                        "type": "string"
+                    },
+                    "ratings_count": {
+                        "title": "ratings_count",
+                        "description": "ratings_count",
+                        "type": "string"
+                    },
+                    "votes": {
+                        "title": "votes",
+                        "description": "votes",
+                        "type": "string"
+                    }
+                },
+                "type": "object",
+                "xml": {
+                    "name": "Manga"
+                }
+            },
+            "Media": {
+                "title": "Media",
+                "description": "Media Model",
+                "properties": {
+                    "id": {
+                        "title": "id",
+                        "description": "Идентификатор",
+                        "type": "integer",
+                        "format": "int64",
+                        "example": 1
+                    },
+                    "name": {
+                        "title": "name",
+                        "description": "Название",
+                        "type": "string",
+                        "example": "Владимир"
+                    },
+                    "collection_name": {
+                        "title": "collection_name",
+                        "description": "collection name",
+                        "type": "string",
+                        "example": "default"
+                    },
+                    "disk": {
+                        "title": "disk",
+                        "description": "disk",
+                        "type": "string",
+                        "example": "public"
+                    },
+                    "url": {
+                        "title": "url",
+                        "description": "url",
+                        "type": "string",
+                        "example": "http://localhost"
+                    },
+                    "created_at": {
+                        "title": "Created at",
+                        "description": "Создана в",
+                        "type": "string",
+                        "format": "datetime",
+                        "example": "2020-01-27 17:50:45"
+                    },
+                    "updated_at": {
+                        "title": "Updated at",
+                        "description": "Обновлена в",
+                        "type": "string",
+                        "format": "datetime",
+                        "example": "2020-01-27 17:50:45"
+                    }
+                },
+                "type": "object",
+                "xml": {
+                    "name": "Media"
+                }
+            },
+            "Permission": {
+                "title": "Permission",
+                "description": "Permission Model",
+                "properties": {
+                    "id": {
+                        "title": "id",
+                        "description": "Идентификатор",
+                        "type": "integer",
+                        "format": "int64",
+                        "example": 1
+                    },
+                    "name": {
+                        "title": "name",
+                        "description": "name",
+                        "type": "string"
+                    },
+                    "created_at": {
+                        "title": "Created at",
+                        "description": "Создана в",
+                        "type": "string",
+                        "format": "datetime",
+                        "example": "2020-01-27 17:50:45"
+                    },
+                    "updated_at": {
+                        "title": "Updated at",
+                        "description": "Обновлена в",
+                        "type": "string",
+                        "format": "datetime",
+                        "example": "2020-01-27 17:50:45"
+                    }
+                },
+                "type": "object",
+                "xml": {
+                    "name": "Permission"
+                }
+            },
+            "Role": {
+                "title": "Role",
+                "description": "Role Model",
+                "properties": {
+                    "id": {
+                        "title": "id",
+                        "description": "Идентификатор",
+                        "type": "integer",
+                        "format": "int64",
+                        "example": 1
+                    },
+                    "name": {
+                        "title": "name",
+                        "description": "name",
+                        "type": "string"
+                    },
+                    "permissions": {
+                        "title": "permissions",
+                        "description": "permissions",
+                        "type": "array",
+                        "items": {
+                            "properties": {
+                                "name": {
+                                    "title": "name",
+                                    "description": "name",
+                                    "type": "string"
+                                }
+                            },
+                            "type": "object"
+                        }
+                    },
+                    "created_at": {
+                        "title": "Created at",
+                        "description": "Создана в",
+                        "type": "string",
+                        "format": "datetime",
+                        "example": "2020-01-27 17:50:45"
+                    },
+                    "updated_at": {
+                        "title": "Updated at",
+                        "description": "Обновлена в",
+                        "type": "string",
+                        "format": "datetime",
+                        "example": "2020-01-27 17:50:45"
+                    }
+                },
+                "type": "object",
+                "xml": {
+                    "name": "Role"
+                }
+            },
+            "User": {
+                "title": "User",
+                "description": "User Model",
+                "properties": {
+                    "id": {
+                        "title": "id",
+                        "description": "Идентификатор",
+                        "type": "integer",
+                        "format": "int64",
+                        "example": 1
+                    },
+                    "name": {
+                        "title": "name",
+                        "description": "name",
+                        "type": "string"
+                    },
+                    "username": {
+                        "title": "username",
+                        "description": "username",
+                        "type": "string"
+                    },
+                    "email": {
+                        "title": "email",
+                        "description": "email",
+                        "type": "string"
+                    },
+                    "created_at": {
+                        "title": "Created at",
+                        "description": "Создана в",
+                        "type": "string",
+                        "format": "datetime",
+                        "example": "2020-01-27 17:50:45"
+                    },
+                    "updated_at": {
+                        "title": "Updated at",
+                        "description": "Обновлена в",
+                        "type": "string",
+                        "format": "datetime",
+                        "example": "2020-01-27 17:50:45"
+                    }
+                },
+                "type": "object",
+                "xml": {
+                    "name": "User"
+                }
+            },
+            "HasMediaRequest": {
+                "title": "Game request",
+                "description": "Game request body data",
+                "required": [],
+                "properties": {
+                    "media": {
+                        "title": "media",
+                        "description": "media",
+                        "type": "array",
+                        "items": {
+                            "type": "file"
+                        }
+                    }
+                },
+                "type": "object"
+            },
+            "MangaRequest": {
+                "title": "Manga request",
+                "description": "Manga request body data",
+                "required": [
+                    "name",
+                    "description",
+                    "tags"
+                ],
+                "properties": {
+                    "name": {
+                        "title": "name",
+                        "description": "name",
+                        "type": "string"
+                    },
+                    "description": {
+                        "title": "description",
+                        "description": "description",
+                        "type": "string"
+                    },
+                    "published_at": {
+                        "title": "published_at",
+                        "description": "published_at",
+                        "type": "string"
+                    },
+                    "tags": {
+                        "title": "tags",
+                        "description": "tags",
+                        "type": "array",
+                        "items": {
+                            "type": "integer"
+                        }
+                    },
+                    "media": {
+                        "title": "media",
+                        "description": "media",
+                        "type": "string"
+                    }
+                },
+                "type": "object"
+            },
+            "PermissionRequest": {
+                "title": "Permission request",
+                "description": "Permission request body data",
+                "required": [
+                    "name"
+                ],
+                "properties": {
+                    "name": {
+                        "title": "name",
+                        "description": "Название",
+                        "type": "string"
+                    }
+                },
+                "type": "object"
+            },
+            "RoleRequest": {
+                "title": "Permission request",
+                "description": "Permission request body data",
+                "required": [
+                    "name"
+                ],
+                "properties": {
+                    "name": {
+                        "title": "name",
+                        "description": "Название",
+                        "type": "string"
+                    }
+                },
+                "type": "object"
+            },
+            "UserRequest": {
+                "title": "User request",
+                "description": "User request body data",
+                "required": [
+                    "name",
+                    "last_name",
+                    "email",
+                    "password"
+                ],
+                "properties": {
+                    "name": {
+                        "title": "name",
+                        "description": "Название",
+                        "type": "string"
+                    },
+                    "last_name": {
+                        "title": "last_name",
+                        "description": "last_name",
+                        "type": "string"
+                    },
+                    "email": {
+                        "title": "email",
+                        "description": "email",
+                        "type": "string"
+                    },
+                    "password": {
+                        "title": "password",
+                        "description": "password",
+                        "type": "string"
+                    }
+                },
+                "type": "object"
+            },
+            "MangaResource": {
+                "title": "MangaResource",
+                "description": "Manga Resource",
+                "properties": {
+                    "manga": {
+                        "$ref": "#/components/schemas/Manga"
+                    }
+                },
+                "type": "object",
+                "xml": {
+                    "name": "Manga Resource"
+                }
+            },
+            "MediaResource": {
+                "title": "MediaResource",
+                "description": "Media Resource",
+                "properties": {
+                    "media": {
+                        "$ref": "#/components/schemas/Media"
+                    }
+                },
+                "type": "object",
+                "xml": {
+                    "name": "Media Resource"
+                }
+            },
+            "PermissionResource": {
+                "title": "PermissionResource",
+                "description": "Permission Resource",
+                "properties": {
+                    "permission": {
+                        "$ref": "#/components/schemas/Permission"
+                    }
+                },
+                "type": "object",
+                "xml": {
+                    "name": "Permission Resource"
+                }
+            },
+            "RoleResource": {
+                "title": "RoleResource",
+                "description": "Role Resource",
+                "properties": {
+                    "role": {
+                        "$ref": "#/components/schemas/Role"
+                    }
+                },
+                "type": "object",
+                "xml": {
+                    "name": "Role Resource"
+                }
+            },
+            "UserResource": {
+                "title": "UserResource",
+                "description": "User Resource",
+                "properties": {
+                    "user": {
+                        "$ref": "#/components/schemas/User"
+                    }
+                },
+                "type": "object",
+                "xml": {
+                    "name": "User Resource"
+                }
+            }
+        },
+        "securitySchemes": {
+            "api-key": {
+                "type": "http",
+                "name": "Authorization",
+                "in": "header",
+                "bearerFormat": "JWT",
+                "scheme": "bearer"
+            }
+        }
+    },
+    "tags": [
+        {
+            "name": "Mangas",
+            "description": "комиксы"
+        }
+    ]
+}

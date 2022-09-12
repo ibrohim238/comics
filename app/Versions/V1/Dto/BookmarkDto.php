@@ -2,14 +2,14 @@
 
 namespace App\Versions\V1\Dto;
 
-use App\Caster\BookmarkTypeEnumCaster;
 use App\Enums\BookmarkTypeEnum;
 use App\Versions\V1\Http\Requests\BookmarkRequest;
 use Spatie\DataTransferObject\Attributes\CastWith;
+use Spatie\DataTransferObject\Casters\EnumCaster;
 
 class BookmarkDto extends BaseDto
 {
-    #[CastWith(BookmarkTypeEnumCaster::class)]
+    #[CastWith(EnumCaster::class, BookmarkTypeEnum::class)]
     public BookmarkTypeEnum $type;
 
     public static function fromRequest(BookmarkRequest $request): BookmarkDto

@@ -19,7 +19,7 @@ class TeamableController extends Controller
     {
         app(TeamableService::class, [
             'team' => $team,
-            'teamable' => $model = $model->identify($id),
+            'teamable' => $model = $model->findModel($id),
         ])->attach();
 
         return response((['message' => Lang::get('teamable.attach')]));
@@ -29,7 +29,7 @@ class TeamableController extends Controller
     {
         app(TeamableService::class, [
             'team' => $team,
-            'teamable' => $model->identify($id),
+            'teamable' => $model->findModel($id),
         ])->detach();
 
         return response(['message' => Lang::get('teamable.detach')]);

@@ -33,7 +33,7 @@ class MangaChapterSeeder extends Seeder
 
         foreach ($mangas as $manga) {
 
-            $chapters = Chapter::factory()->count(5)->create();
+            $chapters = Chapter::factory()->for()->count(5)->create();
             $manga->chapters()->saveMany($chapters);
             foreach ($chapters as $chapter) {
                 $imagUrl = $faker->imageUrl(640,480, null, false);

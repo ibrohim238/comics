@@ -35,7 +35,6 @@ class MangaRequest extends FormRequest
             'description' => ['required', 'string', 'min:4', 'max:625'],
             'published_at' => ['nullable', 'date'],
             'tags' => ['required', 'array', 'exists:tags,id'],
-            'media' => ['nullable', 'image'],
         ];
     }
 }

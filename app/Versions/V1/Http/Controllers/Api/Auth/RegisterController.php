@@ -26,6 +26,8 @@ class RegisterController extends Controller
         $user = app(UserService::class)
             ->store(UserDto::fromRequest($request));
 
+        $user->sendEmailVerificationNotification();
+
         return new UserResource($user);
     }
 }

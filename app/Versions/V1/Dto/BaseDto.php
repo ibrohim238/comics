@@ -8,7 +8,7 @@ use Spatie\DataTransferObject\Attributes\DefaultCast;
 use Spatie\DataTransferObject\DataTransferObject;
 
 #[
-    DefaultCast(Carbon::class, CarbonCaster::class)
+    DefaultCast(Carbon::class, CarbonCaster::class),
 ]
 abstract class BaseDto extends DataTransferObject {
 }

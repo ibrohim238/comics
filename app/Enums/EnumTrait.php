@@ -14,7 +14,7 @@ trait EnumTrait
             ->toArray();
     }
 
-    public function identify(int $id): ?Model
+    public function findModel(int $id): ?Model
     {
         $model = Relation::getMorphedModel($this->value);
 

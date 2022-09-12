@@ -3,6 +3,7 @@
 use App\Versions\V1\Http\Controllers\Api\BookmarkController;
 use App\Versions\V1\Http\Controllers\Api\ChapterController;
 use App\Versions\V1\Http\Controllers\Api\CommentController;
+use App\Versions\V1\Http\Controllers\Api\MediaController;
 use App\Versions\V1\Http\Controllers\Api\NewsController;
 use App\Versions\V1\Http\Controllers\Api\InvitationController;
 use App\Versions\V1\Http\Controllers\Api\LikeController;
@@ -57,6 +58,13 @@ Route::prefix('v1')->group(function () {
         Route::post('/team/{team}/{model}/{id}', [TeamableController::class, 'attach'])->name('team.manga.attach');
         Route::delete('/team/{team}/{model}/{id}', [TeamableController::class, 'detach'])->name('team.manga.detach');
     });
+
+    Route::get('/media/{model}/{id}', [MediaController::class, 'index'])
+        ->name('media.index');
+    Route::post('/media/{model}/{id}', [MediaController::class, 'store'])
+        ->name('media.store');
+    Route::delete('/media/{media}', [MediaController::class, 'destroy'])
+        ->name('media.destroy');
 
     /* Manga */
     Route::apiResource('manga', MangaController::class);

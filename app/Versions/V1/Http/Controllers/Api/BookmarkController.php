@@ -43,7 +43,7 @@ class BookmarkController extends Controller
     {
         try {
             app(BookmarkService::class, [
-                'bookmarkable' => $model->identify($id),
+                'bookmarkable' => $model->findModel($id),
                 'user' => $request->user(),
                 'dto' => BookmarkDto::fromRequest($request),
             ])->attach();
@@ -62,7 +62,7 @@ class BookmarkController extends Controller
     {
         try {
             app(BookmarkService::class, [
-                'bookmarkable' => $model->identify($id),
+                'bookmarkable' => $model->findModel($id),
                 'user' => $request->user(),
                 'dto' => BookmarkDto::fromRequest($request),
             ])->detach();

@@ -22,6 +22,7 @@ class MangaRepository
     {
         return QueryBuilder::for($this->manga)
             ->allowedFilters(
+                AllowedFilter::exact('name'),
                 AllowedFilter::exact('teams', 'teams.id'),
                 AllowedFilter::exact('tags', 'tags.name')
             )
@@ -40,9 +41,9 @@ class MangaRepository
         return $this;
     }
 
-    public function fill(MangaDto $dto): static
+    public function fill(array $data): static
     {
-        $this->manga->fill($dto->toArray());
+        $this->manga->fill($data);
 
         return $this;
     }
@@ -54,18 +55,9 @@ class MangaRepository
         return $this;
     }
 
-    public function addMedia(MangaDto $dto): static
+    public function syncTags(array $tags): static
     {
-        if ($dto->media) {
-            $this->manga->addMediaFromRequest('media')->toMediaCollection();
-        }
-
-        return $this;
-    }
-
-    public function syncTags(MangaDto $dto): static
-    {
-        $this->manga->syncTags($dto->tags);
+        $this->manga->syncTags($tags);
 
         return $this;
     }

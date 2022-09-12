@@ -66,6 +66,11 @@ class User extends Authenticatable implements HasMedia, MustVerifyEmail
         return $this->morphMany(Notification::class, 'notifiable');
     }
 
+    public function findForPassport($value): User
+    {
+        return $this->where('email', $value)->orWhere('username', $value)->first();
+    }
+
     public function registerMediaCollections(): void
     {
         $this

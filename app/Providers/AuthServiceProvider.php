@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use App\Contracts\HasUser;
 use App\Enums\PermissionEnum;
 use App\Enums\TeamPermissionEnum;
 use App\Models\Chapter;
@@ -19,12 +20,15 @@ use Carbon\Carbon;
 use Illuminate\Auth\Notifications\VerifyEmail;
 use Illuminate\Auth\RequestGuard;
 use Illuminate\Contracts\Auth\Authenticatable;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\URL;
 use Laravel\Passport\Passport;
 use IAleroy\Tags\Tag;
+use Spatie\MediaLibrary\HasMedia;
+use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
 class AuthServiceProvider extends ServiceProvider
 {
@@ -64,6 +68,18 @@ class AuthServiceProvider extends ServiceProvider
         });
         Gate::define('teamInvitation', function (User $user, Team $team) {
             return $user->hasTeamPermission($team, TeamPermissionEnum::MANAGE_INVITATION->value);
+        });
+
+        Gate::define('media-index', function (?User $user, HasMedia $hasMedia) {
+            return true;
+        });
+
+        Gate::define('media-store', function (User $user, HasMedia $hasMedia) {
+            return true;
+        });
+
+        Gate::define('media-destroy', function (User $user, Media $media) {
+            return true;
         });
 
         $this->registerPolicies();

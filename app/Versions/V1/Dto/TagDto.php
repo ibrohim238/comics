@@ -2,10 +2,9 @@
 
 namespace App\Versions\V1\Dto;
 
-use App\Caster\TagTypeEnumCaster;
 use App\Enums\TagTypeEnum;
 use App\Versions\V1\Http\Requests\TagRequest;
-use Spatie\DataTransferObject\Attributes\CastWith;
+use Spatie\DataTransferObject\Casters\EnumCaster;
 use Spatie\DataTransferObject\DataTransferObject;
 use Spatie\DataTransferObject\Exceptions\UnknownProperties;
 
@@ -13,7 +12,7 @@ class TagDto extends DataTransferObject
 {
     public string $name;
     public ?string $description;
-    #[CastWith(TagTypeEnumCaster::class)]
+    #[CastWith(EnumCaster::class, TagTypeEnum::class)]
     public TagTypeEnum $type;
 
     /**

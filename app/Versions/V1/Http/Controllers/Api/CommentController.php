@@ -40,7 +40,7 @@ class CommentController extends Controller
     ): CommentCollection
     {
         $comments = app(CommentableRepository::class, [
-            'commentable' => $model->identify($id)
+            'commentable' => $model->findModel($id)
         ])->paginate($request->get('count'));
 
         return new CommentCollection($comments);
@@ -61,7 +61,7 @@ class CommentController extends Controller
     ): CommentResource
     {
         $comment = app(CommentableService::class, [
-           'commentable' => $model->identify($id),
+           'commentable' => $model->findModel($id),
         ])->store(CommentDto::fromRequest($request));
 
         return new CommentResource($comment);

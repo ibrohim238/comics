@@ -27,7 +27,7 @@ class LikeController extends Controller
     ): Response
     {
         $message = app(RateService::class, [
-            'rateable' => $model->identify($id),
+            'rateable' => $model->findModel($id),
             'user' => $request->user(),
             'type' => RateTypeEnum::LIKE_TYPE
         ])->rate(LikeDto::fromRequest($request));
@@ -42,7 +42,7 @@ class LikeController extends Controller
     {
         try {
             app(RateService::class, [
-                'rateable' => $model->identify($id),
+                'rateable' => $model->findModel($id),
                 'user' => Auth::user(),
                 'type' => RateTypeEnum::LIKE_TYPE
             ])->unRate();

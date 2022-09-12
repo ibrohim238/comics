@@ -2,14 +2,13 @@
 
 namespace App\Versions\V1\Dto;
 
-use App\Caster\RolePermissionEnumCaster;
 use App\Enums\RolePermissionEnum;
 use Spatie\DataTransferObject\Attributes\CastWith;
-use Spatie\DataTransferObject\DataTransferObject;
+use Spatie\DataTransferObject\Casters\EnumCaster;
 
-abstract class BaseUserDto extends DataTransferObject implements UserDtoContract
+abstract class BaseUserDto extends BaseDto implements UserDtoContract
 {
-    #[CastWith(RolePermissionEnumCaster::class)]
+    #[CastWith(EnumCaster::class, RolePermissionEnum::class)]
     public RolePermissionEnum $role;
 
     public function forFillArray(): array

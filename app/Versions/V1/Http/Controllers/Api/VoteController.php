@@ -23,7 +23,7 @@ class VoteController extends Controller
     public function rate(VotableTypeEnum $model, int $id,): Response
     {
         $message = app(RateService::class, [
-            'rateable' => $model->identify($id),
+            'rateable' => $model->findModel($id),
             'user' => Auth::user(),
             'type' => RateTypeEnum::RATING_TYPE
         ])->rate();
@@ -35,7 +35,7 @@ class VoteController extends Controller
     {
         try {
             app(RateService::class, [
-                'rateable' => $model->identify($id),
+                'rateable' => $model->findModel($id),
                 'user' => Auth::user(),
                 'type' => RateTypeEnum::VOTE_TYPE
             ])->unRate();

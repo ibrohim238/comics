@@ -15,9 +15,7 @@ enum RolePermissionEnum: string
     public function permissions(): array
     {
         return match ($this) {
-            self::OWNER => [
-                PermissionEnum::values()
-            ],
+            self::OWNER => PermissionEnum::values(),
             self::ADMIN => [
                 PermissionEnum::VIEW_ADMIN_PANEL->value,
                 PermissionEnum::MANAGE_MANGA->value,

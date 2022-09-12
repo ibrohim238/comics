@@ -3,10 +3,10 @@
 namespace App\Versions\V1\Dto;
 
 use App\Caster\HashMakeCaster;
-use App\Caster\RolePermissionEnumCaster;
 use App\Enums\RolePermissionEnum;
 use App\Versions\V1\Http\Requests\RegisterRequest;
 use Spatie\DataTransferObject\Attributes\CastWith;
+use Spatie\DataTransferObject\Casters\EnumCaster;
 
 class UserDto extends BaseUserDto
 {
@@ -15,7 +15,7 @@ class UserDto extends BaseUserDto
     public string $email;
     #[CastWith(HashMakeCaster::class)]
     public string $password;
-    #[CastWith(RolePermissionEnumCaster::class)]
+    #[CastWith(EnumCaster::class, RolePermissionEnum::class)]
     public RolePermissionEnum $role;
 
     public static function fromRequest(RegisterRequest $request): UserDto

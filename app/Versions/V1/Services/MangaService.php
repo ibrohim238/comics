@@ -22,10 +22,9 @@ class MangaService
     public function store(MangaDto $dto): Manga
     {
         $this->repository
-            ->fill($dto)
+            ->fill($dto->toArray())
             ->save()
-            ->addMedia($dto)
-            ->syncTags($dto);
+            ->syncTags($dto->tags);
 
         return $this->manga;
     }
@@ -33,10 +32,9 @@ class MangaService
     public function update(MangaDto $dto): Manga
     {
         $this->repository
-            ->fill($dto)
+            ->fill($dto->toArray())
             ->save()
-            ->addMedia($dto)
-            ->syncTags($dto);
+            ->syncTags($dto->tags);
 
         return $this->manga;
     }

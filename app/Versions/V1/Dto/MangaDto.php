@@ -14,11 +14,7 @@ class MangaDto extends DataTransferObject
     public string $description;
     public ?Carbon $published_at;
     public ?array $tags;
-    public ?UploadedFile $media;
 
-    /**
-     * @throws UnknownProperties
-     */
     public static function fromRequest(MangaRequest $request): MangaDto
     {
         return new self($request->validated());
