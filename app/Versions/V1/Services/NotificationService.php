@@ -8,11 +8,6 @@ use Illuminate\Database\Eloquent\Relations\MorphMany;
 
 class NotificationService
 {
-    public function __construct(
-        public User $user
-    ) {
-    }
-
     public function read(Notification $notification): void
     {
         $notification->markAsRead();
@@ -23,23 +18,23 @@ class NotificationService
         $notification->markAsUnread();
     }
 
-    public function readSet(array $ids): void
+    public function readSet(User $user, array $ids): void
     {
-        $this->getCollection($ids)->markAsRead();
+        $this->getCollection($user, $ids)->markAsRead();
     }
 
-    public function unReadSet(array $ids): void
+    public function unReadSet(User $user, array $ids): void
     {
-        $this->getCollection($ids)->markAsUnread();
+        $this->getCollection($user, $ids)->markAsUnread();
     }
 
-    public function readAll()
+    public function readAll(User $user)
     {
-        $this->user->unreadNotifications->markAsRead();
+        $user->unreadNotifications->markAsRead();
     }
 
-    protected function getCollection(array $ids): MorphMany
+    protected function getCollection(User $user, array $ids): MorphMany
     {
-        return $this->user->notifications()->whereIn('id', $ids);
+        return $user->notifications()->whereIn('id', $ids);
     }
 }

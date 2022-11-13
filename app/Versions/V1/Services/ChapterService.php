@@ -24,9 +24,14 @@ class ChapterService
     public function store(ChapterDto $dto): Chapter
     {
         $this->repository
-            ->fill($dto->toArray())
+            ->fill(
+                $dto
+                    ->except('team_id')
+                    ->except('manga_id')
+                    ->toArray()
+            )
+            ->associateManga($dto->manga_id)
             ->associateTeam($dto->team_id)
-            ->associateManga($dto->manga)
             ->save()
             ->addMedia($dto->media);
 
@@ -36,7 +41,12 @@ class ChapterService
     public function update(ChapterDto $dto): Chapter
     {
         $this->repository
-            ->fill($dto->toArray())
+            ->fill(
+                $dto
+                    ->except('team_id')
+                    ->except('manga_id')
+                    ->toArray()
+            )
             ->save()
             ->addMedia($dto->media);
 

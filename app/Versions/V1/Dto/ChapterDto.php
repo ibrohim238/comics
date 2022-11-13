@@ -17,8 +17,7 @@ class ChapterDto extends DataTransferObject
     public string $name;
     public ?Carbon $free_at;
     public ?array $media;
-    #[CastWith(MangaSlugCaster::class)]
-    public ?Manga $manga;
+    public ?int $manga_id;
     public ?int $team_id;
     public float $price;
 
@@ -27,6 +26,15 @@ class ChapterDto extends DataTransferObject
      */
     public static function fromRequest(ChapterRequest $request): ChapterDto
     {
-        return new self($request->validated());
+        return new self([
+            'volume' => $request->volume,
+            'number' => $request->number,
+            'name' => $request->name,
+            'free_at' => $request->free_at,
+            'media' =>$request->media,
+            'manga_id' => $request->manga_id,
+            'team_id' => $request->team_id,
+            'price' => $request->price,
+        ]);
     }
 }

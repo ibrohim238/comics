@@ -71,9 +71,9 @@ class ChapterRepository
         return $this;
     }
 
-    public function associateManga(Manga $manga): static
+    public function associateManga(int $mangaId): static
     {
-        $this->chapter->manga()->associate($manga);
+        $this->chapter->manga()->associate($mangaId);
 
         return $this;
     }

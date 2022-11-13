@@ -6,7 +6,7 @@ use App\Versions\V1\Dto\NotificationDto;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 /**
- * @mixin \App\Versions\V1\Dto\\App\Versions\V1\Dto\NotificationDto
+ * @mixin NotificationDto
  */
 class NotificationResource extends JsonResource
 {

@@ -11,8 +11,10 @@ use Illuminate\Foundation\Http\FormRequest;
  * @property-read string $name
  * @property-read array $images
  * @property-read Carbon $free_at
+ * @property-read array $media
  * @property-read int $manga_id
  * @property-read int $team_id
+ * @property-read int $price
 */
 class ChapterRequest extends FormRequest
 {
@@ -22,6 +24,7 @@ class ChapterRequest extends FormRequest
             'volume' => ['required', 'int'],
             'number' => ['required', 'int'],
             'name' => ['required', 'string'],
+            'media' => ['sometimes', 'array'],
             'media.*' => ['nullable', 'image'],
             'free_at' => ['nullable', 'date'],
             'price' => ['required', 'int']
@@ -29,8 +32,8 @@ class ChapterRequest extends FormRequest
         return
             match ($this->getMethod()) {
                 'POST' => $rules + [
-                        'manga' => ['required', 'string', 'exists:mangas,slug'],
-                        'team_id' => ['nullable', 'int', 'exists:teams,id'],
+                    'manga_id' => ['required', 'string', 'exists:mangas,id'],
+                    'team_id' => ['nullable', 'int', 'exists:teams,id'],
                 ],
                 'PATCH' => $rules,
             };

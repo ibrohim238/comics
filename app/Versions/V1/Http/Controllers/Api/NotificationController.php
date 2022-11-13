@@ -5,6 +5,7 @@ namespace App\Versions\V1\Http\Controllers\Api;
 use App\Models\Notification;
 use App\Versions\V1\Dto\NotificationDto;
 use App\Versions\V1\Http\Controllers\Controller;
+use App\Versions\V1\Http\Requests\NotificationRequest;
 use App\Versions\V1\Http\Resources\NotificationCollection;
 use App\Versions\V1\Services\NotificationService;
 use App\Versions\V1\Transformers\NotificationTransformer;
@@ -52,48 +53,38 @@ class NotificationController extends Controller
         return new NotificationCollection($notifications);
     }
 
-    public function read(Notification $notification): Response
+    public function read(Notification $notification)
     {
-        app(NotificationService::class, [
-            'user' => Auth::user()
-        ])->read($notification);
+        app(NotificationService::class)->read($notification);
 
-        return response()->noContent();
+        return response()->json();
     }
 
-    public function unread(Notification $notification): Response
+    public function unread(Notification $notification)
     {
-        app(NotificationService::class, [
-            'user' => Auth::user()
-        ])->unRead($notification);
+        app(NotificationService::class)->unRead($notification);
 
-        return response()->noContent();
+        return response()->json();
     }
 
-    public function readSet(array $ids): Response
+    public function readSet(NotificationRequest $request)
     {
-        app(NotificationService::class, [
-            'user' => Auth::user()
-        ])->readSet($ids);
+        app(NotificationService::class)->readSet(Auth::user(), $request->ids);
 
-        return response()->noContent();
+        return response()->json();
     }
 
-    public function unReadSet(array $ids): Response
+    public function unReadSet(NotificationRequest $request)
     {
-        app(NotificationService::class, [
-            'user' => Auth::user()
-        ])->unReadSet($ids);
+        app(NotificationService::class)->unReadSet(Auth::user(), $request->ids);
 
-        return response()->noContent();
+        return response()->json();
     }
 
-    public function readAll(): Response
+    public function readAll()
     {
-        app(NotificationService::class, [
-            'user' => Auth::user()
-        ])->readAll();
+        app(NotificationService::class)->readAll(Auth::user());
 
-        return response()->noContent();
+        return response()->json();
     }
 }
